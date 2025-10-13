@@ -5,4 +5,5 @@ class GameGeneralState(
     var minY: Int,
     var maxX: Int,
     var maxY: Int,
+    var deltaTime: Long,
 )

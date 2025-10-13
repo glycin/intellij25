@@ -6,11 +6,11 @@ import java.awt.Graphics2D
 import kotlin.math.roundToInt
 
 class Player(
-    private var position: Vec2,
+    var position: Vec2,
     private val width: Int,
     private val height: Int,
 ) {
-    private fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun draw(g: Graphics2D) {
         g.color = JBColor.BLUE
