@@ -22,7 +22,8 @@ class EvolvedComponent(
     private val ggState: GameGeneralState,
     private val player: Player,
     private val bulletManager: BulletManager,
-    private val scope: CoroutineScope,
+    private val enemyManager: EnemyManager,
+    scope: CoroutineScope,
 ): JComponent(), Disposable {
     @Volatile private var mouseX: Int = -1
     @Volatile private var mouseY: Int = -1
@@ -67,6 +68,7 @@ class EvolvedComponent(
         if(g is Graphics2D) {
             player.draw(g)
             bulletManager.drawBullets(g)
+            enemyManager.drawEnemies(g)
             if (mouseX >= 0 && mouseY >= 0) {
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
                 g.color = JBColor.RED
