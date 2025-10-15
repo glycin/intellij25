@@ -51,7 +51,6 @@ class EvolvedComponent(
 
         addMouseListener(object: MouseListener {
             override fun mouseClicked(e: MouseEvent?) {
-                println("clicked")
                 bulletManager.addBullet(player.midPoint(), Vec2(mouseX.toFloat(), mouseY.toFloat()))
             }
             override fun mousePressed(e: MouseEvent?) {}

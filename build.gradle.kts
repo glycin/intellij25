@@ -21,8 +21,8 @@ repositories {
 
 intellijPlatform  {
     pluginConfiguration {
-        id = "intelligame"
-        name = "INTELLIGAME"
+        id = "intellij25"
+        name = "IntelliJIDEA25"
         version = v
 
         ideaVersion {
