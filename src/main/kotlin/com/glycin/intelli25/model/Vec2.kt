@@ -1,4 +1,4 @@
-package com.glycin.intelli25.shared
+package com.glycin.intelli25.model
 
 import kotlin.math.abs
 import kotlin.math.sqrt

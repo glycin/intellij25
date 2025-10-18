@@ -1,4 +1,4 @@
-package com.glycin.intelli25.shared
+package com.glycin.intelli25.util
 
 class GameGeneralState(
     val minX: Int,

@@ -1,6 +1,6 @@
 package com.glycin.intelli25.ui
 
-import com.glycin.intelli25.shared.GameGeneralState
+import com.glycin.intelli25.util.GameGeneralState
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.observable.util.addComponent
 import kotlinx.coroutines.CoroutineScope

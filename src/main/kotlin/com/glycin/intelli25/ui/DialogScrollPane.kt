@@ -1,6 +1,6 @@
 package com.glycin.intelli25.ui
 
-import com.glycin.intelli25.shared.GameColors
+import com.glycin.intelli25.util.GameColors
 import com.intellij.openapi.application.EDT
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.util.ui.JBUI

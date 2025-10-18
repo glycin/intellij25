@@ -1,5 +1,6 @@
-package com.glycin.intelli25.shared
+package com.glycin.intelli25.util
 
+import com.glycin.intelli25.model.Vec2
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin

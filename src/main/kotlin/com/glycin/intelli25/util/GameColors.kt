@@ -1,4 +1,4 @@
-package com.glycin.intelli25.shared
+package com.glycin.intelli25.util
 
 import com.intellij.ui.JBColor
 import java.awt.Color

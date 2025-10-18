@@ -1,8 +1,8 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Bullet
-import com.glycin.intelli25.shared.GameGeneralState
-import com.glycin.intelli25.shared.Vec2
+import com.glycin.intelli25.util.GameGeneralState
+import com.glycin.intelli25.model.Vec2
 import com.intellij.ui.JBColor
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
