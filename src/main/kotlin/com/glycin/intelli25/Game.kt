@@ -3,7 +3,6 @@ package com.glycin.intelli25
 import com.glycin.intelli25.managers.BulletManager
 import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
-import com.glycin.intelli25.managers.EvolvedComponent
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGeneralState
 import com.glycin.intelli25.model.Vec2
@@ -24,7 +23,7 @@ class Game(
     private val scope: CoroutineScope,
 ) {
 
-    private var evolvedComponent: EvolvedComponent? = null
+    private var gameComponent: GameComponent? = null
     private var uiComponent: UiComponent? = null
     private var ggState: GameGeneralState? = null
 
@@ -35,10 +34,10 @@ class Game(
             println("maxX: $maxX,  maxY: $maxY")
             ggState = GameGeneralState(0, 0, maxX, maxY, FPS.getDeltaTime())
             val bulletManager = BulletManager(scope, ggState!!)
-            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), 50, 50)
+            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), 150, 150)
             val enemyManager = EnemyManager(player, ggState!!, scope)
             val collisionsManager = CollisionsManager(player, enemyManager, bulletManager, scope, ggState!!) //TODO: Create one update manager that handles all updating in the game
-            evolvedComponent = EvolvedComponent(ggState!!, player, bulletManager, enemyManager, scope).also { ec ->
+            gameComponent = GameComponent(ggState!!, player, bulletManager, enemyManager, scope).also { ec ->
                 ec.bounds = editor.contentComponent.bounds
                 ec.isOpaque = false
             }
@@ -49,10 +48,10 @@ class Game(
             }
 
             editor.contentComponent.let { c ->
-                c.add(evolvedComponent)
+                c.add(gameComponent)
                 c.add(uiComponent)
                 c.setComponentZOrder(uiComponent, 0)
-                c.setComponentZOrder(evolvedComponent, 1)
+                c.setComponentZOrder(gameComponent, 1)
                 c.repaint()
                 c.revalidate()
             }

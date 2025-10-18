@@ -1,8 +1,10 @@
-package com.glycin.intelli25.managers
+package com.glycin.intelli25
 
+import com.glycin.intelli25.managers.BulletManager
+import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
-import com.glycin.intelli25.util.GameGeneralState
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.util.GameGeneralState
 import com.intellij.openapi.Disposable
 import com.intellij.ui.JBColor
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +19,7 @@ import java.awt.event.MouseListener
 import java.awt.event.MouseMotionAdapter
 import javax.swing.JComponent
 
-class EvolvedComponent(
+class GameComponent(
     private val ggState: GameGeneralState,
     private val player: Player,
     private val bulletManager: BulletManager,
@@ -31,11 +33,13 @@ class EvolvedComponent(
     init {
         scope.launch(Dispatchers.Default) {
             while (active) {
+                player.update()
                 repaint()
                 delay(ggState.deltaTime)
             }
         }
 
+        // TODO: Move mouse and keybaord stuff to input listener
         addMouseMotionListener(object : MouseMotionAdapter() {
             override fun mouseMoved(e: MouseEvent) {
                 mouseX = e.x
