@@ -2,7 +2,7 @@ package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.model.Player
-import com.glycin.intelli25.shared.GameGeneralState
+import com.glycin.intelli25.util.GameGeneralState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

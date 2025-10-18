@@ -1,7 +1,7 @@
 package com.glycin.intelli25.ui
 
-import com.glycin.intelli25.shared.GameColors
-import com.glycin.intelli25.shared.GameGeneralState
+import com.glycin.intelli25.util.GameColors
+import com.glycin.intelli25.util.GameGeneralState
 import com.intellij.openapi.Disposable
 import com.intellij.ui.JBColor
 import kotlinx.coroutines.CoroutineScope

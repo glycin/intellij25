@@ -1,6 +1,6 @@
 package com.glycin.intelli25.model
 
-import com.glycin.intelli25.shared.Vec2
+import com.glycin.intelli25.model.Vec2
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import kotlin.math.roundToInt

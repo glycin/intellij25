@@ -5,9 +5,9 @@ import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.managers.EvolvedComponent
 import com.glycin.intelli25.model.Player
-import com.glycin.intelli25.shared.GameGeneralState
-import com.glycin.intelli25.shared.Vec2
-import com.glycin.intelli25.shared.getDeltaTime
+import com.glycin.intelli25.util.GameGeneralState
+import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.util.getDeltaTime
 import com.glycin.intelli25.ui.UiComponent
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
