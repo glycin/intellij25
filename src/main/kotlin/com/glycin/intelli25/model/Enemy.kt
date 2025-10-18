@@ -1,4 +1,4 @@
-package com.glycin.intelli25.ideaevolved
+package com.glycin.intelli25.model
 
 import com.glycin.intelli25.shared.Vec2
 import java.awt.Graphics2D
@@ -12,7 +12,7 @@ class Enemy(
     private var player: Player,
     private var width: Int,
     private var height: Int,
-    private val speed: Float = Random.nextDouble(0.5, 5.0).toFloat(),
+    private val speed: Float = Random.Default.nextDouble(0.5, 5.0).toFloat(),
 ) {
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 

@@ -1,5 +1,6 @@
-package com.glycin.intelli25.ideaevolved
+package com.glycin.intelli25.managers
 
+import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.shared.GameGeneralState
 import com.glycin.intelli25.shared.Vec2
 import com.intellij.ui.JBColor

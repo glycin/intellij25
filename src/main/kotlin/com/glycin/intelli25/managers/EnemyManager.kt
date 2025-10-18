@@ -1,5 +1,7 @@
-package com.glycin.intelli25.ideaevolved
+package com.glycin.intelli25.managers
 
+import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.shared.GameGeneralState
 import com.glycin.intelli25.shared.Vec2
 import com.glycin.intelli25.shared.randomPointOnCircle
@@ -35,7 +37,7 @@ class EnemyManager(
                 val cooldown = Random.nextLong(2_000, 15_000)
                 val spawned = Enemy(
                     id = enemyMap.count() + 1,
-                    position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f) ),
+                    position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
                     player = player,
                     width = 25,
                     height = 25,

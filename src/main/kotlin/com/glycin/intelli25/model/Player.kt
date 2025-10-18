@@ -1,4 +1,4 @@
-package com.glycin.intelli25.ideaevolved
+package com.glycin.intelli25.model
 
 import com.glycin.intelli25.shared.Vec2
 import com.intellij.ui.JBColor

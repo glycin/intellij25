@@ -1,10 +1,10 @@
 package com.glycin.intelli25
 
-import com.glycin.intelli25.ideaevolved.BulletManager
-import com.glycin.intelli25.ideaevolved.CollisionsManager
-import com.glycin.intelli25.ideaevolved.EnemyManager
-import com.glycin.intelli25.ideaevolved.EvolvedComponent
-import com.glycin.intelli25.ideaevolved.Player
+import com.glycin.intelli25.managers.BulletManager
+import com.glycin.intelli25.managers.CollisionsManager
+import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.managers.EvolvedComponent
+import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.shared.GameGeneralState
 import com.glycin.intelli25.shared.Vec2
 import com.glycin.intelli25.shared.getDeltaTime

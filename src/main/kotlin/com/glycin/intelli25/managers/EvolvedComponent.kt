@@ -1,9 +1,9 @@
-package com.glycin.intelli25.ideaevolved
+package com.glycin.intelli25.managers
 
+import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.shared.GameGeneralState
 import com.glycin.intelli25.shared.Vec2
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.EDT
 import com.intellij.ui.JBColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionAdapter
 import javax.swing.JComponent
-import javax.swing.event.MouseInputListener
 
 class EvolvedComponent(
     private val ggState: GameGeneralState,
