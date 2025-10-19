@@ -1,6 +1,6 @@
 package com.glycin.intelli25.ui
 
-import com.glycin.intelli25.util.GameGeneralState
+import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.observable.util.addComponent
 import kotlinx.coroutines.CoroutineScope
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.swing.JComponent
 
 class UiComponent(
-    private val ggState: GameGeneralState,
+    private val ggState: GameGlobalState,
     private val scope: CoroutineScope,
 ): JComponent(), Disposable {
 

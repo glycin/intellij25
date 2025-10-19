@@ -1,7 +1,7 @@
 package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
-import com.glycin.intelli25.util.GameGeneralState
+import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
 import com.intellij.ui.JBColor
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +17,7 @@ private const val SCROLL_BOTTOM_PADDING = 25
 
 class DialogComponent(
     texts: List<String>,
-    private val ggState: GameGeneralState,
+    private val ggState: GameGlobalState,
     scope: CoroutineScope,
 ): JComponent(), Disposable {
 

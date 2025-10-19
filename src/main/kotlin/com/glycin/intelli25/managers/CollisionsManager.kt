@@ -2,7 +2,7 @@ package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.model.Player
-import com.glycin.intelli25.util.GameGeneralState
+import com.glycin.intelli25.util.GameGlobalState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,7 +13,7 @@ class CollisionsManager(
     private val enemyManager: EnemyManager,
     private val bulletManager: BulletManager,
     scope: CoroutineScope,
-    ggState: GameGeneralState,
+    ggState: GameGlobalState,
 ) {
     val active = true
 
