@@ -26,4 +26,13 @@ class Enemy(
     fun draw(g: Graphics2D) {
         g.fillRect(position.x.roundToInt(), position.y.roundToInt(), width, height)
     }
+
+    fun getPickup(): Pickup {
+        return Pickup(
+            id = id,
+            position = midPoint(),
+            width = 10,
+            height = 15,
+        )
+    }
 }

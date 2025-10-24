@@ -1,5 +1,6 @@
 package com.glycin.intelli25.ui
 
+import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.observable.util.addComponent
@@ -10,12 +11,14 @@ import kotlinx.coroutines.launch
 import javax.swing.JComponent
 
 class UiComponent(
+    private val player: Player,
     private val ggState: GameGlobalState,
     private val scope: CoroutineScope,
 ): JComponent(), Disposable {
 
     private var active = true
     private var dialogComponent: DialogComponent? = null
+    private var gameUiComponent: InGameComponent? = null
 
     init {
         scope.launch(Dispatchers.Default) {
@@ -36,7 +39,14 @@ class UiComponent(
         addComponent(dialogComponent!!)
         revalidate()
         repaint()
+    }
 
+    fun showGameUi() {
+        if(gameUiComponent != null) { return }
+        gameUiComponent = InGameComponent(player, ggState)
+        addComponent(gameUiComponent!!)
+        revalidate()
+        repaint()
     }
 
     override fun dispose() {

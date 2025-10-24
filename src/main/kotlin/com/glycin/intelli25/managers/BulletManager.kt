@@ -39,8 +39,8 @@ class BulletManager(
 
         scope.launch(Dispatchers.Default) {
             while (active) {
-                addBullet(player.position, Vec2(ggState.mouseX.toFloat(), ggState.mouseY.toFloat()))
-                delay(ggState.normalAttackShootDelay)
+                addBullet(player.midPoint(), Vec2(ggState.mouseX.toFloat(), ggState.mouseY.toFloat()))
+                delay(ggState.normalAttackDelay)
             }
         }
     }

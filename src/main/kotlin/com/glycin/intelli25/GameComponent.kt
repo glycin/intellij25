@@ -45,6 +45,9 @@ class GameComponent(
             player.draw(g)
             bulletManager.drawBullets(g)
             enemyManager.drawEnemies(g)
+            enemyManager.drawPickups(g)
+
+            //TODO: Mouse debug stuff
             if (ggState.mouseX >= 0 && ggState.mouseY >= 0) {
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
                 g.color = JBColor.RED

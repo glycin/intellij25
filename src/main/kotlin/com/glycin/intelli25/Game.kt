@@ -35,9 +35,8 @@ class Game(
         scope.launch(Dispatchers.EDT) {
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
-            println("maxX: $maxX,  maxY: $maxY")
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime())
-            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), width = 150, height = 150)
+            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), width = 75, height = 75)
 
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
@@ -53,7 +52,7 @@ class Game(
                 ec.requestFocusInWindow()
             }
 
-            uiComponent = UiComponent(ggState!!, scope).also { uic ->
+            uiComponent = UiComponent(player, ggState!!, scope).also { uic ->
                 uic.bounds = editor.contentComponent.bounds
                 uic.isOpaque = false
             }
@@ -68,6 +67,7 @@ class Game(
             }
 
             uiComponent?.showDialogBox(listOf("Test1", "Test2", "Test3", "Test4", "Test5"))
+            uiComponent?.showGameUi()
         }
     }
 

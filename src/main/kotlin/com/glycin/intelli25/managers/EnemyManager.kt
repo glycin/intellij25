@@ -1,6 +1,7 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.model.Pickup
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
@@ -20,7 +21,9 @@ class EnemyManager(
     scope: CoroutineScope,
 ) {
     private var enemyMap = concurrentMapOf<Int, Enemy>()
-    var active = true
+    private var pickupsMap = concurrentMapOf<Int, Pickup>()
+    private var active = true
+    private var idCounter = 0
 
     init {
         scope.launch(Dispatchers.Default) {
@@ -34,13 +37,14 @@ class EnemyManager(
 
         scope.launch(Dispatchers.Default) {
             while (active) {
-                val cooldown = Random.nextLong(2_000, 15_000)
+                val cooldown = Random.nextLong(2_000, 5_000)
+                idCounter++
                 val spawned = Enemy(
-                    id = enemyMap.count() + 1,
+                    id = idCounter,
                     position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
                     player = player,
-                    width = 25,
-                    height = 25,
+                    width = 15,
+                    height = 15,
                 )
                 enemyMap[spawned.id] = spawned
                 delay(cooldown)
@@ -49,17 +53,34 @@ class EnemyManager(
     }
 
     fun kill(enemy: Enemy) {
+        pickupsMap[enemy.id] = enemy.getPickup()
         enemyMap.remove(enemy.id)
     }
 
     fun killAll(enemies: List<Enemy>) {
-        enemies.forEach { enemyMap.remove(it.id) }
+        enemies.forEach {
+            pickupsMap[it.id] = it.getPickup()
+            enemyMap.remove(it.id)
+        }
+    }
+
+    fun removeAllPickups(pickups: List<Pickup>) {
+        pickups.forEach {
+            pickupsMap.remove(it.id)
+        }
     }
 
     fun getEnemies() = enemyMap.values.toList()
 
+    fun getPickups() = pickupsMap.values.toList()
+
     fun drawEnemies(g: Graphics2D) {
         g.color = JBColor.YELLOW
         enemyMap.values.forEach {e -> e.draw(g) }
+    }
+
+    fun drawPickups(g: Graphics2D) {
+        g.color = JBColor.PINK
+        pickupsMap.values.forEach {e -> e.draw(g) }
     }
 }

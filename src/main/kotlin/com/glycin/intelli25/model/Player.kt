@@ -11,8 +11,12 @@ class Player(
     private val width: Int,
     private val height: Int,
 ) {
-    private val animator = PlayerAnimator()
+    var experience = 0
+    var experienceNeeded = 10
+    var pickUpRange: Float = 20.0f
+    var level = 1
 
+    private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT
     private var moving = false
@@ -54,5 +58,14 @@ class Player(
     fun stopMoving() {
         state = PlayerState.IDLE
         moving = false
+    }
+
+    fun addExp(xpCount: Int) {
+        experience += xpCount
+        if(experience >= experienceNeeded) {
+            experience -= experienceNeeded
+            experienceNeeded *= 2 // TODO: Make the scaling better
+            level++
+        }
     }
 }
