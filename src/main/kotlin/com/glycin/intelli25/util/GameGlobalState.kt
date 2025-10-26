@@ -7,6 +7,7 @@ data class GameGlobalState(
     var maxX: Int,
     var maxY: Int,
     var deltaTime: Long,
+    var inUpgradeMenu: Boolean = false,
 
     // Input things
     @Volatile var mouseX: Int = -1,

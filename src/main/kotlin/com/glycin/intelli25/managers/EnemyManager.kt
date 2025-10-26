@@ -28,8 +28,8 @@ class EnemyManager(
     init {
         scope.launch(Dispatchers.Default) {
             while (active) {
-                enemyMap.forEach { e ->
-                    e.value.move()
+                if(!ggState.inUpgradeMenu){
+                    enemyMap.forEach { e -> e.value.move() }
                 }
                 delay(ggState.deltaTime)
             }
@@ -37,16 +37,18 @@ class EnemyManager(
 
         scope.launch(Dispatchers.Default) {
             while (active) {
-                val cooldown = Random.nextLong(2_000, 5_000)
-                idCounter++
-                val spawned = Enemy(
-                    id = idCounter,
-                    position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
-                    player = player,
-                    width = 15,
-                    height = 15,
-                )
-                enemyMap[spawned.id] = spawned
+                val cooldown = Random.nextLong(500, 2_500)
+                if (!ggState.inUpgradeMenu){
+                    idCounter++
+                    val spawned = Enemy(
+                        id = idCounter,
+                        position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
+                        player = player,
+                        width = 15,
+                        height = 15,
+                    )
+                    enemyMap[spawned.id] = spawned
+                }
                 delay(cooldown)
             }
         }

@@ -1,14 +1,18 @@
 package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.EDT
 import com.intellij.openapi.observable.util.addComponent
+import com.intellij.openapi.ui.popup.JBPopupFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.swing.JComponent
+import javax.swing.JPanel
 
 class UiComponent(
     private val player: Player,
@@ -47,6 +51,36 @@ class UiComponent(
         addComponent(gameUiComponent!!)
         revalidate()
         repaint()
+    }
+
+    fun showUpgradePopup(
+        options: List<UpgradeOption>
+    ) {
+        val panel = UpgradeMenu(options)
+
+        val popup = JBPopupFactory.getInstance()
+            .createComponentPopupBuilder(panel, null)
+            .setRequestFocus(true)
+            .setFocusable(true)
+            .setModalContext(true)
+            .setCancelOnClickOutside(false)
+            .setCancelOnOtherWindowOpen(false)
+            .setCancelKeyEnabled(false)
+            .setTitle("LEVEL UP!")
+            .createPopup()
+
+        // Pass popup reference to cards so they can close it
+        panel.components.forEach { comp ->
+            if (comp is JPanel) {
+                comp.components.forEach { innerComp ->
+                    if (innerComp is UpgradeMenu.UpgradeCard) {
+                        innerComp.setPopupReference(popup)
+                    }
+                }
+            }
+        }
+
+        scope.launch(Dispatchers.EDT) { popup.showInCenterOf(parent) }
     }
 
     override fun dispose() {

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class CollisionsManager(
     private val player: Player,
     private val enemyManager: EnemyManager,
-    private val bulletManager: BulletManager,
+    private val attackManager: AttackManager,
     scope: CoroutineScope,
     ggState: GameGlobalState,
 ) {
@@ -46,14 +46,14 @@ class CollisionsManager(
         }
 
         if (pickUpsInRange.isNotEmpty()){
-            player.addExp(pickUpsInRange.count())
+            player.addExp(pickUpsInRange.count() * 5)
             enemyManager.removeAllPickups(pickUpsInRange)
         }
     }
 
     fun checkBulletToEnemy() {
         val bulletsToRemove = mutableListOf<Bullet>()
-        bulletManager.getBullets().forEach { b ->
+        attackManager.getBullets().forEach { b ->
             val enemiesInRange = enemyManager.getEnemies().filter { e ->
                 e.rect().intersects(b.rect()) || e.rect().contains(b.middleAsPoint())
             }
@@ -63,6 +63,6 @@ class CollisionsManager(
             }
         }
 
-        bulletManager.destroy(bulletsToRemove)
+        attackManager.destroy(bulletsToRemove)
     }
 }

@@ -1,7 +1,7 @@
 package com.glycin.intelli25
 
 import com.glycin.intelli25.input.GameMouseMotionListener
-import com.glycin.intelli25.managers.BulletManager
+import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
@@ -19,7 +19,7 @@ import javax.swing.JComponent
 class GameComponent(
     private val ggState: GameGlobalState,
     private val player: Player,
-    private val bulletManager: BulletManager,
+    private val attackManager: AttackManager,
     private val enemyManager: EnemyManager,
     scope: CoroutineScope,
 ): JComponent(), Disposable {
@@ -43,7 +43,7 @@ class GameComponent(
         super.paintComponent(g)
         if(g is Graphics2D) {
             player.draw(g)
-            bulletManager.drawBullets(g)
+            attackManager.drawBullets(g)
             enemyManager.drawEnemies(g)
             enemyManager.drawPickups(g)
 

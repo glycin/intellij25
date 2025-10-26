@@ -1,10 +1,11 @@
 package com.glycin.intelli25
 
 import com.glycin.intelli25.input.GameKeyListener
-import com.glycin.intelli25.managers.BulletManager
+import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.getDeltaTime
@@ -13,6 +14,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.util.PlatformIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,16 +38,18 @@ class Game(
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime())
-            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), width = 75, height = 75)
+            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), ggState = ggState!!, width = 75, height = 75) {
+                uiComponent?.showUpgradePopup(generateUpgradeOptions(it))
+            }
 
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
-            val bulletManager = BulletManager(scope, player, ggState!!)
+            val attackManager = AttackManager(scope, player, ggState!!)
             val enemyManager = EnemyManager(player, ggState!!, scope)
-            val collisionsManager = CollisionsManager(player, enemyManager, bulletManager, scope, ggState!!) //TODO: Create one update manager that handles all updating in the game
-            gameComponent = GameComponent(ggState!!, player, bulletManager, enemyManager, scope).also { ec ->
+            val collisionsManager = CollisionsManager(player, enemyManager, attackManager, scope, ggState!!) //TODO: Create one update manager that handles all updating in the game
+            gameComponent = GameComponent(ggState!!, player, attackManager, enemyManager, scope).also { ec ->
                 ec.bounds = editor.contentComponent.bounds
                 ec.isOpaque = false
                 ec.isFocusable = true
@@ -66,9 +70,32 @@ class Game(
                 c.revalidate()
             }
 
-            uiComponent?.showDialogBox(listOf("Test1", "Test2", "Test3", "Test4", "Test5"))
+            //uiComponent?.showDialogBox(listOf("Test1", "Test2", "Test3", "Test4", "Test5"))
             uiComponent?.showGameUi()
         }
+    }
+
+    private fun generateUpgradeOptions(player: Player): List<UpgradeOption> {
+        return listOf(
+            UpgradeOption(
+                icon = PlatformIcons.CHECK_ICON,
+                title = "Debugger",
+                description = "Shoot faster",
+                onSelect = { player.addUpgrade(it) },
+            ),
+            UpgradeOption(
+                icon = PlatformIcons.CLASS_ICON,
+                title = "AI",
+                description = "More HP",
+                onSelect = { player.addUpgrade(it) },
+            ),
+            UpgradeOption(
+                icon = PlatformIcons.COMBOBOX_ARROW_ICON,
+                title = "Javascript integration",
+                description = "More damage",
+                onSelect = { player.addUpgrade(it) },
+            )
+        )
     }
 
     override fun dispose() {

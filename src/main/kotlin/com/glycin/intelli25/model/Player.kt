@@ -1,5 +1,6 @@
 package com.glycin.intelli25.model
 
+import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import kotlin.math.roundToInt
@@ -8,8 +9,10 @@ class Player(
     var position: Vec2,
     var direction: Vec2 = Vec2.zero,
     var speed: Float = 10.0f,
+    private val ggState: GameGlobalState,
     private val width: Int,
     private val height: Int,
+    private val onLevelUp: (Player) -> Unit,
 ) {
     var experience = 0
     var experienceNeeded = 10
@@ -20,6 +23,7 @@ class Player(
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT
     private var moving = false
+    private val upgrades = mutableListOf<UpgradeOption>()
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
@@ -33,6 +37,12 @@ class Player(
         }
     }
 
+    fun addUpgrade(upgradeOption: UpgradeOption) {
+        println("Added upgrade option: ${upgradeOption.title}")
+        ggState.inUpgradeMenu = false
+        upgrades.add(upgradeOption)
+    }
+
     fun draw(g: Graphics2D) {
         val currentSprite = animator.getCurrentSprite()
 
@@ -44,6 +54,8 @@ class Player(
     }
 
     fun movePlayer(dir: Vec2) {
+        if(ggState.inUpgradeMenu) return
+
         moving = true
         if(state != PlayerState.WALK) { state = PlayerState.WALK }
         if(dir.x < 0) {
@@ -66,6 +78,8 @@ class Player(
             experience -= experienceNeeded
             experienceNeeded *= 2 // TODO: Make the scaling better
             level++
+            ggState.inUpgradeMenu = true
+            onLevelUp.invoke(this)
         }
     }
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 
-class BulletManager(
+class AttackManager(
     scope: CoroutineScope,
     player: Player,
     ggState: GameGlobalState,
@@ -39,7 +39,9 @@ class BulletManager(
 
         scope.launch(Dispatchers.Default) {
             while (active) {
-                addBullet(player.midPoint(), Vec2(ggState.mouseX.toFloat(), ggState.mouseY.toFloat()))
+                if(!ggState.inUpgradeMenu) {
+                    addBullet(player.midPoint(), Vec2(ggState.mouseX.toFloat(), ggState.mouseY.toFloat()))
+                }
                 delay(ggState.normalAttackDelay)
             }
         }
