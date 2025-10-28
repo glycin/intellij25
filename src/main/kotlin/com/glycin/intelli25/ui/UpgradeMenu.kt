@@ -2,7 +2,9 @@ package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameColors
+import com.intellij.openapi.ui.popup.JBPopup
 import com.intellij.ui.JBColor
+import com.intellij.util.IconUtil
 import com.intellij.util.ui.JBUI
 import java.awt.BorderLayout
 import java.awt.Color
@@ -58,14 +60,15 @@ class UpgradeMenu(
 
     inner class UpgradeCard(private val option: UpgradeOption) : JPanel() {
         private var isHovered = false
-        private var popup: com.intellij.openapi.ui.popup.JBPopup? = null
+        private var popup: JBPopup? = null
 
         init {
             layout = BorderLayout(10, 10)
-            preferredSize = Dimension(200, 250)
-            border = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(JBColor.red, 2),
-                JBUI.Borders.empty(15)
+            preferredSize = Dimension(200, 150)
+            background = GameColors.jbPurple
+            border = BorderFactory.createLineBorder(
+                GameColors.jbPurple,
+                2
             )
             cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 
@@ -77,11 +80,10 @@ class UpgradeMenu(
             return JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 isOpaque = false
-
                 option.icon.also {
                     val iconLabel = JLabel(it).apply {
                         alignmentX = CENTER_ALIGNMENT
-                        bounds = Rectangle(0, 0, 50, 50)
+                        bounds = Rectangle(0, 0, 75, 75)
                     }
                     add(iconLabel)
                     add(Box.createRigidArea(Dimension(0, 10)))
@@ -93,45 +95,45 @@ class UpgradeMenu(
                     alignmentX = CENTER_ALIGNMENT
                 })
 
-                add(Box.createRigidArea(Dimension(0, 10)))
-                add(createLevelIndicator())
-                add(Box.createRigidArea(Dimension(0, 15)))
+                add(Box.createRigidArea(Dimension(0, 5)))
+                //add(createLevelIndicator())
+                add(Box.createRigidArea(Dimension(0, 5)))
 
                 add(JTextArea(option.description).apply {
                     isEditable = false
                     lineWrap = true
                     wrapStyleWord = true
                     isOpaque = false
-                    foreground = JBColor.YELLOW
+                    foreground = GameColors.white
                     font = Fonts.pixelFont.deriveFont(16.0f)
                     alignmentX = CENTER_ALIGNMENT
                 })
             }
         }
 
-        private fun createLevelIndicator(): JPanel {
+        /*private fun createLevelIndicator(): JPanel {
             return JPanel(FlowLayout(FlowLayout.CENTER, 3, 0)).apply {
                 isOpaque = false
                     add(JPanel().apply {
                     preferredSize = Dimension(20, 8)
-                    background = GameColors.black
+                    background = GameColors.jbBlue
                     border = BorderFactory.createLineBorder(
-                        GameColors.white,
+                        GameColors.jbRed,
                         1
                     )
                 })
             }
-        }
+        }*/
 
         private fun setupMouseListeners() {
             addMouseListener(object : MouseAdapter() {
                 override fun mouseEntered(e: MouseEvent) {
                     isHovered = true
-                    background = JBColor(Color(60, 60, 90), Color(60, 60, 90))
+                    background = GameColors.jbBlue
                     border = BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(
-                            JBColor(Color(255, 215, 0), Color(255, 215, 0)),
-                            3
+                            GameColors.jbOrange,
+                            5
                         ),
                         JBUI.Borders.empty(15)
                     )
@@ -140,10 +142,10 @@ class UpgradeMenu(
 
                 override fun mouseExited(e: MouseEvent) {
                     isHovered = false
-                    background = JBColor(Color(40, 40, 60), Color(40, 40, 60))
+                    background = GameColors.jbPurple
                     border = BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(
-                            JBColor(Color(100, 100, 120), Color(100, 100, 120)),
+                            GameColors.jbPurple,
                             2
                         ),
                         JBUI.Borders.empty(15)

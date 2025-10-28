@@ -14,6 +14,8 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.ui.scale.ScaleContext
+import com.intellij.util.IconUtil
 import com.intellij.util.PlatformIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,22 +80,33 @@ class Game(
     private fun generateUpgradeOptions(player: Player): List<UpgradeOption> {
         return listOf(
             UpgradeOption(
-                icon = PlatformIcons.CHECK_ICON,
+                icon = IconUtil.scale(PlatformIcons.CHECK_ICON, null, 2.5f),
                 title = "Debugger",
-                description = "Shoot faster",
-                onSelect = { player.addUpgrade(it) },
-            ),
-            UpgradeOption(
-                icon = PlatformIcons.CLASS_ICON,
-                title = "AI",
-                description = "More HP",
-                onSelect = { player.addUpgrade(it) },
-            ),
-            UpgradeOption(
-                icon = PlatformIcons.COMBOBOX_ARROW_ICON,
-                title = "Javascript integration",
                 description = "More damage",
-                onSelect = { player.addUpgrade(it) },
+                onSelect = {
+                    ggState?.normalAttackDamage += 10
+                    println("applying more damage")
+                    player.addUpgrade(it)
+               },
+            ),
+            UpgradeOption(
+                icon = IconUtil.scale(PlatformIcons.CLASS_ICON, null, 2.5f),
+                title = "AI",
+                description = "Faster bullets",
+                onSelect = {
+                    ggState?.normalAttackDelay /= 2
+                    println("applying faster bullets")
+                    player.addUpgrade(it)
+                },
+            ),
+            UpgradeOption(
+                icon = IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f),
+                title = "Compiler",
+                description = "More bullets",
+                onSelect = {
+                    println("applying more bullets")
+                    player.addUpgrade(it)
+               },
             )
         )
     }

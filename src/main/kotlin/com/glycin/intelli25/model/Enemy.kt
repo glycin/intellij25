@@ -3,7 +3,6 @@ package com.glycin.intelli25.model
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class Enemy(
     var id: Int,
@@ -11,9 +10,11 @@ class Enemy(
     private var player: Player,
     private var width: Int,
     private var height: Int,
-    private val speed: Float = Random.Default.nextDouble(0.5, 5.0).toFloat(),
+    private val speed: Float = 1f,
 ) {
     var damage = 1
+    var maxHp = 10
+    var currentHp = maxHp
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 

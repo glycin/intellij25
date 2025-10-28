@@ -9,6 +9,7 @@ class Bullet(
     val id: Long,
     var position: Vec2,
     var direction: Vec2,
+    var damage: Int,
     val radius: Int = 15,
     val speed: Float = 10.0f,
 ) {

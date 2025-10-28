@@ -15,7 +15,7 @@ import java.awt.Graphics2D
 class AttackManager(
     scope: CoroutineScope,
     player: Player,
-    ggState: GameGlobalState,
+    private val ggState: GameGlobalState,
 ) {
     private var nextId = 0L
     private var bullets = concurrentMapOf<Long, Bullet>()
@@ -55,7 +55,7 @@ class AttackManager(
     fun getBullets() = bullets.values.toList()
 
     fun addBullet(playerPosition: Vec2, direction: Vec2) {
-        bullets[nextId] = Bullet(nextId, playerPosition, direction)
+        bullets[nextId] = Bullet(nextId, playerPosition, direction, ggState.normalAttackDamage)
         nextId++
     }
 

@@ -36,7 +36,6 @@ class CollisionsManager(
         }
 
         if (enemiesInRange.isNotEmpty()){
-            enemyManager.killAll(enemiesInRange)
             player.hurt(enemiesInRange.sumOf { it.damage })
         }
     }
@@ -53,17 +52,13 @@ class CollisionsManager(
     }
 
     fun checkBulletToEnemy() {
-        val bulletsToRemove = mutableListOf<Bullet>()
         attackManager.getBullets().forEach { b ->
             val enemiesInRange = enemyManager.getEnemies().filter { e ->
-                e.rect().intersects(b.rect()) || e.rect().contains(b.middleAsPoint())
+                Vec2.distance(e.position, b.position) <= b.radius
             }
             if (enemiesInRange.isNotEmpty()){
-                enemyManager.killAll(enemiesInRange)
-                bulletsToRemove.add(b)
+                enemyManager.damageAll(enemiesInRange, b.damage)
             }
         }
-
-        attackManager.destroy(bulletsToRemove)
     }
 }

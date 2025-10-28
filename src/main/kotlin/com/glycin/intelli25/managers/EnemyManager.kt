@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
-import kotlin.random.Random
+import java.util.concurrent.atomic.AtomicLong
 
 class EnemyManager(
     player: Player,
@@ -24,6 +24,7 @@ class EnemyManager(
     private var pickupsMap = concurrentMapOf<Int, Pickup>()
     private var active = true
     private var idCounter = 0
+    private val elapsedTimeMs = AtomicLong(0L)
 
     init {
         scope.launch(Dispatchers.Default) {
@@ -37,32 +38,45 @@ class EnemyManager(
 
         scope.launch(Dispatchers.Default) {
             while (active) {
-                val cooldown = Random.nextLong(500, 2_500)
                 if (!ggState.inUpgradeMenu){
-                    idCounter++
-                    val spawned = Enemy(
-                        id = idCounter,
-                        position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
-                        player = player,
-                        width = 15,
-                        height = 15,
-                    )
-                    enemyMap[spawned.id] = spawned
+                    repeat(ggState.spawnCountPerCooldown) {
+                        idCounter++
+                        val spawned = Enemy(
+                            id = idCounter,
+                            position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
+                            player = player,
+                            width = 15,
+                            height = 15,
+                        )
+                        enemyMap[spawned.id] = spawned
+                    }
                 }
-                delay(cooldown)
+                delay(ggState.enemySpawnCooldown)
+            }
+        }
+
+        scope.launch(Dispatchers.Default) {
+            while (active) {
+                if(!ggState.inUpgradeMenu){
+                    val elapsedSeconds = elapsedTimeMs.addAndGet(1000L) / 1000L
+                    if(elapsedSeconds > 0 && elapsedSeconds % 30 == 0L){
+                        println("Now at seconds: $elapsedSeconds")
+                        ggState.spawnCountPerCooldown++
+                        ggState.enemySpawnCooldown -= 100L
+                    }
+                }
+                delay(1000L) // Update every second
             }
         }
     }
 
-    fun kill(enemy: Enemy) {
-        pickupsMap[enemy.id] = enemy.getPickup()
-        enemyMap.remove(enemy.id)
-    }
-
-    fun killAll(enemies: List<Enemy>) {
-        enemies.forEach {
-            pickupsMap[it.id] = it.getPickup()
-            enemyMap.remove(it.id)
+    fun damageAll(enemies: List<Enemy>, damage: Int) {
+        enemies.forEach { e ->
+            e.currentHp -= damage
+            if(e.currentHp <= 0){
+                pickupsMap[e.id] = e.getPickup()
+                enemyMap.remove(e.id)
+            }
         }
     }
 

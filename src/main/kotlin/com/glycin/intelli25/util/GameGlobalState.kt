@@ -9,6 +9,11 @@ data class GameGlobalState(
     var deltaTime: Long,
     var inUpgradeMenu: Boolean = false,
 
-    // Player settings
-    var normalAttackDelay: Long = 2000L //ms,
+    // Player state
+    var normalAttackDelay: Long = 2000L, //ms
+    var normalAttackDamage: Int = 1,
+
+    // Enemy state
+    var enemySpawnCooldown: Long = 2000L,
+    var spawnCountPerCooldown: Int = 1,
 )
