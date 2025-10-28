@@ -40,7 +40,8 @@ class AttackManager(
         scope.launch(Dispatchers.Default) {
             while (active) {
                 if(!ggState.inUpgradeMenu) {
-                    addBullet(player.midPoint(), Vec2(ggState.mouseX.toFloat(), ggState.mouseY.toFloat()))
+                    addBullet(player.midPoint(), Vec2.left)
+                    addBullet(player.midPoint(), Vec2.right)
                 }
                 delay(ggState.normalAttackDelay)
             }
@@ -53,8 +54,7 @@ class AttackManager(
 
     fun getBullets() = bullets.values.toList()
 
-    fun addBullet(playerPosition: Vec2, mousePosition: Vec2) {
-        val direction = (mousePosition - playerPosition).normalized()
+    fun addBullet(playerPosition: Vec2, direction: Vec2) {
         bullets[nextId] = Bullet(nextId, playerPosition, direction)
         nextId++
     }

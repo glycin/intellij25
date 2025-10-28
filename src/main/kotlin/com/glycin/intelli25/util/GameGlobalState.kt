@@ -9,10 +9,6 @@ data class GameGlobalState(
     var deltaTime: Long,
     var inUpgradeMenu: Boolean = false,
 
-    // Input things
-    @Volatile var mouseX: Int = -1,
-    @Volatile var mouseY: Int = -1,
-
     // Player settings
     var normalAttackDelay: Long = 2000L //ms,
 )

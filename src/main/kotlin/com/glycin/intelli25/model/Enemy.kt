@@ -1,6 +1,5 @@
 package com.glycin.intelli25.model
 
-import com.glycin.intelli25.model.Vec2
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import kotlin.math.roundToInt
@@ -14,6 +13,8 @@ class Enemy(
     private var height: Int,
     private val speed: Float = Random.Default.nextDouble(0.5, 5.0).toFloat(),
 ) {
+    var damage = 1
+
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun rect() = Rectangle(position.x.roundToInt(), position.y.roundToInt(), width, height)

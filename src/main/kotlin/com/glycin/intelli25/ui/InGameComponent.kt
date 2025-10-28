@@ -8,6 +8,8 @@ import com.intellij.ui.JBColor
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.JComponent
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 private const val barHeight = 20
 class InGameComponent(
@@ -24,6 +26,7 @@ class InGameComponent(
         super.paintComponent(g)
         if(g is Graphics2D) {
             drawExpBar(g)
+            drawPlayerHp(g)
         }
     }
 
@@ -33,6 +36,16 @@ class InGameComponent(
         g.color = JBColor.blue
         val filledWidth = player.experience * (ggState.maxX / player.experienceNeeded)
         g.fillRect(0, 0, filledWidth, barHeight)
+    }
+
+    private fun drawPlayerHp(g: Graphics2D) {
+        val x = player.position.x.roundToInt()
+        val y = player.position.y.roundToInt() + player.height + 10
+        val hpWidth = max((player.currentHp.toFloat() / player.maxHP.toFloat()) * player.width, 0f).roundToInt()
+        g.color = GameColors.red
+        g.fillRect(x, y, player.width, 5)
+        g.color = GameColors.green
+        g.fillRect(x, y, hpWidth, 5)
     }
 
     override fun dispose() {

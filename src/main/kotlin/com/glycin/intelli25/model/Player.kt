@@ -9,15 +9,17 @@ class Player(
     var position: Vec2,
     var direction: Vec2 = Vec2.zero,
     var speed: Float = 10.0f,
+    val width: Int,
+    val height: Int,
     private val ggState: GameGlobalState,
-    private val width: Int,
-    private val height: Int,
     private val onLevelUp: (Player) -> Unit,
 ) {
     var experience = 0
     var experienceNeeded = 10
     var pickUpRange: Float = 20.0f
     var level = 1
+    var currentHp = 100
+    var maxHP = 100
 
     private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
@@ -81,5 +83,9 @@ class Player(
             ggState.inUpgradeMenu = true
             onLevelUp.invoke(this)
         }
+    }
+
+    fun hurt(damage: Int) {
+        currentHp -= damage
     }
 }

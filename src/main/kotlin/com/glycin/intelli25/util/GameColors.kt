@@ -8,4 +8,6 @@ object GameColors {
     val black = Color.black.toJbColor()
     val white = Color.white.toJbColor()
     val yellow = Color.yellow.toJbColor()
+    val red = Color.red.toJbColor()
+    val green = Color.green.toJbColor()
 }

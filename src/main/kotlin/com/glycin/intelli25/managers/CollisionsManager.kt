@@ -37,6 +37,7 @@ class CollisionsManager(
 
         if (enemiesInRange.isNotEmpty()){
             enemyManager.killAll(enemiesInRange)
+            player.hurt(enemiesInRange.sumOf { it.damage })
         }
     }
 
