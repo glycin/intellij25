@@ -16,7 +16,7 @@ class Player(
 ) {
     var experience = 0
     var experienceNeeded = 10
-    var pickUpRange: Float = 20.0f
+    var pickUpRange: Float = 50.0f
     var level = 1
     var currentHp = 100
     var maxHP = 100

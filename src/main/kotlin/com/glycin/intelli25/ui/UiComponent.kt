@@ -20,13 +20,12 @@ class UiComponent(
     private val scope: CoroutineScope,
 ): JComponent(), Disposable {
 
-    private var active = true
     private var dialogComponent: DialogComponent? = null
     private var gameUiComponent: InGameComponent? = null
 
     init {
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 repaint()
                 delay(ggState.deltaTime)
             }

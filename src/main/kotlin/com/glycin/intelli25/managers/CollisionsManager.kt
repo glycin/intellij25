@@ -1,6 +1,5 @@
 package com.glycin.intelli25.managers
 
-import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
@@ -17,11 +16,9 @@ class CollisionsManager(
     scope: CoroutineScope,
     ggState: GameGlobalState,
 ) {
-    val active = true
-
     init {
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 checkPlayerToEnemy()
                 checkBulletToEnemy()
                 checkPlayerToPickup()
@@ -52,12 +49,10 @@ class CollisionsManager(
     }
 
     fun checkBulletToEnemy() {
-        attackManager.getBullets().forEach { b ->
-            val enemiesInRange = enemyManager.getEnemies().filter { e ->
-                Vec2.distance(e.position, b.position) <= b.radius
-            }
-            if (enemiesInRange.isNotEmpty()){
-                enemyManager.damageAll(enemiesInRange, b.damage)
+        enemyManager.getEnemies().forEach { e ->
+            val dmg = attackManager.getDamage(e)
+            if(dmg > 0){
+                enemyManager.damage(e, dmg)
             }
         }
     }

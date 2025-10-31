@@ -22,13 +22,12 @@ class EnemyManager(
 ) {
     private var enemyMap = concurrentMapOf<Int, Enemy>()
     private var pickupsMap = concurrentMapOf<Int, Pickup>()
-    private var active = true
     private var idCounter = 0
     private val elapsedTimeMs = AtomicLong(0L)
 
     init {
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
                     enemyMap.forEach { e -> e.value.move() }
                 }
@@ -37,7 +36,7 @@ class EnemyManager(
         }
 
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 if (!ggState.inUpgradeMenu){
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
@@ -56,7 +55,7 @@ class EnemyManager(
         }
 
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
                     val elapsedSeconds = elapsedTimeMs.addAndGet(1000L) / 1000L
                     if(elapsedSeconds > 0 && elapsedSeconds % 30 == 0L){
@@ -70,13 +69,11 @@ class EnemyManager(
         }
     }
 
-    fun damageAll(enemies: List<Enemy>, damage: Int) {
-        enemies.forEach { e ->
-            e.currentHp -= damage
-            if(e.currentHp <= 0){
-                pickupsMap[e.id] = e.getPickup()
-                enemyMap.remove(e.id)
-            }
+    fun damage(enemy: Enemy, damage: Int) {
+        enemy.currentHp -= damage
+        if(enemy.currentHp <= 0){
+            pickupsMap[enemy.id] = enemy.getPickup()
+            enemyMap.remove(enemy.id)
         }
     }
 

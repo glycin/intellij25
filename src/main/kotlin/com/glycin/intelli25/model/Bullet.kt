@@ -16,7 +16,7 @@ class Bullet(
     val innerRadius: Int = radius - 5
 
     fun rect() = Rectangle(position.x.roundToInt(), position.y.roundToInt(), innerRadius, innerRadius)
-    fun middleAsPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2)).toPoint()
+    fun midPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2))
 
     fun move() {
         position += direction * speed

@@ -20,11 +20,10 @@ class GameComponent(
     private val enemyManager: EnemyManager,
     scope: CoroutineScope,
 ): JComponent(), Disposable {
-    private var active = true
 
     init {
         scope.launch(Dispatchers.Default) {
-            while (active) {
+            while (ggState.gameActive) {
                 player.update()
                 repaint()
                 delay(ggState.deltaTime)
@@ -38,13 +37,13 @@ class GameComponent(
         super.paintComponent(g)
         if(g is Graphics2D) {
             player.draw(g)
-            attackManager.drawBullets(g)
+            attackManager.drawAttacks(g)
             enemyManager.drawEnemies(g)
             enemyManager.drawPickups(g)
         }
     }
 
     override fun dispose() {
-        active = false
+        ggState.gameActive = false
     }
 }

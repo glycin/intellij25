@@ -1,11 +1,10 @@
 package com.glycin.intelli25.managers
 
-import com.glycin.intelli25.model.Bullet
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
-import com.intellij.ui.JBColor
-import com.jetbrains.rd.util.concurrentMapOf
+import com.glycin.intelli25.upgrades.Attack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,50 +16,23 @@ class AttackManager(
     player: Player,
     private val ggState: GameGlobalState,
 ) {
-    private var nextId = 0L
-    private var bullets = concurrentMapOf<Long, Bullet>()
-    var active = true
+    private var attacks = mutableListOf<Attack>()
 
     init {
         scope.launch(Dispatchers.Default) {
-            while (active) {
-                bullets.filter { (id, b) ->
-                    b.position.x > ggState.maxX || b.position.x < 0 || b.position.y > ggState.maxY || b.position.y < 0
-                }.forEach { (id, b) ->
-                    bullets.remove(id)
+            while (ggState.gameActive) {
+                if(!ggState.inUpgradeMenu){
+                    attacks.forEach { it.move() }
                 }
 
-                bullets.forEach { (id, b) ->
-                    b.move()
-                }
                 delay(ggState.deltaTime)
             }
         }
-
-        scope.launch(Dispatchers.Default) {
-            while (active) {
-                if(!ggState.inUpgradeMenu) {
-                    addBullet(player.midPoint(), Vec2.left)
-                    addBullet(player.midPoint(), Vec2.right)
-                }
-                delay(ggState.normalAttackDelay)
-            }
-        }
     }
 
-    fun destroy(removedBullets: List<Bullet>) {
-        removedBullets.forEach { bullets.remove(it.id) }
-    }
+    fun getDamage(enemy: Enemy) = attacks.sumOf { it.getDamage(enemy) }
 
-    fun getBullets() = bullets.values.toList()
+    fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }
 
-    fun addBullet(playerPosition: Vec2, direction: Vec2) {
-        bullets[nextId] = Bullet(nextId, playerPosition, direction, ggState.normalAttackDamage)
-        nextId++
-    }
-
-    fun drawBullets(g: Graphics2D) {
-        g.color = JBColor.GREEN
-        bullets.values.forEach { b -> b.draw(g) }
-    }
+    fun addAttack(attack: Attack) = attacks.add(attack)
 }

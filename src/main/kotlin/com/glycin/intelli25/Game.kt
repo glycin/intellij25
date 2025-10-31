@@ -1,5 +1,6 @@
 package com.glycin.intelli25
 
+import com.github.weisj.jsvg.ba
 import com.glycin.intelli25.input.GameKeyListener
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
@@ -10,6 +11,7 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.getDeltaTime
 import com.glycin.intelli25.ui.UiComponent
+import com.glycin.intelli25.upgrades.BasicAttack
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
@@ -73,6 +75,7 @@ class Game(
             }
 
             //uiComponent?.showDialogBox(listOf("Test1", "Test2", "Test3", "Test4", "Test5"))
+            initUpgrades(attackManager, player)
             uiComponent?.showGameUi()
         }
     }
@@ -111,11 +114,16 @@ class Game(
         )
     }
 
+    private fun initUpgrades(attackManager: AttackManager, player: Player) {
+        attackManager.addAttack(BasicAttack(ggState!!, player, scope))
+    }
+
     override fun dispose() {
         editor.contentComponent.remove(uiComponent)
         editor.contentComponent.remove(gameComponent)
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
+        ggState?.gameActive = false
     }
 }
