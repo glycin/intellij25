@@ -1,6 +1,5 @@
 package com.glycin.intelli25
 
-import com.github.weisj.jsvg.ba
 import com.glycin.intelli25.input.GameKeyListener
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
@@ -16,7 +15,6 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.ui.scale.ScaleContext
 import com.intellij.util.IconUtil
 import com.intellij.util.PlatformIcons
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +34,7 @@ class Game(
     private var uiComponent: UiComponent? = null
     private var ggState: GameGlobalState? = null
     private var keyListener: GameKeyListener? = null
+    private lateinit var attackManager: AttackManager
 
     init {
         scope.launch(Dispatchers.EDT) {
@@ -50,7 +49,7 @@ class Game(
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
-            val attackManager = AttackManager(scope, player, ggState!!)
+            attackManager = AttackManager(scope, player, ggState!!)
             val enemyManager = EnemyManager(player, ggState!!, scope)
             val collisionsManager = CollisionsManager(player, enemyManager, attackManager, scope, ggState!!) //TODO: Create one update manager that handles all updating in the game
             gameComponent = GameComponent(ggState!!, player, attackManager, enemyManager, scope).also { ec ->
@@ -81,37 +80,16 @@ class Game(
     }
 
     private fun generateUpgradeOptions(player: Player): List<UpgradeOption> {
-        return listOf(
-            UpgradeOption(
-                icon = IconUtil.scale(PlatformIcons.CHECK_ICON, null, 2.5f),
-                title = "Debugger",
-                description = "More damage",
-                onSelect = {
-                    ggState?.normalAttackDamage += 10
-                    println("applying more damage")
-                    player.addUpgrade(it)
-               },
-            ),
-            UpgradeOption(
-                icon = IconUtil.scale(PlatformIcons.CLASS_ICON, null, 2.5f),
-                title = "AI",
-                description = "Faster bullets",
-                onSelect = {
-                    ggState?.normalAttackDelay /= 2
-                    println("applying faster bullets")
-                    player.addUpgrade(it)
-                },
-            ),
-            UpgradeOption(
-                icon = IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f),
-                title = "Compiler",
-                description = "More bullets",
-                onSelect = {
-                    println("applying more bullets")
-                    player.addUpgrade(it)
-               },
-            )
+        val upgrades = attackManager.getUpgrades()
+        val otherUpgrades = listOf(
+            UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
+            UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
+            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
+            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
+            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
+            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false }
         )
+        return (upgrades + otherUpgrades).shuffled().take(3)
     }
 
     private fun initUpgrades(attackManager: AttackManager, player: Player) {

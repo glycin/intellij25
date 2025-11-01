@@ -2,6 +2,7 @@ package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.upgrades.Attack
@@ -35,4 +36,8 @@ class AttackManager(
     fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }
 
     fun addAttack(attack: Attack) = attacks.add(attack)
+
+    fun getUpgrades(): List<UpgradeOption> {
+        return attacks.mapNotNull { it.getNextUpgrade() }
+    }
 }

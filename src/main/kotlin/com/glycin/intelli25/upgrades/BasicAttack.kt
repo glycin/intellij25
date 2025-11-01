@@ -3,9 +3,12 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
+import com.intellij.icons.AllIcons
 import com.intellij.ui.JBColor
+import com.intellij.util.IconUtil
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,15 +24,65 @@ class BasicAttack(
 
     private var nextId = 0L
     private var bullets = concurrentMapOf<Long, Bullet>()
+    private var attackDelay: Long = 2000L //ms
+
+    private val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
+    private val title = "Debugger"
+    private val basicAttackDamage: Int = 2
+
+    private val upgrades = listOf(
+        UpgradeOption(attackIcon, title, "Increase firing speed of debugging bullets.") {
+            attackDelay = 1250L
+            ggState.inUpgradeMenu = false
+            currentLevel++
+        },
+        UpgradeOption(attackIcon, title, "Fire additional lines of debugging bullets.") {
+            ggState.inUpgradeMenu = false
+            currentLevel++
+        },
+        UpgradeOption(attackIcon, title, "Increase firing speed even more!") {
+            attackDelay = 750L
+            ggState.inUpgradeMenu = false
+            currentLevel++
+        },
+        UpgradeOption(attackIcon, title, "Fire even more lines of debugging bullets.") {
+            ggState.inUpgradeMenu = false
+            currentLevel++
+        }
+    )
 
     init {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
-                    addBullet(player.midPoint(), Vec2.left)
-                    addBullet(player.midPoint(), Vec2.right)
+                    when(currentLevel) {
+                        1, 2 -> {
+                            addBullet(player.midPoint(), Vec2.left)
+                            addBullet(player.midPoint(), Vec2.right)
+                        }
+                        3, 4 -> {
+                            addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
+                            addBullet(player.midPoint(), Vec2.left)
+                            addBullet(player.midPoint(), Vec2(1.0f, 1.0f))
+
+                            addBullet(player.midPoint(), Vec2(-1.0f, -1.0f))
+                            addBullet(player.midPoint(), Vec2.right)
+                            addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
+                        }
+                        5 -> {
+                            addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
+                            addBullet(player.midPoint(), Vec2.left)
+                            addBullet(player.midPoint(), Vec2(1.0f, 1.0f))
+                            addBullet(player.midPoint(), Vec2.up)
+
+                            addBullet(player.midPoint(), Vec2(-1.0f, -1.0f))
+                            addBullet(player.midPoint(), Vec2.right)
+                            addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
+                            addBullet(player.midPoint(), Vec2.down)
+                        }
+                    }
                 }
-                delay(ggState.normalAttackDelay)
+                delay(attackDelay)
             }
         }
     }
@@ -61,8 +114,13 @@ class BasicAttack(
         }
     }
 
+    override fun getNextUpgrade(): UpgradeOption? {
+        if(currentLevel >= maxLevel) { return null}
+        return upgrades[currentLevel - 1]
+    }
+
     fun addBullet(playerPosition: Vec2, direction: Vec2) {
-        bullets[nextId] = Bullet(nextId, playerPosition, direction, ggState.normalAttackDamage)
+        bullets[nextId] = Bullet(nextId, playerPosition, direction, basicAttackDamage)
         nextId++
     }
 }
