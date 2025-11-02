@@ -10,7 +10,9 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.getDeltaTime
 import com.glycin.intelli25.ui.UiComponent
-import com.glycin.intelli25.upgrades.BasicAttack
+import com.glycin.intelli25.upgrades.AreaAttack
+import com.glycin.intelli25.upgrades.LightningAttack
+import com.glycin.intelli25.upgrades.RotatingAttack
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
@@ -93,7 +95,10 @@ class Game(
     }
 
     private fun initUpgrades(attackManager: AttackManager, player: Player) {
-        attackManager.addAttack(BasicAttack(ggState!!, player, scope))
+        //attackManager.addAttack(BasicAttack(ggState!!, player, scope))
+        attackManager.addAttack(AreaAttack(ggState!!, player))
+        //attackManager.addAttack(RotatingAttack(ggState!!, player))
+        attackManager.addAttack(LightningAttack(ggState!!, player, scope))
     }
 
     override fun dispose() {

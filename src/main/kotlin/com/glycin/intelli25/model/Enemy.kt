@@ -13,7 +13,7 @@ class Enemy(
     private val speed: Float = 1f,
 ) {
     var damage = 1
-    var maxHp = 10
+    var maxHp = 20
     var currentHp = maxHp
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))

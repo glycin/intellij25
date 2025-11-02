@@ -28,7 +28,7 @@ class BasicAttack(
 
     private val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
     private val title = "Debugger"
-    private val basicAttackDamage: Int = 2
+    private val basicAttackDamage: Int = 10
 
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Increase firing speed of debugging bullets.") {
@@ -41,7 +41,7 @@ class BasicAttack(
             currentLevel++
         },
         UpgradeOption(attackIcon, title, "Increase firing speed even more!") {
-            attackDelay = 750L
+            attackDelay = 250L
             ggState.inUpgradeMenu = false
             currentLevel++
         },
@@ -104,9 +104,9 @@ class BasicAttack(
         }
     }
 
-    override fun getDamage(enemy: Enemy): Int {
+    override fun getDamage(enemyMidPos: Vec2): Int {
         return bullets.values.sumOf { b ->
-            if(Vec2.distance(enemy.midPoint(), b.midPoint()) <= b.radius) {
+            if(Vec2.distance(enemyMidPos, b.midPoint()) <= b.radius) {
                 b.damage
             } else {
                 0

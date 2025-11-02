@@ -31,7 +31,10 @@ class AttackManager(
         }
     }
 
-    fun getDamage(enemy: Enemy) = attacks.sumOf { it.getDamage(enemy) }
+    fun getDamage(enemy: Enemy): Int {
+        val midPos = enemy.midPoint()
+        return attacks.sumOf { it.getDamage(midPos) }
+    }
 
     fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }
 
