@@ -59,7 +59,7 @@ class LightningAttack(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
-                    activeLightningPosition = randomPointInCircle(ggState.maxX - 200f, player.midPoint())
+                    activeLightningPosition = randomPointInCircle(ggState.maxX - 300f, player.midPoint())
                 }
                 delay(attackCooldown)
             }

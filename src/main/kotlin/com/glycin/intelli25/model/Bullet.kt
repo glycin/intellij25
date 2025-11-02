@@ -1,6 +1,5 @@
 package com.glycin.intelli25.model
 
-import com.glycin.intelli25.util.toPoint
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import kotlin.math.roundToInt
@@ -9,7 +8,7 @@ class Bullet(
     val id: Long,
     var position: Vec2,
     var direction: Vec2,
-    var damage: Int,
+    val damage: Int,
     val radius: Int = 15,
     val speed: Float = 10.0f,
 ) {

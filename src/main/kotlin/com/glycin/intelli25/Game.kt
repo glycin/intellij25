@@ -12,6 +12,7 @@ import com.glycin.intelli25.util.getDeltaTime
 import com.glycin.intelli25.ui.UiComponent
 import com.glycin.intelli25.upgrades.AreaAttack
 import com.glycin.intelli25.upgrades.LightningAttack
+import com.glycin.intelli25.upgrades.PoolAttack
 import com.glycin.intelli25.upgrades.RotatingAttack
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
@@ -98,7 +99,8 @@ class Game(
         //attackManager.addAttack(BasicAttack(ggState!!, player, scope))
         attackManager.addAttack(AreaAttack(ggState!!, player))
         //attackManager.addAttack(RotatingAttack(ggState!!, player))
-        attackManager.addAttack(LightningAttack(ggState!!, player, scope))
+        //attackManager.addAttack(LightningAttack(ggState!!, player, scope))
+        attackManager.addAttack(PoolAttack(ggState!!, player, scope))
     }
 
     override fun dispose() {
