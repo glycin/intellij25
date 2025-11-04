@@ -64,7 +64,7 @@ class UpgradeMenu(
 
         init {
             layout = BorderLayout(10, 10)
-            preferredSize = Dimension(200, 150)
+            preferredSize = Dimension(200, 250)
             background = GameColors.jbPurple
             border = BorderFactory.createLineBorder(
                 GameColors.jbPurple,
@@ -83,7 +83,7 @@ class UpgradeMenu(
                 option.icon.also {
                     val iconLabel = JLabel(it).apply {
                         alignmentX = CENTER_ALIGNMENT
-                        bounds = Rectangle(0, 0, 75, 75)
+                        bounds = Rectangle(0, 0, 50, 50)
                     }
                     add(iconLabel)
                     add(Box.createRigidArea(Dimension(0, 10)))
@@ -110,20 +110,6 @@ class UpgradeMenu(
                 })
             }
         }
-
-        /*private fun createLevelIndicator(): JPanel {
-            return JPanel(FlowLayout(FlowLayout.CENTER, 3, 0)).apply {
-                isOpaque = false
-                    add(JPanel().apply {
-                    preferredSize = Dimension(20, 8)
-                    background = GameColors.jbBlue
-                    border = BorderFactory.createLineBorder(
-                        GameColors.jbRed,
-                        1
-                    )
-                })
-            }
-        }*/
 
         private fun setupMouseListeners() {
             addMouseListener(object : MouseAdapter() {
@@ -160,7 +146,7 @@ class UpgradeMenu(
             })
         }
 
-        fun setPopupReference(popup: com.intellij.openapi.ui.popup.JBPopup) {
+        fun setPopupReference(popup: JBPopup) {
             this.popup = popup
         }
     }

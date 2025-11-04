@@ -60,7 +60,7 @@ class EnemyManager(
                     val elapsedSeconds = elapsedTimeMs.addAndGet(1000L) / 1000L
                     if(elapsedSeconds > 0 && elapsedSeconds % 30 == 0L){
                         println("Now at seconds: $elapsedSeconds")
-                        ggState.spawnCountPerCooldown++
+                        ggState.spawnCountPerCooldown *= 2
                         ggState.enemySpawnCooldown -= 100L
                     }
                 }

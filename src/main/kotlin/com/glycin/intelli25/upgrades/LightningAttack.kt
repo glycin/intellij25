@@ -1,6 +1,5 @@
 package com.glycin.intelli25.upgrades
 
-import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
@@ -22,8 +21,8 @@ class LightningAttack(
     scope: CoroutineScope,
 ): Attack(ggState, player) {
 
-    private val attackIcon = IconUtil.scale(AllIcons.Actions.Lightning, null, 2.5f)
-    private val title = "Git integration"
+    override val attackIcon = IconUtil.scale(AllIcons.Actions.Lightning, null, 2.5f)
+    override val title = "Git integration"
     private val basicAttackDamage: Int = 50
     private val maxFrameAlive: Int = 60
     private var frameAliveCount: Int = 0
@@ -34,24 +33,20 @@ class LightningAttack(
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Decreases lightning strike cooldown.") {
             attackCooldown = 3000L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Increases lighting strike impact radius.") {
             lightningRadius = 40
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Decreases lightning strike cooldown even further.") {
             attackCooldown = 1500L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Decreases cooldown even further and increases impact radius.") {
             lightningRadius = 80
             attackCooldown = 900L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         }
     )
 
@@ -83,8 +78,7 @@ class LightningAttack(
     override fun getDamage(enemyMidPos: Vec2): Int {
         return activeLightningPosition?.let { pos ->
             if(Vec2.distance(enemyMidPos, pos) <= lightningRadius) {
-                println("${pos.x}, ${pos.y}")
-                basicAttackDamage
+                basicAttackDamage * ggState.damageMultiplier
             } else 0
         } ?: 0
     }

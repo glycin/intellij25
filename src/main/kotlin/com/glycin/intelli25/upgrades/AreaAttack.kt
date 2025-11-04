@@ -1,6 +1,5 @@
 package com.glycin.intelli25.upgrades
 
-import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
@@ -15,32 +14,28 @@ class AreaAttack(
     ggState: GameGlobalState,
     player: Player
 ) : Attack(ggState, player) {
+    override val attackIcon = IconUtil.scale(AllIcons.Ide.LocalScope, null, 2.5f)
+    override val title = "Kotlin null safety"
 
-    private val attackIcon = IconUtil.scale(AllIcons.Ide.LocalScope, null, 2.5f)
-    private val title = "Kotlin null safety"
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 10
 
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Increase size of protective area") {
-            ggState.inUpgradeMenu = false
             diameter = player.width + 50
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Further increase size of protective area") {
-            ggState.inUpgradeMenu = false
             diameter = player.width + 80
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Even further increase size of protective area") {
-            ggState.inUpgradeMenu = false
             diameter = player.width + 150
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Even even further increase size of protective area.") {
-            ggState.inUpgradeMenu = false
             diameter = player.width + 200
-            currentLevel++
+            generalLevelUp()
         }
     )
 
@@ -54,7 +49,7 @@ class AreaAttack(
 
     override fun getDamage(enemyMidPos: Vec2): Int {
         return if(Vec2.distance(enemyMidPos, player.midPoint()) <= (diameter / 2)) {
-            basicAttackDamage
+            basicAttackDamage * ggState.damageMultiplier
         } else
             0
     }

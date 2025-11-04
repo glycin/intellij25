@@ -23,8 +23,8 @@ class PoolAttack(
 
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()
-    private val attackIcon = IconUtil.scale(AllIcons.Breakpoints.BreakpointFieldUnsuspendentDisabled, null, 2.5f)
-    private val title = "Breakpoint"
+    override val attackIcon = IconUtil.scale(AllIcons.Breakpoints.BreakpointFieldUnsuspendentDisabled, null, 2.5f)
+    override val title = "Breakpoint"
     private var size = 60
     private var spawnCooldown = 10000L
     private val baseDamage = 1
@@ -32,23 +32,19 @@ class PoolAttack(
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Increase breakpoint spawn rate.") {
             spawnCooldown = 7000L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Increase breakpoint size.") {
             size = 80
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Further increase breakpoint spawn rate.") {
             spawnCooldown = 4500L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Further increase breakpoint size.") {
             size = 120
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         }
     )
 
@@ -90,7 +86,7 @@ class PoolAttack(
     override fun getDamage(enemyMidPos: Vec2): Int {
         return poolMap.values.sumOf {
             if(Vec2.distance(enemyMidPos, it.midPoint()) <= it.width) {
-                it.damage
+                it.damage * ggState.damageMultiplier
             } else 0
         }
     }

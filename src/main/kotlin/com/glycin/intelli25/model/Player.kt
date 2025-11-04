@@ -12,20 +12,20 @@ class Player(
     val width: Int,
     val height: Int,
     private val ggState: GameGlobalState,
-    private val onLevelUp: (Player) -> Unit,
+    private val onLevelUp: () -> Unit,
 ) {
     var experience = 0
     var experienceNeeded = 10
     var pickUpRange: Float = 50.0f
     var level = 1
     var currentHp = 100
-    var maxHP = 100
 
+    private val baseMaxHp = 100
+    private val baseRegenRate = 1
     private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT
     private var moving = false
-    private val upgrades = mutableListOf<UpgradeOption>()
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
@@ -35,14 +35,13 @@ class Player(
         animator.animate(state)
 
         if(moving) {
-            position += direction * speed
+            position += direction * (speed * ggState.speedMultiplier)
         }
     }
 
-    fun addUpgrade(upgradeOption: UpgradeOption) {
-        println("Added upgrade option: ${upgradeOption.title}")
-        ggState.inUpgradeMenu = false
-        upgrades.add(upgradeOption)
+    fun regenerate() {
+        val newHp = currentHp + (baseRegenRate * ggState.regenRatePerSecondMultiplier)
+        currentHp = newHp.coerceIn(0, maxHp())
     }
 
     fun draw(g: Graphics2D) {
@@ -81,11 +80,13 @@ class Player(
             experienceNeeded *= 2 // TODO: Make the scaling better
             level++
             ggState.inUpgradeMenu = true
-            onLevelUp.invoke(this)
+            onLevelUp.invoke()
         }
     }
 
     fun hurt(damage: Int) {
         currentHp -= damage
     }
+
+    fun maxHp() = baseMaxHp * ggState.healthMultiplier
 }

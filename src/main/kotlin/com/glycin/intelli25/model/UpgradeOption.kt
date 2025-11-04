@@ -6,6 +6,5 @@ data class UpgradeOption(
     val icon: Icon,
     val title: String,
     val description: String,
-    val applied: Boolean = false,
     val onSelect: (UpgradeOption) -> Unit,
 )

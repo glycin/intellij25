@@ -1,6 +1,5 @@
 package com.glycin.intelli25.upgrades
 
-import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
@@ -17,8 +16,8 @@ class RotatingAttack(
     player: Player
 ): Attack(ggState, player) {
 
-    private val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
-    private val title = "AI Assistant"
+    override val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
+    override val title = "AI Assistant"
     private val radius = 250f
     private val basicAttackDamage: Int = 20
     private var speed =  0.005f
@@ -28,29 +27,25 @@ class RotatingAttack(
 
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Increase rotating speed of the AI assistant") {
-            ggState.inUpgradeMenu = false
             speed =  0.015f
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Add an additional AI assistant") {
-            ggState.inUpgradeMenu = false
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 1.0f
             pointValues.add(0.0f)
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Further increase rotating speed and size of the AI assistant") {
-            ggState.inUpgradeMenu = false
             speed =  0.025f
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Add an additional AI assistant") {
-            ggState.inUpgradeMenu = false
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 0.66f
             pointValues[1] = 1.33f
             pointValues.add(0.0f)
-            currentLevel++
+            generalLevelUp()
         }
     )
 
@@ -74,7 +69,7 @@ class RotatingAttack(
             Vec2.distance(enemyMidPos, it) <= widthHeight
         }
 
-        return if (inRange) basicAttackDamage else 0
+        return if (inRange) basicAttackDamage * ggState.damageMultiplier else 0
     }
 
     override fun getNextUpgrade(): UpgradeOption? {

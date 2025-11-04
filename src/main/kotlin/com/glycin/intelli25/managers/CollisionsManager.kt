@@ -13,8 +13,8 @@ class CollisionsManager(
     private val player: Player,
     private val enemyManager: EnemyManager,
     private val attackManager: AttackManager,
+    private val ggState: GameGlobalState,
     scope: CoroutineScope,
-    ggState: GameGlobalState,
 ) {
     init {
         scope.launch(Dispatchers.Default) {
@@ -39,11 +39,11 @@ class CollisionsManager(
 
     fun checkPlayerToPickup() {
         val pickUpsInRange = enemyManager.getPickups().filter { p ->
-            Vec2.distance(p.midPoint(), player.midPoint()) <= player.pickUpRange
+            Vec2.distance(p.midPoint(), player.midPoint()) <= (player.pickUpRange * ggState.xpPickUpRangeMultiplier)
         }
 
         if (pickUpsInRange.isNotEmpty()){
-            player.addExp(pickUpsInRange.count() * 5)
+            player.addExp(pickUpsInRange.count() * (5 * ggState.xpMultiplier))
             enemyManager.removeAllPickups(pickUpsInRange)
         }
     }

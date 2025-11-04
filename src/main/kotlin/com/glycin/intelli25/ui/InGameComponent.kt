@@ -41,7 +41,7 @@ class InGameComponent(
     private fun drawPlayerHp(g: Graphics2D) {
         val x = player.position.x.roundToInt()
         val y = player.position.y.roundToInt() + player.height + 10
-        val hpWidth = max((player.currentHp.toFloat() / player.maxHP.toFloat()) * player.width, 0f).roundToInt()
+        val hpWidth = max((player.currentHp.toFloat() / player.maxHp().toFloat()) * player.width, 0f).roundToInt()
         g.color = GameColors.red
         g.fillRect(x, y, player.width, 5)
         g.color = GameColors.green

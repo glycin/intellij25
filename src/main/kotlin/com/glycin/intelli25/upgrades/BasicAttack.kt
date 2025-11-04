@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
+import kotlin.math.roundToInt
 
 class BasicAttack(
     ggState: GameGlobalState,
@@ -26,28 +27,24 @@ class BasicAttack(
     private var bullets = concurrentMapOf<Long, Bullet>()
     private var attackDelay: Long = 2000L //ms
 
-    private val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
-    private val title = "Debugger"
+    override val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
+    override val  title = "Debugger"
     private val basicAttackDamage: Int = 10
 
     private val upgrades = listOf(
         UpgradeOption(attackIcon, title, "Increase firing speed of debugging bullets.") {
             attackDelay = 1250L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Fire additional lines of debugging bullets.") {
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Increase firing speed even more!") {
             attackDelay = 250L
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         },
         UpgradeOption(attackIcon, title, "Fire even more lines of debugging bullets.") {
-            ggState.inUpgradeMenu = false
-            currentLevel++
+            generalLevelUp()
         }
     )
 
@@ -107,7 +104,7 @@ class BasicAttack(
     override fun getDamage(enemyMidPos: Vec2): Int {
         return bullets.values.sumOf { b ->
             if(Vec2.distance(enemyMidPos, b.midPoint()) <= b.radius) {
-                b.damage
+                b.damage * ggState.damageMultiplier
             } else {
                 0
             }

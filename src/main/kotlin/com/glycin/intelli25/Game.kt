@@ -11,9 +11,11 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.getDeltaTime
 import com.glycin.intelli25.ui.UiComponent
 import com.glycin.intelli25.upgrades.AreaAttack
+import com.glycin.intelli25.upgrades.BasicAttack
 import com.glycin.intelli25.upgrades.LightningAttack
 import com.glycin.intelli25.upgrades.PoolAttack
 import com.glycin.intelli25.upgrades.RotatingAttack
+import com.glycin.intelli25.upgrades.UpgradeRepository
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.editor.Editor
@@ -37,7 +39,9 @@ class Game(
     private var uiComponent: UiComponent? = null
     private var ggState: GameGlobalState? = null
     private var keyListener: GameKeyListener? = null
+    private lateinit var upgradeRepository: UpgradeRepository
     private lateinit var attackManager: AttackManager
+    private lateinit var collisionsManager: CollisionsManager
 
     init {
         scope.launch(Dispatchers.EDT) {
@@ -45,16 +49,19 @@ class Game(
             val maxY = editor.scrollingModel.visibleArea.height
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime())
             val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), ggState = ggState!!, width = 75, height = 75) {
-                uiComponent?.showUpgradePopup(generateUpgradeOptions(it))
+                uiComponent?.showUpgradePopup(generateUpgradeOptions())
             }
 
+            upgradeRepository = UpgradeRepository(ggState!!, player, scope)
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
-            attackManager = AttackManager(scope, player, ggState!!)
+            attackManager = AttackManager(scope, player, ggState!!).also {
+                it.addAttack(BasicAttack(ggState!!, player, scope))
+            }
             val enemyManager = EnemyManager(player, ggState!!, scope)
-            val collisionsManager = CollisionsManager(player, enemyManager, attackManager, scope, ggState!!) //TODO: Create one update manager that handles all updating in the game
+            collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState!!, scope) //TODO: Create one update manager that handles all updating in the game
             gameComponent = GameComponent(ggState!!, player, attackManager, enemyManager, scope).also { ec ->
                 ec.bounds = editor.contentComponent.bounds
                 ec.isOpaque = false
@@ -77,30 +84,12 @@ class Game(
             }
 
             //uiComponent?.showDialogBox(listOf("Test1", "Test2", "Test3", "Test4", "Test5"))
-            initUpgrades(attackManager, player)
             uiComponent?.showGameUi()
         }
     }
 
-    private fun generateUpgradeOptions(player: Player): List<UpgradeOption> {
-        val upgrades = attackManager.getUpgrades()
-        val otherUpgrades = listOf(
-            UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
-            UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
-            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
-            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
-            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false },
-            //UpgradeOption(IconUtil.scale(PlatformIcons.INTERFACE_ICON, null, 2.5f), "test1", "Testsatsatastastast") { ggState?.inUpgradeMenu = false }
-        )
-        return (upgrades + otherUpgrades).shuffled().take(3)
-    }
-
-    private fun initUpgrades(attackManager: AttackManager, player: Player) {
-        //attackManager.addAttack(BasicAttack(ggState!!, player, scope))
-        attackManager.addAttack(AreaAttack(ggState!!, player))
-        //attackManager.addAttack(RotatingAttack(ggState!!, player))
-        //attackManager.addAttack(LightningAttack(ggState!!, player, scope))
-        attackManager.addAttack(PoolAttack(ggState!!, player, scope))
+    private fun generateUpgradeOptions(): List<UpgradeOption> {
+        return upgradeRepository.getRandomUpgrades(attackManager)
     }
 
     override fun dispose() {

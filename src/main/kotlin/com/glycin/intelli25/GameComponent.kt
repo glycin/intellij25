@@ -30,6 +30,13 @@ class GameComponent(
             }
         }
 
+        scope.launch {
+            while (ggState.gameActive) {
+                player.regenerate()
+                delay(1000L)
+            }
+        }
+
         enableEvents(0)
     }
 
