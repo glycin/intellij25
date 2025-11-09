@@ -1,6 +1,7 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.Pickup
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
@@ -40,13 +41,8 @@ class EnemyManager(
                 if (!ggState.inUpgradeMenu){
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
-                        val spawned = Enemy(
-                            id = idCounter,
-                            position = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f)),
-                            player = player,
-                            width = 15,
-                            height = 15,
-                        )
+                        val p = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
+                        val spawned = Enemy.createOfType(idCounter, p, player, Enemy.getAllowedTypes(ggState.enemyTier).random())
                         enemyMap[spawned.id] = spawned
                     }
                 }
@@ -62,6 +58,11 @@ class EnemyManager(
                         println("Now at seconds: $elapsedSeconds")
                         ggState.spawnCountPerCooldown *= 2
                         ggState.enemySpawnCooldown -= 100L
+                    }
+
+                    if(elapsedSeconds > 0 && elapsedSeconds % 120 == 0L){
+                        println("Increasing enemy tier!")
+                        ggState.enemyTier++
                     }
                 }
                 delay(1000L) // Update every second
@@ -88,7 +89,6 @@ class EnemyManager(
     fun getPickups() = pickupsMap.values.toList()
 
     fun drawEnemies(g: Graphics2D) {
-        g.color = JBColor.YELLOW
         enemyMap.values.forEach {e -> e.draw(g) }
     }
 

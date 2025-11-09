@@ -21,6 +21,7 @@ data class GameGlobalState(
     // Enemy state
     var enemySpawnCooldown: Long = 2000L,
     var spawnCountPerCooldown: Int = 1,
+    var enemyTier: Int = 1,
 
     // Inventory
     val maxWeapons: Int = 3,
