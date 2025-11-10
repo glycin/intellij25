@@ -7,8 +7,7 @@ import kotlin.math.roundToInt
 
 class Player(
     var position: Vec2,
-    var direction: Vec2 = Vec2.zero,
-    var speed: Float = 10.0f,
+    var speed: Float = 2.5f,
     val width: Int,
     val height: Int,
     private val ggState: GameGlobalState,
@@ -20,23 +19,58 @@ class Player(
     var level = 1
     var currentHp = 100
 
+    val keyMap = mutableMapOf(
+        "UP" to false,
+        "LEFT" to false,
+        "DOWN" to false,
+        "RIGHT" to false,
+    )
+
     private val baseMaxHp = 100
     private val baseRegenRate = 1
     private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT
-    private var moving = false
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun rect() : Rectangle = Rectangle(position.x.roundToInt(), position.y.roundToInt(), width, height)
 
     fun update() {
-        animator.animate(state)
+        if(ggState.inUpgradeMenu) return
 
-        if(moving) {
-            position += direction * (speed * ggState.speedMultiplier)
+        var dir = Vec2.zero
+
+        if (keyMap["UP"] == true){
+            dir += Vec2.up
         }
+
+        if (keyMap["LEFT"] == true){
+            dir += Vec2.left
+        }
+
+        if (keyMap["DOWN"] == true){
+            dir += Vec2.down
+        }
+
+        if (keyMap["RIGHT"] == true){
+            dir += Vec2.right
+        }
+
+        if(dir.x < 0) {
+            facing = PlayerFacing.LEFT
+        } else if (dir.x > 0) {
+            facing = PlayerFacing.RIGHT
+        }
+
+        if(dir != Vec2.zero) {
+            if(state != PlayerState.WALK) { state = PlayerState.WALK }
+        } else {
+            state = PlayerState.IDLE
+        }
+
+        animator.animate(state)
+        position += dir * (speed * ggState.speedMultiplier)
     }
 
     fun regenerate() {
@@ -52,25 +86,6 @@ class Player(
         }else{
             g.drawImage(currentSprite, position.x.roundToInt(), position.y.roundToInt(), width, height, null)
         }
-    }
-
-    fun movePlayer(dir: Vec2) {
-        if(ggState.inUpgradeMenu) return
-
-        moving = true
-        if(state != PlayerState.WALK) { state = PlayerState.WALK }
-        if(dir.x < 0) {
-            facing = PlayerFacing.LEFT
-        } else if (dir.x > 0) {
-            facing = PlayerFacing.RIGHT
-        }
-
-        position += dir * speed
-    }
-
-    fun stopMoving() {
-        state = PlayerState.IDLE
-        moving = false
     }
 
     fun addExp(xpCount: Int) {
