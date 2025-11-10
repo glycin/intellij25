@@ -50,6 +50,7 @@ class Enemy(
             position = midPoint(),
             width = 10,
             height = 15,
+            player = player,
         )
     }
 

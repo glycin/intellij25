@@ -31,6 +31,7 @@ class EnemyManager(
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
                     enemyMap.forEach { e -> e.value.move() }
+                    pickupsMap.filter { p -> p.value.picked }.forEach { it.value.move() }
                 }
                 delay(ggState.deltaTime)
             }
@@ -83,6 +84,10 @@ class EnemyManager(
         pickups.forEach {
             pickupsMap.remove(it.id)
         }
+    }
+
+    fun removePickup(pickup: Pickup) {
+        pickupsMap.remove(pickup.id)
     }
 
     fun getEnemies() = enemyMap.values.toList()

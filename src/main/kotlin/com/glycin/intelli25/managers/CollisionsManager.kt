@@ -42,9 +42,12 @@ class CollisionsManager(
             Vec2.distance(p.midPoint(), player.midPoint()) <= (player.pickUpRange * ggState.xpPickUpRangeMultiplier)
         }
 
-        if (pickUpsInRange.isNotEmpty()){
-            player.addExp(pickUpsInRange.count() * (5 * ggState.xpMultiplier))
-            enemyManager.removeAllPickups(pickUpsInRange)
+        pickUpsInRange.forEach { pickUp ->
+            pickUp.picked = true
+            if(Vec2.distance(pickUp.position, player.midPoint()) <= 10f) {
+                player.addExp(pickUp.xp * ggState.xpMultiplier)
+                enemyManager.removePickup(pickUp)
+            }
         }
     }
 
