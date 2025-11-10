@@ -20,7 +20,7 @@ class CollisionsManager(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 checkPlayerToEnemy()
-                checkBulletToEnemy()
+                checkAttackToEnemy()
                 checkPlayerToPickup()
                 delay(ggState.deltaTime)
             }
@@ -48,7 +48,7 @@ class CollisionsManager(
         }
     }
 
-    fun checkBulletToEnemy() {
+    fun checkAttackToEnemy() {
         enemyManager.getEnemies().forEach { e ->
             val dmg = attackManager.getDamage(e)
             if(dmg > 0){

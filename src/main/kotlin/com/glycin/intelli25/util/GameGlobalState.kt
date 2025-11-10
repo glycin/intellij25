@@ -26,4 +26,6 @@ data class GameGlobalState(
     // Inventory
     val maxWeapons: Int = 3,
     var weaponsEquipped: Int = 1,
+
+    var score: Int = 0,
 )

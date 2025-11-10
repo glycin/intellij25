@@ -15,7 +15,10 @@ class AreaAttack(
     player: Player
 ) : Attack(ggState, player) {
     override val attackIcon = IconUtil.scale(AllIcons.Ide.LocalScope, null, 2.5f)
-    override val title = "Kotlin null safety"
+    override val title: String
+        get() = "Kotlin null safety"
+    override val unlockDescription: String
+        get() = "Unlocks the power of Kotlin null safety, which adds a protective area that damages enemies when they get close."
 
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 10

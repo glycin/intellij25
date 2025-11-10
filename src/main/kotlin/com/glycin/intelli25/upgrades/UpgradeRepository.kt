@@ -83,9 +83,10 @@ class UpgradeRepository(
                 UpgradeOption(
                     icon = attack.attackIcon,
                     title = attack.title,
-                    description = "Unlock the ${attack.title} weapon.",
+                    description = attack.unlockDescription,
                     onSelect = {
                         attackManager.addAttack(attack)
+                        ggState.weaponsEquipped++
                         attackUpgrades.remove(key)
                         defaultLevelUp()
                     }

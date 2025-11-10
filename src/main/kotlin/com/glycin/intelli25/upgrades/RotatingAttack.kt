@@ -18,6 +18,9 @@ class RotatingAttack(
 
     override val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
     override val title = "AI Assistant"
+    override val unlockDescription: String
+        get() = "Unlocks the power of AI, which adds a drone that flies around you and damages enemies."
+
     private val radius = 250f
     private val basicAttackDamage: Int = 20
     private var speed =  0.005f

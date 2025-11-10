@@ -14,7 +14,7 @@ class Player(
     private val ggState: GameGlobalState,
     private val onLevelUp: () -> Unit,
 ) {
-    var experience = 0
+    var experience = 0.0f
     var experienceNeeded = 10
     var pickUpRange: Float = 50.0f
     var level = 1
@@ -78,7 +78,6 @@ class Player(
         if(experience >= experienceNeeded) {
             experience -= experienceNeeded
             experienceNeeded *= 2 // TODO: Make the scaling better
-            level++
             ggState.inUpgradeMenu = true
             onLevelUp.invoke()
         }

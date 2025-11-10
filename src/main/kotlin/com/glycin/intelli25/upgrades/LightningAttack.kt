@@ -23,6 +23,9 @@ class LightningAttack(
 
     override val attackIcon = IconUtil.scale(AllIcons.Actions.Lightning, null, 2.5f)
     override val title = "Git integration"
+    override val unlockDescription: String
+        get() = "Unlocks the power of Git, which randomly strikes an area around you for heavy damage."
+
     private val basicAttackDamage: Int = 50
     private val maxFrameAlive: Int = 60
     private var frameAliveCount: Int = 0

@@ -26,6 +26,8 @@ class BasicAttack(
     private var nextId = 0L
     private var bullets = concurrentMapOf<Long, Bullet>()
     private var attackDelay: Long = 2000L //ms
+    override val unlockDescription: String
+        get() = "This is already unlocked"
 
     override val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
     override val  title = "Debugger"

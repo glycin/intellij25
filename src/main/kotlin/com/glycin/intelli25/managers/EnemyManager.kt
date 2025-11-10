@@ -17,8 +17,8 @@ import java.awt.Graphics2D
 import java.util.concurrent.atomic.AtomicLong
 
 class EnemyManager(
+    private val ggState: GameGlobalState,
     player: Player,
-    ggState: GameGlobalState,
     scope: CoroutineScope,
 ) {
     private var enemyMap = concurrentMapOf<Int, Enemy>()
@@ -74,6 +74,7 @@ class EnemyManager(
         enemy.currentHp -= damage
         if(enemy.currentHp <= 0){
             pickupsMap[enemy.id] = enemy.getPickup()
+            ggState.score += enemy.points
             enemyMap.remove(enemy.id)
         }
     }

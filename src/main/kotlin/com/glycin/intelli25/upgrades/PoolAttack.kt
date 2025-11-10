@@ -25,6 +25,9 @@ class PoolAttack(
     private val poolMap = mutableMapOf<Int, Pool>()
     override val attackIcon = IconUtil.scale(AllIcons.Breakpoints.BreakpointFieldUnsuspendentDisabled, null, 2.5f)
     override val title = "Breakpoint"
+    override val unlockDescription: String
+        get() = "Unlocks the power of breakpoints, which allows pools to spawn randomly around you that linger and hurt enemies."
+
     private var size = 60
     private var spawnCooldown = 10000L
     private val baseDamage = 1

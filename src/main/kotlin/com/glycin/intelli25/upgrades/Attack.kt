@@ -15,6 +15,7 @@ abstract class Attack(
     var currentLevel: Int = 1
     abstract val attackIcon: Icon
     abstract val title: String
+    abstract val unlockDescription: String
     abstract fun draw(g: Graphics2D)
     abstract fun move()
     abstract fun getDamage(enemyMidPos: Vec2): Int

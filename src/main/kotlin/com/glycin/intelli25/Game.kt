@@ -60,7 +60,7 @@ class Game(
             attackManager = AttackManager(scope, player, ggState!!).also {
                 it.addAttack(BasicAttack(ggState!!, player, scope))
             }
-            val enemyManager = EnemyManager(player, ggState!!, scope)
+            val enemyManager = EnemyManager(ggState!!, player, scope)
             collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState!!, scope) //TODO: Create one update manager that handles all updating in the game
             gameComponent = GameComponent(ggState!!, player, attackManager, enemyManager, scope).also { ec ->
                 ec.bounds = editor.contentComponent.bounds
