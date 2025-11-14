@@ -16,6 +16,8 @@ class GameService(
 
     private var game: Game? = null
 
+    fun getProjectScope() = scope
+
     fun startGame() {
         println("Starting game service")
         FileEditorManager.getInstance(project).selectedTextEditor?.let { e ->

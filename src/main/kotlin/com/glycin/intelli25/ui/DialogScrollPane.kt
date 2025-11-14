@@ -6,8 +6,10 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.util.ui.JBUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.awt.Dimension
 import java.awt.Font
 import java.awt.Insets
 import javax.swing.JTextPane
@@ -18,13 +20,15 @@ class DialogScrollPane(
     private val texts: List<String>,
     private val scope: CoroutineScope,
     private val deltaTime: Long,
+    private val onFinished: () -> Unit
 ): JBScrollPane() {
 
-    private var active = false
     private var currentTextIndex = 0
+    private var animationJob : Job? = null
 
     private val textPane: JTextPane = JTextPane().apply {
         val color = GameColors.black
+        preferredSize = Dimension(512, 100)
         isEditable = false
         foreground = color
         margin = Insets(10, 15, 30, 15)
@@ -32,7 +36,7 @@ class DialogScrollPane(
         val font = Fonts.pixelFont
         val style = SimpleAttributeSet().apply {
             StyleConstants.setFontFamily(inputAttributes, font.family)
-            StyleConstants.setFontSize(inputAttributes, 32)
+            StyleConstants.setFontSize(inputAttributes, 16)
             StyleConstants.setItalic(inputAttributes, (font.style and Font.ITALIC) != 0)
             StyleConstants.setBold(inputAttributes, (font.style and Font.BOLD) != 0)
             StyleConstants.setForeground(inputAttributes, color)
@@ -48,32 +52,38 @@ class DialogScrollPane(
         textPane.background = GameColors.transparent
         setViewportView(textPane)
         viewportBorder = JBUI.Borders.empty(0, 0, 15, 0)
-        verticalScrollBarPolicy = VERTICAL_SCROLLBAR_AS_NEEDED
+        verticalScrollBarPolicy = VERTICAL_SCROLLBAR_NEVER
         horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_NEVER
+        mouseWheelListeners.forEach { removeMouseWheelListener(it) }
         animateText()
     }
 
     fun animateText() {
-        if(currentTextIndex >= texts.size) { return }
-        active = true
-        scope.launch (Dispatchers.EDT) {
+        if(currentTextIndex >= texts.size - 1) { return }
+        animationJob = scope.launch (Dispatchers.EDT) {
             var curIndex = 0
-            while(curIndex < texts[currentTextIndex].length && active) {
+            while(curIndex < texts[currentTextIndex].length) {
                 textPane.text = texts[currentTextIndex].take(++curIndex)
                 textPane.caretPosition = textPane.text.length
                 repaint()
                 delay(deltaTime)
             }
-            active = false
         }
     }
 
     fun nextText() {
         currentTextIndex++
+        if(animationJob?.isActive == true) {
+            animationJob?.cancel()
+            textPane.text = texts[currentTextIndex]
+        }
         animateText()
+        if(currentTextIndex >= texts.size - 1) {
+            onFinished()
+        }
     }
 
     fun stop() {
-        active = false
+        animationJob?.cancel()
     }
 }

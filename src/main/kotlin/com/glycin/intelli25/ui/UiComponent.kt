@@ -20,7 +20,6 @@ class UiComponent(
     private val scope: CoroutineScope,
 ): JComponent(), Disposable {
 
-    private var dialogComponent: DialogComponent? = null
     private var gameUiComponent: InGameComponent? = null
 
     init {
@@ -30,18 +29,6 @@ class UiComponent(
                 delay(ggState.deltaTime)
             }
         }
-    }
-
-    fun showDialogBox(text: String) {
-        showDialogBox(listOf(text))
-    }
-
-    fun showDialogBox(texts: List<String>) {
-        if(dialogComponent != null) { return }
-        dialogComponent = DialogComponent(texts, ggState, scope)
-        addComponent(dialogComponent!!)
-        revalidate()
-        repaint()
     }
 
     fun showGameUi() {

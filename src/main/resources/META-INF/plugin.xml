@@ -26,5 +26,10 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="com.glycin.intelli25.GameStartupActivity"/>
+        <toolWindow id="Runee"
+                    anchor="right"
+                    factoryClass="com.glycin.intelli25.ui.GameToolWindowFactory"
+                    icon="AllIcons.Toolwindows.ToolWindowRun"
+                    canCloseContents="true"/>
     </extensions>
 </idea-plugin>

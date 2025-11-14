@@ -15,4 +15,14 @@ object PNG {
             null
         }
     }
+
+    val RUNEE : BufferedImage? by lazy {
+        try {
+            val url = PNG::class.java.getResource("/sprites/runee.png")
+            url?.let { ImageIO.read(it) }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
 }
