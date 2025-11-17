@@ -6,7 +6,7 @@ import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.State
 
 @Service(Service.Level.APP)
-@State(name = "GameProgress", storages = [Storage("gameProgress.xml")])
+@State(name = "RuneeSaveState", storages = [Storage("runeeSaveState.xml")])
 class GameSaveState: SerializablePersistentStateComponent<GameSaveState.SaveState>(SaveState()) {
 
     var levelsBeaten: Int
@@ -26,7 +26,7 @@ class GameSaveState: SerializablePersistentStateComponent<GameSaveState.SaveStat
         }
 
     data class SaveState (
-        @JvmField val levelsBeaten: Int = 0,
-        @JvmField val dialoguesSeen: Int = 0,
+        var levelsBeaten: Int = 0,
+        var dialoguesSeen: Int = 0,
     )
 }

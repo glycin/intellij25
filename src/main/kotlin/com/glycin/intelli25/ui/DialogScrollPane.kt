@@ -59,7 +59,7 @@ class DialogScrollPane(
     }
 
     fun animateText() {
-        if(currentTextIndex >= texts.size - 1) { return }
+        if(currentTextIndex >= texts.size) { return }
         animationJob = scope.launch (Dispatchers.EDT) {
             var curIndex = 0
             while(curIndex < texts[currentTextIndex].length) {

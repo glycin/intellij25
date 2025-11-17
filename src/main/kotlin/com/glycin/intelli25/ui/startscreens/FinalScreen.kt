@@ -1,7 +1,6 @@
 package com.glycin.intelli25.ui.startscreens
 
 import com.glycin.intelli25.GameService
-import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.util.GameColors
@@ -19,37 +18,30 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-class LevelOneScreen(
+class FinalScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
-    private val saveState: GameSaveState,
 ): JPanel() {
     init{
         isOpaque = false
         layout = BorderLayout()
 
-        val baseContent = LevelOneScreenContent {
-            if(saveState.dialoguesSeen == 0) {
-                val projectScope = project.service<GameService>().getProjectScope()
-                val dialogueScreen = LevelOneDialogueScreen(projectScope) {
-                    toolWindow.hide()
-                    saveState.dialoguesSeen++
-                }
-                remove(it)
-                add(dialogueScreen)
-                revalidate()
-                repaint()
-            } else {
-                //TODO: Start game
+        val baseContent = FinalScreenContent {
+            val projectScope = project.service<GameService>().getProjectScope()
+            val dialogueScreen = FinalDialogueScreen(projectScope) {
                 toolWindow.hide()
             }
+            remove(it)
+            add(dialogueScreen)
+            revalidate()
+            repaint()
         }
 
         add(baseContent)
     }
 }
 
-private class LevelOneScreenContent(
+private class FinalScreenContent(
     private val onStart: (JPanel) -> Unit,
 ): JPanel() {
 
@@ -70,8 +62,7 @@ private class LevelOneScreenContent(
         }
         val startButton = StartButton("Start Game").apply {
             addActionListener {
-                println("StartGame")
-                onStart(this@LevelOneScreenContent)
+                onStart(this@FinalScreenContent)
             }
         }
         buttonPanel.add(startButton)

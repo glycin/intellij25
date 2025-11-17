@@ -21,7 +21,7 @@ class GameService(
     fun startGame() {
         println("Starting game service")
         FileEditorManager.getInstance(project).selectedTextEditor?.let { e ->
-            game = Game(project, e, scope)
+            //game = Game(project, e, scope)
         }
     }
 
