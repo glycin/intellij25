@@ -60,7 +60,11 @@ private class FinalScreenContent(
         val buttonPanel = JPanel(GridBagLayout()).apply {
             isOpaque = false
         }
-        val startButton = StartButton("Start Game").apply {
+        val startButton = StartButton(
+            backgroundColor = GameColors.black,
+            hoverColor = GameColors.jbOrange,
+            text = "Start Game",
+        ).apply {
             addActionListener {
                 onStart(this@FinalScreenContent)
             }

@@ -1,6 +1,7 @@
 package com.glycin.intelli25.ui.startscreens
 
 import com.glycin.intelli25.GameService
+import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.util.GameColors
@@ -21,20 +22,27 @@ import javax.swing.SwingConstants
 class LevelTwoScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
+    private val saveState: GameSaveState,
 ): JPanel() {
     init{
         isOpaque = false
         layout = BorderLayout()
 
         val baseContent = LevelTwoScreenContent {
-            val projectScope = project.service<GameService>().getProjectScope()
-            val dialogueScreen = LevelTwoDialogueScreen(projectScope) {
+            if(saveState.dialoguesSeen == 1) {
+                val projectScope = project.service<GameService>().getProjectScope()
+                val dialogueScreen = LevelTwoDialogueScreen(projectScope) {
+                    toolWindow.hide()
+                    saveState.dialoguesSeen++
+                }
+                remove(it)
+                add(dialogueScreen)
+                revalidate()
+                repaint()
+            } else {
+                //TODO: Start game
                 toolWindow.hide()
             }
-            remove(it)
-            add(dialogueScreen)
-            revalidate()
-            repaint()
         }
 
         add(baseContent)
@@ -60,7 +68,11 @@ private class LevelTwoScreenContent(
         val buttonPanel = JPanel(GridBagLayout()).apply {
             isOpaque = false
         }
-        val startButton = StartButton("Start Game").apply {
+        val startButton = StartButton(
+            backgroundColor = GameColors.black,
+            hoverColor = GameColors.jbOrange,
+            text = "Start Game",
+        ).apply {
             addActionListener {
                 onStart(this@LevelTwoScreenContent)
             }

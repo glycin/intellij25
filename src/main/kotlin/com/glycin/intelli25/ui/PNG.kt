@@ -25,4 +25,14 @@ object PNG {
             null
         }
     }
+
+    val firstLogo : BufferedImage? by lazy {
+        try {
+            val url = PNG::class.java.getResource("/logos/intellij-2001.png")
+            url?.let { ImageIO.read(it) }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

@@ -19,5 +19,5 @@ object GameColors {
 
     val jb2001Blue = JBColor(Color(25,91,168, 255), Color(25,91, 168, 255))
     val jb2001Orange = JBColor(Color(242,138,32, 255), Color(242,138,32, 255))
-
+    val jb2001Grey = JBColor(Color(214,211,206, 255), Color(214,211,206, 255))
 }

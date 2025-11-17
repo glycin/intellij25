@@ -2,19 +2,25 @@ package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
 import com.intellij.util.ui.JBUI
+import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JButton
 
-class StartButton(text: String): JButton(text) {
+class StartButton(
+    private val backgroundColor: Color,
+    private val hoverColor: Color,
+    textColor: Color = GameColors.white,
+    text: String,
+): JButton(text) {
     private var hover = false
 
     init {
         font = Fonts.pixelFont.deriveFont(16.0f)
         preferredSize = JBUI.size(320, 100)
-        foreground = GameColors.white
+        foreground = textColor
         isFocusPainted = false
         isBorderPainted = false
         isContentAreaFilled = false
@@ -33,12 +39,12 @@ class StartButton(text: String): JButton(text) {
 
     override fun paintComponent(g: Graphics) {
         if(g is Graphics2D) {
-            g.color = GameColors.black
+            g.color = backgroundColor
             g.fillRect(0, 0, width, height)
             super.paintComponent(g)
 
             if (hover) {
-                g.color = GameColors.jbOrange
+                g.color = hoverColor
                 g.stroke = java.awt.BasicStroke(4f)
                 g.drawRect(2, 2, width - 4, height - 4)
             }

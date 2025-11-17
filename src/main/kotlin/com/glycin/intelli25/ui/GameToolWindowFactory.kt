@@ -13,40 +13,29 @@ import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
+import javax.swing.JPanel
 
 class GameToolWindowFactory : ToolWindowFactory {
-    private val contentFactory = ContentFactory.getInstance()
 
     private var currentContent: Content? = null
+    private var gameScreenContainer: ToolWindowBaseComponent? = null
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        project.messageBus.connect(toolWindow.disposable).subscribe(
-            ToolWindowManagerListener.TOPIC,
-            object : ToolWindowManagerListener {
-                override fun stateChanged(toolWindowManager: ToolWindowManager) {
-                    val tw = toolWindowManager.getToolWindow(toolWindow.id)
-                    if (tw != null && tw.isVisible) {
-                        updateContent(project, toolWindow)
-                    }
-                }
-            }
-        )
-    }
-
-    private fun updateContent(project: Project, toolWindow: ToolWindow) {
         val gameState = service<GameSaveState>()
-        //TODO: Debugging remove
-        gameState.levelsBeaten = 0
+        //TODO: Testing remove
         gameState.dialoguesSeen = 0
-        
-        val contentPanel = when(gameState.levelsBeaten) {
-            0 -> LevelOneScreen(project, toolWindow, gameState)
-            1 -> LevelTwoScreen(project, toolWindow)
-            2 -> LevelThreeScreen(project, toolWindow)
-            else -> FinalScreen(project, toolWindow)
+        gameState.levelsBeaten = 2
+
+        if (gameScreenContainer == null) {
+            gameScreenContainer = ToolWindowBaseComponent(project, toolWindow, gameState)
+        }
+        val contentFactory = ContentFactory.getInstance()
+
+        if (currentContent == null) {
+            currentContent = contentFactory.createContent(gameScreenContainer, null, false)
+            toolWindow.contentManager.addContent(currentContent!!)
         }
 
-        currentContent = contentFactory.createContent(contentPanel, null, false)
-        toolWindow.contentManager.addContent(currentContent!!)
+        gameScreenContainer?.showScreen(gameState.levelsBeaten)
     }
 }
