@@ -78,8 +78,8 @@ private class FinalScreenContent(
         if(g is Graphics2D) {
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
             val gradient = GradientPaint(
-                width.toFloat(), 0f, GameColors.jbRed,
-                0f, height.toFloat(), GameColors.jbBlue
+                width.toFloat(), 0f, GameColors.jbOrange,
+                0f, height.toFloat(), GameColors.jbRed
             )
             g.paint = gradient
             g.fillRect(0, 0, width, height)

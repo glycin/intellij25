@@ -1,6 +1,10 @@
 package com.glycin.intelli25.util
 
+import com.glycin.intelli25.GameService
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.ui.ToolWindowBaseComponent
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.ToolWindow
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -32,4 +36,9 @@ fun randomPointInCircle(radius: Float, center: Vec2, rng: Random = Random.Defaul
     val x = center.x + r * cos(theta)
     val y = center.y + r * sin(theta)
     return Vec2(x, y)
+}
+
+fun startGame(project: Project, toolWindow: ToolWindow, toolWindowBaseComponent: ToolWindowBaseComponent) {
+    val gameService = project.getService(GameService::class.java)
+    gameService.startGame(toolWindow, toolWindowBaseComponent)
 }

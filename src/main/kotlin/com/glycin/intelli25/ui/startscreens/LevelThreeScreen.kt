@@ -4,7 +4,9 @@ import com.glycin.intelli25.GameService
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
+import com.glycin.intelli25.util.startGame
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -34,14 +36,15 @@ class LevelThreeScreen(
                 val dialogueScreen = LevelThreeDialogueScreen(projectScope) {
                     toolWindow.hide()
                     saveState.dialoguesSeen++
+                    startGame(project, toolWindow, parent as ToolWindowBaseComponent)
                 }
                 remove(it)
                 add(dialogueScreen)
                 revalidate()
                 repaint()
             } else {
-                //TODO: Start game
                 toolWindow.hide()
+                startGame(project, toolWindow, parent as ToolWindowBaseComponent)
             }
         }
 

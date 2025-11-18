@@ -1,7 +1,6 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
-import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.Pickup
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState

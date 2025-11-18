@@ -4,7 +4,6 @@ import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.upgrades.Attack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

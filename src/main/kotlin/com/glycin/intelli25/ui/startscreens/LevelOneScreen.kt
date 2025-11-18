@@ -5,10 +5,12 @@ import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.PNG
 import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
+import com.glycin.intelli25.util.startGame
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Font
@@ -18,7 +20,6 @@ import java.awt.GridBagLayout
 import javax.swing.BorderFactory
 import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JTextArea
 import javax.swing.SwingConstants
 
 class LevelOneScreen(
@@ -36,14 +37,15 @@ class LevelOneScreen(
                 val dialogueScreen = LevelOneDialogueScreen(projectScope) {
                     toolWindow.hide()
                     saveState.dialoguesSeen++
+                    startGame(project, toolWindow, parent as ToolWindowBaseComponent)
                 }
                 remove(it)
                 add(dialogueScreen)
                 revalidate()
                 repaint()
             } else {
-                //TODO: Start game
                 toolWindow.hide()
+                startGame(project, toolWindow, parent as ToolWindowBaseComponent)
             }
         }
 
@@ -129,7 +131,6 @@ private class LevelOneScreenContent(
             g.drawString("                         \"HELP ME, I AM STUCK IN HERE\"", 40, startY + (fontMetrics.height * 2))
 
             g.color = GameColors.jb2001Grey
-            g.fillRect(width - standardSize, 40, standardSize, height)
             g.fillRect(0, 40, standardSize, height)
             g.fillRect(0, height - standardSize, width, standardSize)
             g.fillRect(0, 20, width, standardSize)
