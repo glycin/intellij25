@@ -20,7 +20,7 @@ data class GameGlobalState(
     var regenRatePerSecondMultiplier: Int = 1,
 
     // Enemy state
-    var enemySpawnCooldown: Long = 2000L,
+    var enemySpawnCooldown: Long = 1000L,
     var spawnCountPerCooldown: Int = 1,
     var enemyTier: Int = 1,
 

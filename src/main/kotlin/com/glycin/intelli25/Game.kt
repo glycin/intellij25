@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import java.awt.KeyboardFocusManager
 
 private const val FPS = 120L
-private const val GAME_DURATION = 1 * 20 * 1000L // 10 Minutes
+private const val GAME_DURATION = 10 * 60 * 1000L // 10 Minutes
 
 class Game(
     private val project: Project,
@@ -49,7 +49,7 @@ class Game(
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime(), GAME_DURATION)
-            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), ggState = ggState!!, width = 75, height = 75) {
+            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), ggState = ggState!!, width = 64, height = 64) {
                 uiComponent?.showUpgradePopup(generateUpgradeOptions())
             }
 

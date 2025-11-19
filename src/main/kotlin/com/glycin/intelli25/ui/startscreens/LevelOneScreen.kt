@@ -62,7 +62,7 @@ private class LevelOneScreenContent(
         background = GameColors.white
         layout = BorderLayout()
 
-        val titleLabel = JLabel("Runee, the IJ Survivor").apply {
+        val titleLabel = JLabel("Runzo, the IJ Survivor").apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
             foreground = GameColors.jb2001Blue
             horizontalAlignment = SwingConstants.CENTER
@@ -135,7 +135,7 @@ private class LevelOneScreenContent(
             g.fillRect(0, height - standardSize, width, standardSize)
             g.fillRect(0, 20, width, standardSize)
 
-            g.drawImage(PNG.firstLogo, (width / 2) - 64, height - 256, 128, 128, null)
+            g.drawImage(PNG.firstLogo, (width / 2) - 64, height - 256, 256, 128, null)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.glycin.intelli25.ui.startscreens
 import com.glycin.intelli25.GameService
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
+import com.glycin.intelli25.ui.PNG
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
@@ -60,7 +61,7 @@ private class LevelTwoScreenContent(
         isOpaque = false
         layout = BorderLayout()
 
-        val titleLabel = JLabel("Runee, the IJ Survivor").apply {
+        val titleLabel = JLabel("Runzo, the IJ Survivor").apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
             foreground = GameColors.white
             horizontalAlignment = SwingConstants.CENTER
@@ -72,7 +73,7 @@ private class LevelTwoScreenContent(
             isOpaque = false
         }
         val startButton = StartButton(
-            backgroundColor = GameColors.black,
+            backgroundColor = GameColors.jb2001Blue,
             hoverColor = GameColors.jbOrange,
             text = "Start Game",
         ).apply {
@@ -94,6 +95,7 @@ private class LevelTwoScreenContent(
             )
             g.paint = gradient
             g.fillRect(0, 0, width, height)
+            g.drawImage(PNG.secondLogo, (width / 2) - 64, height - 256, 128, 128, null)
         }
     }
 }

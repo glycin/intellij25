@@ -48,7 +48,7 @@ class LevelOneDialogueScreen(
         if(g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
-            g.drawImage(PNG.RUNEE, width / 2, height / 4, 128, 128, null)
+            g.drawImage(PNG.RUNZO, width / 2, height / 4, 128, 128, null)
         }
     }
 }

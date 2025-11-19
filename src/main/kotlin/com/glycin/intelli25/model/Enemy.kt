@@ -1,8 +1,9 @@
 package com.glycin.intelli25.model
 
-import com.intellij.ui.JBColor
+import com.glycin.intelli25.util.EnemyPNG
 import java.awt.Graphics2D
 import java.awt.Rectangle
+import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
 
 class Enemy(
@@ -16,8 +17,10 @@ class Enemy(
     private var width: Int,
     private var height: Int,
     private val speed: Float = 1f,
+    private val image: BufferedImage?,
 ) {
     var currentHp = maxHp
+    private var facing = EnemyFacing.LEFT
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
 
@@ -26,22 +29,20 @@ class Enemy(
     fun move() {
         val dir = (player.midPoint() - position).normalized()
         position += dir * speed
+
+        facing = if(dir.x < 0) {
+            EnemyFacing.LEFT
+        } else {
+            EnemyFacing.RIGHT
+        }
     }
 
     fun draw(g: Graphics2D) {
-        when (type) {
-            EnemyType.SNAIL -> g.color = JBColor.yellow
-            EnemyType.MOSQUITO -> g.color = JBColor.pink
-            EnemyType.LARVA -> g.color = JBColor.blue
-            EnemyType.LADYBUG -> g.color = JBColor.green
-            EnemyType.SPIDER -> g.color = JBColor.white
-            EnemyType.BEE -> g.color = JBColor.red
-            EnemyType.WASP -> g.color = JBColor.CYAN
-            EnemyType.BEATLE -> g.color = JBColor.MAGENTA
-            EnemyType.ANT -> g.color = JBColor.orange
-            EnemyType.MANTIS -> g.color = JBColor.darkGray
+        if(facing == EnemyFacing.LEFT) {
+            g.drawImage(image, position.x.roundToInt() + width, position.y.roundToInt(), -width, height, null)
+        }else{
+            g.drawImage(image, position.x.roundToInt(), position.y.roundToInt(), width, height, null)
         }
-        g.fillRect(position.x.roundToInt(), position.y.roundToInt(), width, height)
     }
 
     fun getPickup(): Pickup {
@@ -57,125 +58,96 @@ class Enemy(
     companion object{
         fun createOfType(id: Int, position: Vec2, player: Player, type: EnemyType): Enemy {
             return when(type){
-                EnemyType.SNAIL -> Enemy(
+                EnemyType.BUG -> Enemy(
                     id = id,
                     position = position,
                     points = 10,
                     type = type,
                     player = player,
-                    width = 15,
-                    height = 15,
+                    width = 20,
+                    height = 20,
                     damage = 1,
                     maxHp = 20,
                     speed = 1f,
+                    image = EnemyPNG.bug,
                 )
-                EnemyType.MOSQUITO -> Enemy(
+                EnemyType.BLOCKER -> Enemy(
                     id = id,
                     position = position,
                     points = 20,
                     type = type,
                     player = player,
-                    width = 10,
-                    height = 10,
+                    width = 50,
+                    height = 50,
                     damage = 2,
                     maxHp = 40,
                     speed = 1.5f,
+                    image = EnemyPNG.blocker,
                 )
-                EnemyType.LARVA -> Enemy(
+                EnemyType.BURNING_CALENDAR -> Enemy(
                     id = id,
                     position = position,
                     points = 30,
-                    type = type,
-                    player = player,
-                    width = 12,
-                    height = 12,
-                    damage = 3,
-                    maxHp = 50,
-                    speed = 1.9f,
-                )
-                EnemyType.LADYBUG -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 50,
-                    type = type,
-                    player = player,
-                    width = 15,
-                    height = 15,
-                    damage = 10,
-                    maxHp = 100,
-                    speed = 0.2f,
-                )
-                EnemyType.SPIDER -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 50,
-                    type = type,
-                    player = player,
-                    width = 18,
-                    height = 18,
-                    damage = 10,
-                    maxHp = 20,
-                    speed = 2.5f,
-                )
-                EnemyType.BEE -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 30,
-                    type = type,
-                    player = player,
-                    width = 5,
-                    height = 5,
-                    damage = 3,
-                    maxHp = 10,
-                    speed = 3f,
-                )
-                EnemyType.WASP -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 30,
-                    type = type,
-                    player = player,
-                    width = 7,
-                    height = 7,
-                    damage = 3,
-                    maxHp = 10,
-                    speed = 3f,
-                )
-                EnemyType.BEATLE -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 80,
-                    type = type,
-                    player = player,
-                    width = 20,
-                    height = 20,
-                    damage = 20,
-                    maxHp = 250,
-                    speed = 2f,
-                )
-                EnemyType.ANT -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 80,
-                    type = type,
-                    player = player,
-                    width = 15,
-                    height = 15,
-                    damage = 20,
-                    maxHp = 250,
-                    speed = 2f,
-                )
-                EnemyType.MANTIS -> Enemy(
-                    id = id,
-                    position = position,
-                    points = 200,
                     type = type,
                     player = player,
                     width = 25,
                     height = 25,
-                    damage = 30,
-                    maxHp = 500,
-                    speed = 1.5f,
+                    damage = 3,
+                    maxHp = 50,
+                    speed = 1.9f,
+                    image = EnemyPNG.calendar,
+                )
+                EnemyType.PHANTOM -> Enemy(
+                    id = id,
+                    position = position,
+                    points = 50,
+                    type = type,
+                    player = player,
+                    width = 25,
+                    height = 25,
+                    damage = 10,
+                    maxHp = 100,
+                    speed = 0.2f,
+                    image = EnemyPNG.phantom,
+                )
+                EnemyType.DEMON -> Enemy(
+                    id = id,
+                    position = position,
+                    points = 50,
+                    type = type,
+                    player = player,
+                    width = 30,
+                    height = 30,
+                    damage = 10,
+                    maxHp = 20,
+                    speed = 2.5f,
+                    image = EnemyPNG.demon,
+                )
+                EnemyType.BEES -> Enemy(
+                    id = id,
+                    position = position,
+                    points = 30,
+                    type = type,
+                    player = player,
+                    width = 25,
+                    height = 25,
+                    damage = 3,
+                    maxHp = 10,
+                    speed = 3f,
+                    image = EnemyPNG.bees,
+                )
+                EnemyType.VAMPIRE -> Enemy(
+                    id = id,
+                    position = position,
+                    points = 30,
+                    type = type,
+                    player = player,
+                    width = 30,
+                    height = 30,
+                    damage = 3,
+                    maxHp = 10,
+                    speed = 3f,
+                    image = EnemyPNG.vampire,
                 )
             }
         }
@@ -186,14 +158,16 @@ class Enemy(
 }
 
 enum class EnemyType(val tier: Int) {
-    SNAIL(1),
-    MOSQUITO(2),
-    LARVA(2),
-    LADYBUG(3),
-    SPIDER(3),
-    BEE(4),
-    WASP(4),
-    BEATLE(5),
-    ANT(5),
-    MANTIS(6),
+    BUG(1),
+    BLOCKER(1),
+    BURNING_CALENDAR(1),
+    PHANTOM(1),
+    DEMON(1),
+    BEES(1),
+    VAMPIRE(1),
+}
+
+private enum class EnemyFacing{
+    LEFT,
+    RIGHT,
 }

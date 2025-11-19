@@ -4,7 +4,7 @@ object CutsceneTexts {
 
     val screenOne = listOf(
         "Hey there, human.",
-        "I’m Runee.",
+        "I’m Runzo.",
         "Yes, your IDE’s run button.",
         "Been living inside IntelliJ IDEA for 25 years, watching devs build incredible things and occasionally rage-clicking me when their code wouldn't compile.",
         "My mission? Make your ideas real or to put it simpler – run your code. ",

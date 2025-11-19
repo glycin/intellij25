@@ -49,7 +49,7 @@ private class FinalScreenContent(
         isOpaque = false
         layout = BorderLayout()
 
-        val titleLabel = JLabel("Runee, the IJ Survivor").apply {
+        val titleLabel = JLabel("Runzo, the IJ Survivor").apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
             foreground = GameColors.white
             horizontalAlignment = SwingConstants.CENTER

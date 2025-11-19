@@ -16,9 +16,9 @@ object PNG {
         }
     }
 
-    val RUNEE : BufferedImage? by lazy {
+    val RUNZO : BufferedImage? by lazy {
         try {
-            val url = PNG::class.java.getResource("/sprites/runee.png")
+            val url = PNG::class.java.getResource("/sprites/runzo/runzo_idle.png")
             url?.let { ImageIO.read(it) }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -28,7 +28,17 @@ object PNG {
 
     val firstLogo : BufferedImage? by lazy {
         try {
-            val url = PNG::class.java.getResource("/logos/intellij-2001.png")
+            val url = PNG::class.java.getResource("/screens/intellij-2001.png")
+            url?.let { ImageIO.read(it) }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    val secondLogo : BufferedImage? by lazy {
+        try {
+            val url = PNG::class.java.getResource("/screens/intellij-2010.png")
             url?.let { ImageIO.read(it) }
         } catch (e: IOException) {
             e.printStackTrace()

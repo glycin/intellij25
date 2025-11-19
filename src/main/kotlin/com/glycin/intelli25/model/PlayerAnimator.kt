@@ -3,14 +3,14 @@ package com.glycin.intelli25.model
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import java.awt.image.BufferedImage
 
-private const val STANDARD_CELL_WIDTH = 128
-private const val STANDARD_CELL_HEIGHT = 128
+private const val STANDARD_CELL_WIDTH = 256
+private const val STANDARD_CELL_HEIGHT = 256
 private const val BASE_PATH = "/sprites"
 
 class PlayerAnimator {
 
-    private val idle = SpriteSheetImageLoader.loadSprites("$BASE_PATH/runee.png", STANDARD_CELL_WIDTH, STANDARD_CELL_HEIGHT, 1)
-    private val walking = SpriteSheetImageLoader.loadSprites("$BASE_PATH/runee.png", STANDARD_CELL_WIDTH, STANDARD_CELL_HEIGHT, 1)
+    private val idle = SpriteSheetImageLoader.loadSprites("$BASE_PATH/runzo/runzo_idle.png", STANDARD_CELL_WIDTH, STANDARD_CELL_HEIGHT, 1)
+    private val walking = SpriteSheetImageLoader.loadSprites("$BASE_PATH/runzo/runzo_move.png", STANDARD_CELL_WIDTH, STANDARD_CELL_HEIGHT, 1)
 
     private var currentSprite : BufferedImage = idle[0]
     private var currentAnimationIndex = 0
