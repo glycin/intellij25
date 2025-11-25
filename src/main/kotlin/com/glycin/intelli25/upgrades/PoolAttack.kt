@@ -4,6 +4,7 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.Pool
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.randomPointInCircle
@@ -24,32 +25,69 @@ class PoolAttack(
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()
     override val attackIcon = IconUtil.scale(AllIcons.Breakpoints.BreakpointFieldUnsuspendentDisabled, null, 2.5f)
-    override val title = "Breakpoint"
+    override val title = "Build & Deployment tools"
     override val unlockDescription: String
-        get() = "Unlocks the power of breakpoints, which allows pools to spawn randomly around you that linger and hurt enemies."
+        get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
+    override val unlockEffect: String
+        get() = "This weapon allows pools to spawn randomly around you that linger and hurt enemies."
 
     private var size = 60
     private var spawnCooldown = 10000L
     private val baseDamage = 1
 
-    private val upgrades = listOf(
-        UpgradeOption(attackIcon, title, "Increase breakpoint spawn rate.") {
+    private val upgradeOne = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Maven 3 Integration"
+        description = "Maven 3 Integration was added"
+        effect = "Increase spawn rate of the pools."
+        onSelect = {
             spawnCooldown = 7000L
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Increase breakpoint size.") {
+        }
+    }
+
+    private val upgradeTwo = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Gradle Support"
+        description = "IntelliJ added gradle support"
+        effect = "Increase size of the spawned pools"
+        onSelect = {
             size = 80
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Further increase breakpoint spawn rate.") {
+        }
+    }
+
+    private val upgradeThree = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Docker Support"
+        description = "IntelliJ added docker support"
+        effect = "Further increase breakpoint spawn rate"
+        onSelect = {
             spawnCooldown = 4500L
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Further increase breakpoint size.") {
+        }
+    }
+
+    private val upgradeFour = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Kubernetes support"
+        description = "Added k8s support!"
+        effect = "Further increase breakpoint size"
+        onSelect = {
             size = 120
             generalLevelUp()
         }
-    )
+    }
+
+    private val upgrades = when(ggState.chosenGameLevel) {
+        1 -> emptyList()
+        2 -> listOf(upgradeOne, upgradeTwo, upgradeThree)
+        else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
+    }
 
     init {
         scope.launch(Dispatchers.Default) {

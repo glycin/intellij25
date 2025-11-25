@@ -10,6 +10,7 @@ data class GameGlobalState(
     val gameDuration : Long,
     var inUpgradeMenu: Boolean = false,
     var gameActive: Boolean = true,
+    val chosenGameLevel: Int = 1,
 
     // Upgrade Modifiers
     var damageMultiplier: Int = 1,
@@ -18,6 +19,7 @@ data class GameGlobalState(
     var xpPickUpRangeMultiplier: Int = 1,
     var xpMultiplier: Int = 1,
     var regenRatePerSecondMultiplier: Int = 1,
+    var enemyDamageMultiplier: Int = 10,
 
     // Enemy state
     var enemySpawnCooldown: Long = 1000L,

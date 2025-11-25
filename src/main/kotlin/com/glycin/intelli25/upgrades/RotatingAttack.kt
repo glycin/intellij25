@@ -3,6 +3,7 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.pointOnCircle
@@ -17,9 +18,11 @@ class RotatingAttack(
 ): Attack(ggState, player) {
 
     override val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
-    override val title = "AI Assistant"
+    override val title = "Artificial Intelligence"
     override val unlockDescription: String
-        get() = "Unlocks the power of AI, which adds a drone that flies around you and damages enemies."
+        get() = "Unlocks the power of AI, the latest transformative innovation in tech."
+    override val unlockEffect: String
+        get() = "This weapon adds a drone that flies around you and damages enemies."
 
     private val radius = 250f
     private val basicAttackDamage: Int = 20
@@ -28,29 +31,53 @@ class RotatingAttack(
     private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
     private var pointValues = mutableListOf(0.0f)
 
-    private val upgrades = listOf(
-        UpgradeOption(attackIcon, title, "Increase rotating speed of the AI assistant") {
+    private val upgradeOne = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "AI Chat"
+        description = ""
+        effect = "Increase rotating speed of the AI assistant"
+        onSelect = {
             speed =  0.015f
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Add an additional AI assistant") {
+        }
+    }
+
+    private val upgradeTwo = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Junie"
+        description = "IntelliJ added Junie"
+        effect = "Add an additional AI assistant"
+        onSelect = {
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 1.0f
             pointValues.add(0.0f)
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Further increase rotating speed and size of the AI assistant") {
+        }
+    }
+
+    private val upgradeThree = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "K2 Mode"
+        description = "IntelliJ added support for the K2 compiler"
+        effect = "Add an additional AI assistant and increase rotation speed of the drones"
+        onSelect = {
             speed =  0.025f
-            generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Add an additional AI assistant") {
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 0.66f
             pointValues[1] = 1.33f
             pointValues.add(0.0f)
             generalLevelUp()
         }
-    )
+    }
+
+    private val upgrades = when(ggState.chosenGameLevel) {
+        1 -> emptyList()
+        2 -> emptyList()
+        else -> listOf(upgradeOne, upgradeTwo, upgradeThree)
+    }
 
     override fun draw(g: Graphics2D) {
         g.color = GameColors.jbGreen

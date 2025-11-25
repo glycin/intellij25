@@ -3,6 +3,7 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.randomPointInCircle
@@ -22,9 +23,11 @@ class LightningAttack(
 ): Attack(ggState, player) {
 
     override val attackIcon = IconUtil.scale(AllIcons.Actions.Lightning, null, 2.5f)
-    override val title = "Git integration"
+    override val title = "Kotlin"
     override val unlockDescription: String
-        get() = "Unlocks the power of Git, which randomly strikes an area around you for heavy damage."
+        get() = "Unlocks the power of Kotlin, the JVM language made by JetBrains."
+    override val unlockEffect: String
+        get() = "This weapon randomly strikes an area around you for heavy damage"
 
     private val basicAttackDamage: Int = 50
     private val maxFrameAlive: Int = 60
@@ -33,25 +36,60 @@ class LightningAttack(
     private var lightningRadius = 20
     private var attackCooldown = 5000L //ms
 
-    private val upgrades = listOf(
-        UpgradeOption(attackIcon, title, "Decreases lightning strike cooldown.") {
+    private val upgradeOne = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Kotlin support"
+        description = "IntelliJ added kotlin support"
+        effect = "Decreases lightning strike cooldown"
+        onSelect = {
             attackCooldown = 3000L
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Increases lighting strike impact radius.") {
+        }
+    }
+
+    private val upgradeTwo = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Kotlin multi-platform"
+        description = "IntelliJ added support for KMP"
+        effect = "Increases lighting strike impact radius"
+        onSelect = {
             lightningRadius = 40
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Decreases lightning strike cooldown even further.") {
+        }
+    }
+
+    private val upgradeThree = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "K2 Mode"
+        description = "IntelliJ added support for the K2 compiler"
+        effect = "Decreases lightning strike cooldown even further"
+        onSelect = {
             attackCooldown = 1500L
             generalLevelUp()
-        },
-        UpgradeOption(attackIcon, title, "Decreases cooldown even further and increases impact radius.") {
+        }
+    }
+
+    private val upgradeFour = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Kotlin notebooks"
+        description = "IntelliJ can create and run kotlin notebooks"
+        effect = "Decreases cooldown even further and increases impact radius"
+        onSelect = {
             lightningRadius = 80
             attackCooldown = 900L
             generalLevelUp()
         }
-    )
+    }
+
+    private val upgrades = when(ggState.chosenGameLevel) {
+        1 -> emptyList()
+        2 -> listOf(upgradeOne)
+        else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
+    }
 
     init {
         scope.launch(Dispatchers.Default) {
