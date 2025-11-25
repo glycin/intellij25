@@ -7,6 +7,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.observable.util.addComponent
 import com.intellij.openapi.ui.popup.JBPopupFactory
+import com.intellij.util.ui.JBDimension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

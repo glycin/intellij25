@@ -44,7 +44,7 @@ class CollisionsManager(
 
         pickUpsInRange.forEach { pickUp ->
             pickUp.picked = true
-            if(Vec2.distance(pickUp.position, player.midPoint()) <= 10f) {
+            if(Vec2.distance(pickUp.position, player.midPoint()) <= 25f) {
                 player.addExp(pickUp.xp * ggState.xpMultiplier)
                 enemyManager.removePickup(pickUp)
             }

@@ -17,6 +17,7 @@ class AreaAttack(
 ) : Attack(ggState, player) {
     override val attackIcon = IconUtil.scale(AllIcons.Ide.LocalScope, null, 2.5f)
     override val title: String = "Enterprise Ready"
+    override val maxLevel: Int = 7
     override val unlockDescription: String
         get() = "Unlocks the power of integrations for Enterprise grade production environments"
     override val unlockEffect: String

@@ -32,7 +32,8 @@ class BasicAttack(
 
     override val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
     override val title = "Productivity"
-    private val basicAttackDamage: Int = 10
+    override val maxLevel: Int = 9
+    private val basicAttackDamage: Int = 100 //TODO: Set back to 10
     private var invincibleBullet = false
 
     private val upgradeOne = upgradeOption {

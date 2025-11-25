@@ -98,7 +98,6 @@ class EnemyManager(
     }
 
     fun drawPickups(g: Graphics2D) {
-        g.color = JBColor.PINK
         pickupsMap.values.forEach {e -> e.draw(g) }
     }
 }

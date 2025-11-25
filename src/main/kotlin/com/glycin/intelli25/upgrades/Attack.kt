@@ -11,8 +11,8 @@ abstract class Attack(
     val ggState: GameGlobalState,
     val player: Player,
 ) {
-    val maxLevel: Int = 5
     var currentLevel: Int = 1
+    abstract val maxLevel: Int
     abstract val attackIcon: Icon
     abstract val title: String
     abstract val unlockDescription: String

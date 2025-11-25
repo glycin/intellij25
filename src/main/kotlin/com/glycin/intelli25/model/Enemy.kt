@@ -49,8 +49,8 @@ class Enemy(
         return Pickup(
             id = id,
             position = midPoint(),
-            width = 10,
-            height = 15,
+            width = 32,
+            height = 32,
             player = player,
         )
     }

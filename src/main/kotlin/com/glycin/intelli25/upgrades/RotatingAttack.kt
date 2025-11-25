@@ -19,6 +19,7 @@ class RotatingAttack(
 
     override val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
     override val title = "Artificial Intelligence"
+    override val maxLevel: Int = 4
     override val unlockDescription: String
         get() = "Unlocks the power of AI, the latest transformative innovation in tech."
     override val unlockEffect: String

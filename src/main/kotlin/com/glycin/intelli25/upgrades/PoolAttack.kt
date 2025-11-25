@@ -26,6 +26,7 @@ class PoolAttack(
     private val poolMap = mutableMapOf<Int, Pool>()
     override val attackIcon = IconUtil.scale(AllIcons.Breakpoints.BreakpointFieldUnsuspendentDisabled, null, 2.5f)
     override val title = "Build & Deployment tools"
+    override val maxLevel: Int = 5
     override val unlockDescription: String
         get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
     override val unlockEffect: String

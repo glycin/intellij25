@@ -14,12 +14,22 @@ class UpgradeRepository(
     private val player: Player,
     scope: CoroutineScope,
 ) {
-    private val attackUpgrades = mutableMapOf(
-        "Kotlin null safety" to AreaAttack(ggState, player),
-        "AI Assistant" to RotatingAttack(ggState, player),
-        "Git integration" to LightningAttack(ggState, player, scope),
-        "Breakpoint" to PoolAttack(ggState, player, scope)
-    )
+    private val attackUpgrades = when(ggState.chosenGameLevel) {
+        1 -> mutableMapOf(
+            "Enterprise Ready Integration" to AreaAttack(ggState, player),
+        )
+        2 -> mutableMapOf(
+            "Enterprise Ready Integration" to AreaAttack(ggState, player),
+            "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
+            "Kotlin" to LightningAttack(ggState, player, scope)
+        )
+        else -> mutableMapOf(
+            "AI Assistant" to RotatingAttack(ggState, player),
+            "Enterprise Ready Integration" to AreaAttack(ggState, player),
+            "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
+            "Kotlin" to LightningAttack(ggState, player, scope)
+        )
+    }
 
     private val pizzaUpgrade = upgradeOption {
         icon = IconUtil.scale(AllIcons.Breakpoints.MultipleBreakpointsMuted, null, 2.5f)

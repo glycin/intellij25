@@ -1,5 +1,6 @@
 package com.glycin.intelli25.model
 
+import com.glycin.intelli25.ui.PNG
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
 
@@ -23,6 +24,6 @@ class Pickup(
     }
 
     fun draw(g: Graphics2D) {
-        g.fillOval(position.x.roundToInt(), position.y.roundToInt(), width, height)
+        g.drawImage(PNG.GEM, position.x.roundToInt(), position.y.roundToInt(), width, height, null)
     }
 }
