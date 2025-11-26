@@ -67,8 +67,8 @@ class UpgradeMenu(
 
         init {
             layout = BoxLayout(this, BoxLayout.X_AXIS)
-            preferredSize = Dimension(600, 90)
-            maximumSize = Dimension(Int.MAX_VALUE, 90)
+            preferredSize = Dimension(800, 120)
+            maximumSize = Dimension(Int.MAX_VALUE, 120)
             background = GameColors.black
             border = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GameColors.jbRed, 2),
@@ -105,12 +105,12 @@ class UpgradeMenu(
                 })
 
                 add(JLabel(option.description).apply {
-                    font = Fonts.pixelFont.deriveFont(12.0f)
+                    font = Fonts.pixelFont.deriveFont(13.0f)
                     foreground = GameColors.white
                 })
 
                 add(JLabel(option.effect).apply {
-                    font = Fonts.pixelFont.deriveFont(1, 12.0f)
+                    font = Fonts.pixelFont.deriveFont(1, 13.0f)
                     foreground = GameColors.jbOrange
                     border = JBUI.Borders.emptyTop(4)
                 })

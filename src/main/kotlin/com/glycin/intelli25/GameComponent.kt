@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.util.Timer
 import javax.swing.JComponent
 
 class GameComponent(
@@ -22,8 +21,6 @@ class GameComponent(
     scope: CoroutineScope,
     onGameBeaten: () -> Unit,
 ): JComponent(), Disposable {
-
-    private var elapsedTime = 0L
 
     init {
         scope.launch(Dispatchers.Default) {
@@ -38,9 +35,9 @@ class GameComponent(
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
                     player.regenerate()
-                    elapsedTime += 1000L
-                    println("Elapsed time: ${elapsedTime / 1000L} seconds, max duration: ${ggState.gameDuration / 1000L} seconds")
-                    if(elapsedTime >= ggState.gameDuration) {
+                    ggState.elapsedTime += 1000L
+                    println("Elapsed time: ${ggState.elapsedTime / 1000L} seconds, max duration: ${ggState.gameDuration / 1000L} seconds")
+                    if(ggState.elapsedTime >= ggState.gameDuration) {
                         dispose()
                         onGameBeaten()
                     }

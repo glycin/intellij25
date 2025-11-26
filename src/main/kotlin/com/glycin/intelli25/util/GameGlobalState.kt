@@ -8,6 +8,7 @@ data class GameGlobalState(
     var maxY: Int,
     var deltaTime: Long,
     val gameDuration : Long,
+    var elapsedTime: Long = 0L,
     var inUpgradeMenu: Boolean = false,
     var gameActive: Boolean = true,
     val chosenGameLevel: Int = 1,
