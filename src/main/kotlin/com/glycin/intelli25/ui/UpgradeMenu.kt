@@ -12,12 +12,14 @@ import java.awt.Cursor
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.GridLayout
+import java.awt.Image
 import java.awt.Rectangle
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
+import javax.swing.ImageIcon
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -85,10 +87,12 @@ class UpgradeMenu(
         }
 
         private fun createIconSection(): JComponent {
-            return JLabel(option.icon).apply {
-                preferredSize = Dimension(48, 48)
-                minimumSize = Dimension(48, 48)
-                maximumSize = Dimension(48, 48)
+            val targetSize = 48
+            val scaledIcon = option.icon.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH)
+            return JLabel(ImageIcon(scaledIcon)).apply {
+                preferredSize = Dimension(targetSize, targetSize)
+                minimumSize = Dimension(targetSize, targetSize)
+                maximumSize = Dimension(targetSize, targetSize)
                 alignmentY = 0.5f
             }
         }

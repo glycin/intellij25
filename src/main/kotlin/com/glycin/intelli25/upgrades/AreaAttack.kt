@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.UpgradePNG
 import com.intellij.icons.AllIcons
 import com.intellij.util.IconUtil
 import java.awt.Graphics2D
@@ -15,7 +16,7 @@ class AreaAttack(
     ggState: GameGlobalState,
     player: Player
 ) : Attack(ggState, player) {
-    override val attackIcon = IconUtil.scale(AllIcons.Ide.LocalScope, null, 2.5f)
+    override val attackIcon = UpgradePNG.leaf
     override val title: String = "Enterprise Ready"
     override val maxLevel: Int = 7
     override val unlockDescription: String

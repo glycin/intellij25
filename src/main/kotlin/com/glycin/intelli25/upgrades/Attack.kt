@@ -5,7 +5,7 @@ import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
-import javax.swing.Icon
+import java.awt.image.BufferedImage
 
 abstract class Attack(
     val ggState: GameGlobalState,
@@ -13,7 +13,7 @@ abstract class Attack(
 ) {
     var currentLevel: Int = 1
     abstract val maxLevel: Int
-    abstract val attackIcon: Icon
+    abstract val attackIcon: BufferedImage?
     abstract val title: String
     abstract val unlockDescription: String
     abstract val unlockEffect: String

@@ -3,7 +3,7 @@ package com.glycin.intelli25.ui.startscreens
 import com.glycin.intelli25.GameService
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
-import com.glycin.intelli25.ui.PNG
+import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors

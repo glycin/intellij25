@@ -38,8 +38,9 @@ class Game(
 
     private var gameComponent: GameComponent? = null
     private var uiComponent: UiComponent? = null
-    private var ggState: GameGlobalState? = null
     private var keyListener: GameKeyListener? = null
+
+    private lateinit var ggState: GameGlobalState
     private lateinit var upgradeRepository: UpgradeRepository
     private lateinit var attackManager: AttackManager
     private lateinit var collisionsManager: CollisionsManager
@@ -49,21 +50,23 @@ class Game(
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime(), GAME_DURATION)
-            val player = Player(Vec2((ggState!!.maxX / 2f) - 25, (ggState!!.maxY / 2f) + 25), ggState = ggState!!, width = 64, height = 64) {
+            val player = Player(Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25), ggState = ggState, width = 64, height = 64) {
                 uiComponent?.showUpgradePopup(generateUpgradeOptions())
             }
 
-            upgradeRepository = UpgradeRepository(ggState!!, player, scope)
+            upgradeRepository = UpgradeRepository(ggState, player, scope)
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
-            attackManager = AttackManager(scope, player, ggState!!).also {
-                it.addAttack(BasicAttack(ggState!!, player, scope))
+            attackManager = AttackManager(ggState, scope).also {
+                val basicAttack = BasicAttack(ggState, player, scope)
+                it.addAttack(basicAttack)
+                player.upgrades[basicAttack.title] = basicAttack.attackIcon
             }
-            val enemyManager = EnemyManager(ggState!!, player, scope)
-            collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState!!, scope) //TODO: Create one update manager that handles all updating in the game
-            gameComponent = GameComponent(ggState!!, player, attackManager, enemyManager, scope) {
+            val enemyManager = EnemyManager(ggState, player, scope)
+            collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState, scope) //TODO: Create one update manager that handles all updating in the game
+            gameComponent = GameComponent(ggState, player, attackManager, enemyManager, scope) {
                 dispose()
                 val saveState = service<GameSaveState>()
                 saveState.levelsBeaten++
@@ -78,7 +81,7 @@ class Game(
                 ec.requestFocusInWindow()
             }
 
-            uiComponent = UiComponent(player, ggState!!, scope).also { uic ->
+            uiComponent = UiComponent(player, ggState, scope).also { uic ->
                 uic.bounds = editor.contentComponent.bounds
                 uic.isOpaque = false
             }
@@ -106,6 +109,6 @@ class Game(
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
-        ggState?.gameActive = false
+        ggState.gameActive = false
     }
 }

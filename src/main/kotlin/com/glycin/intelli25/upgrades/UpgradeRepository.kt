@@ -5,9 +5,9 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
-import com.intellij.icons.AllIcons
-import com.intellij.util.IconUtil
+import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
+import java.awt.image.BufferedImage
 
 class UpgradeRepository(
     private val ggState: GameGlobalState,
@@ -32,98 +32,122 @@ class UpgradeRepository(
     }
 
     private val pizzaUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Breakpoints.MultipleBreakpointsMuted, null, 2.5f)
+        val upgradeIcon = UpgradePNG.pizza
+        val title = "Pizza slice"
+
+        icon = UpgradePNG.pizza
         upgradePathTitle = "Pizza slice"
         subTitle = ""
         description = "Yum"
         effect = "Increases your health regeneration rate"
         onSelect = {
             ggState.regenRatePerSecondMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val coffeeUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.RunAll, null, 2.5f)
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Coffee"
+
+        icon = UpgradePNG.coffee
         upgradePathTitle = "Coffee"
         subTitle = ""
         description = "A tasty sip for a bolt of energy"
         effect = "Increases your movement speed"
         onSelect = {
             ggState.speedMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val performanceUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.RunAll, null, 2.5f)
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Performance fix"
+
+        icon = UpgradePNG.coffee
         upgradePathTitle = "Performance fix"
         subTitle = ""
         description = "Code running so well!"
         effect = "Increases your total health"
         onSelect = {
             ggState.healthMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val firewallUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.Scratch, null, 2.5f)
+        val upgradeIcon = UpgradePNG.firewall
+        val title = "Firewall shield"
+
+        icon = UpgradePNG.firewall
         upgradePathTitle = "Firewall shield"
         subTitle = ""
         description = "The best defense is..."
         effect = "Decreases enemy damage"
         onSelect = {
             ggState.enemyDamageMultiplier -= 1
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val autoRefactoringUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.ShowWriteAccess, null, 2.5f)
+        val upgradeIcon = UpgradePNG.duck
+        val title = "Auto Refactoring"
+
+        icon = UpgradePNG.duck
         upgradePathTitle = "Auto Refactoring"
         subTitle = ""
         description = "For when you don't want to do things yourself"
         effect = "Increases your damage"
         onSelect = {
             ggState.damageMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val intentionActionsUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.RunAll, null, 2.5f)
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Intention Actions"
+
+        icon = UpgradePNG.coffee
         upgradePathTitle = "Intention Actions"
         subTitle = ""
         description = "For when your intentions are clear"
         effect = "Increases your damage"
         onSelect = {
             ggState.damageMultiplier *= 2 //TODO: We have this twice
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val codeInspectionsUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.CodeWithMe.CwmInvite, null, 2.5f)
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Code Inspections"
+
+        icon = UpgradePNG.coffee
         upgradePathTitle = "Code Inspections"
         subTitle = ""
         description = "Go go gadget inspections!"
         effect = "Increase your experience pickup range"
         onSelect = {
             ggState.xpPickUpRangeMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
     private val dukeUpgrade = upgradeOption {
-        icon = IconUtil.scale(AllIcons.Actions.RunAll, null, 2.5f)
-        upgradePathTitle = "The Duke"
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "The Duke"
+
+        icon = upgradeIcon
+        upgradePathTitle = title
         subTitle = ""
         description = "Every new version of the Duke, IntelliJ is right there"
         effect = "Increase the amount of experience gained"
         onSelect = {
             ggState.xpMultiplier *= 2
-            defaultLevelUp()
+            defaultLevelUp(title, upgradeIcon)
         }
     }
 
@@ -134,19 +158,19 @@ class UpgradeRepository(
     fun getRandomUpgrades(attackManager: AttackManager): List<UpgradeOption> {
         val weaponUnlocks = if(ggState.weaponsEquipped != ggState.maxWeapons) {
             attackUpgrades.map { (key, attack) ->
-                UpgradeOption(
-                    icon = attack.attackIcon,
-                    title = attack.title,
-                    description = attack.unlockDescription,
-                    subTitle = "",
-                    effect = attack.unlockEffect,
+                upgradeOption {
+                    icon = attack.attackIcon
+                    upgradePathTitle = attack.title
+                    description = attack.unlockDescription
+                    subTitle = ""
+                    effect = attack.unlockEffect
                     onSelect = {
                         attackManager.addAttack(attack)
                         ggState.weaponsEquipped++
                         attackUpgrades.remove(key)
-                        defaultLevelUp()
+                        defaultLevelUp(attack.title, attack.attackIcon)
                     }
-                )
+                }
             }
         } else emptyList()
 
@@ -155,8 +179,9 @@ class UpgradeRepository(
         return (weaponUnlocks + weaponUpgrades + basicUpgrades).shuffled().take(3)
     }
 
-    private fun defaultLevelUp() {
+    private fun defaultLevelUp(title: String, inventoryIcon: BufferedImage?) {
         player.level++
+        player.upgrades.putIfAbsent(title, inventoryIcon)
         ggState.inUpgradeMenu = false
     }
 }

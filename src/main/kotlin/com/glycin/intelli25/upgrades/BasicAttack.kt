@@ -5,7 +5,9 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.UpgradePNG
 import com.intellij.icons.AllIcons
 import com.intellij.ui.JBColor
 import com.intellij.util.IconUtil
@@ -30,7 +32,7 @@ class BasicAttack(
     override val unlockEffect: String
         get() = "This is already unlocked"
 
-    override val attackIcon = IconUtil.scale(AllIcons.Nodes.Artifact, null, 2.5f)
+    override val attackIcon = UpgradePNG.coffee
     override val title = "Productivity"
     override val maxLevel: Int = 9
     private val basicAttackDamage: Int = 100 //TODO: Set back to 10
@@ -179,7 +181,6 @@ class BasicAttack(
     }
 
     override fun draw(g: Graphics2D) {
-        g.color = JBColor.GREEN
         bullets.values.forEach { b -> b.draw(g) }
     }
 

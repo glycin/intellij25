@@ -3,6 +3,7 @@ package com.glycin.intelli25.model
 import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
 import java.awt.Rectangle
+import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
 
 class Player(
@@ -25,6 +26,8 @@ class Player(
         "DOWN" to false,
         "RIGHT" to false,
     )
+
+    val upgrades = mutableMapOf<String, BufferedImage?>()
 
     private val baseMaxHp = 100
     private val baseRegenRate = 1

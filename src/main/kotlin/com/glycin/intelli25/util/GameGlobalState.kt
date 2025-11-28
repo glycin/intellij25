@@ -23,7 +23,7 @@ data class GameGlobalState(
     var enemyDamageMultiplier: Int = 10,
 
     // Enemy state
-    var enemySpawnCooldown: Long = 1000L,
+    var enemySpawnCooldown: Long = 3000L,
     var spawnCountPerCooldown: Int = 1,
     var enemyTier: Int = 1,
 

@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.pointOnCircle
 import com.intellij.icons.AllIcons
 import com.intellij.util.IconUtil
@@ -17,7 +18,7 @@ class RotatingAttack(
     player: Player
 ): Attack(ggState, player) {
 
-    override val attackIcon = IconUtil.scale(AllIcons.Javaee.WebService, null, 2.5f)
+    override val attackIcon = UpgradePNG.coffee
     override val title = "Artificial Intelligence"
     override val maxLevel: Int = 4
     override val unlockDescription: String

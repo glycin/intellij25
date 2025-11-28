@@ -1,9 +1,9 @@
 package com.glycin.intelli25.model
 
-import javax.swing.Icon
+import java.awt.image.BufferedImage
 
 data class UpgradeOption(
-    val icon: Icon,
+    val icon: BufferedImage,
     val title: String,
     val subTitle: String,
     val description: String,
@@ -12,7 +12,7 @@ data class UpgradeOption(
 )
 
 class UpgradeOptionBuilder {
-    var icon: Icon? = null
+    var icon: BufferedImage? = null
     var upgradePathTitle: String? = null
     var subTitle: String? = null
     var description: String? = null

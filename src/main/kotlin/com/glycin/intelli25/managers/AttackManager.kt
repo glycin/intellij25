@@ -12,9 +12,8 @@ import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 
 class AttackManager(
-    scope: CoroutineScope,
-    player: Player,
     private val ggState: GameGlobalState,
+    scope: CoroutineScope,
 ) {
     private var attacks = mutableListOf<Attack>()
 
@@ -37,7 +36,9 @@ class AttackManager(
 
     fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }
 
-    fun addAttack(attack: Attack) = attacks.add(attack)
+    fun addAttack(attack: Attack) {
+        attacks.add(attack)
+    }
 
     fun getUpgrades(): List<UpgradeOption> {
         return attacks.mapNotNull { it.getNextUpgrade() }

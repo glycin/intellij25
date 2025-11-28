@@ -1,6 +1,7 @@
 package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
+import com.glycin.intelli25.util.PNG
 import kotlinx.coroutines.CoroutineScope
 import java.awt.BorderLayout
 import java.awt.Font

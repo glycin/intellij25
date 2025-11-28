@@ -2,7 +2,7 @@ package com.glycin.intelli25.ui.startscreens
 
 import com.glycin.intelli25.ui.DialogComponent
 import com.glycin.intelli25.ui.Fonts
-import com.glycin.intelli25.ui.PNG
+import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.GameColors
 import kotlinx.coroutines.CoroutineScope
 import java.awt.BorderLayout

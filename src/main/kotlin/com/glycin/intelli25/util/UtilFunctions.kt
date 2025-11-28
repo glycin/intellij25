@@ -2,7 +2,7 @@ package com.glycin.intelli25.util
 
 import com.glycin.intelli25.GameService
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.ui.PNG
+import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -45,4 +45,14 @@ fun randomPointInCircle(radius: Float, center: Vec2, rng: Random = Random.Defaul
 fun startGame(project: Project, toolWindow: ToolWindow, toolWindowBaseComponent: ToolWindowBaseComponent) {
     val gameService = project.getService(GameService::class.java)
     gameService.startGame(toolWindow, toolWindowBaseComponent)
+}
+
+fun <T> getPng(url: String, resourceClass: Class<T>): BufferedImage? {
+    return try {
+        val url = resourceClass.getResource(url)
+        url?.let { ImageIO.read(it) }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
 }
