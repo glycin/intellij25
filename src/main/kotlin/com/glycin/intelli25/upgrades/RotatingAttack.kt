@@ -20,7 +20,6 @@ class RotatingAttack(
 
     override val attackIcon = UpgradePNG.coffee
     override val title = "Artificial Intelligence"
-    override val maxLevel: Int = 4
     override val unlockDescription: String
         get() = "Unlocks the power of AI, the latest transformative innovation in tech."
     override val unlockEffect: String
@@ -80,6 +79,8 @@ class RotatingAttack(
         2 -> emptyList()
         else -> listOf(upgradeOne, upgradeTwo, upgradeThree)
     }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     override fun draw(g: Graphics2D) {
         g.color = GameColors.jbGreen

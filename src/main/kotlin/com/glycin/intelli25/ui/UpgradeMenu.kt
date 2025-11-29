@@ -11,6 +11,7 @@ import java.awt.Color
 import java.awt.Cursor
 import java.awt.Dimension
 import java.awt.FlowLayout
+import java.awt.Font
 import java.awt.GridLayout
 import java.awt.Image
 import java.awt.Rectangle
@@ -53,25 +54,37 @@ class UpgradeMenu(
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             isOpaque = false
 
-            upgrades.forEach { up ->
-                add(createUpgradeCard(up))
+            upgrades.forEachIndexed { index, up ->
+                add(createUpgradeCard(up, index))
                 add(Box.createRigidArea(Dimension(0, 10)))
             }
         }
     }
 
-    private fun createUpgradeCard(option: UpgradeOption): JPanel {
-        return UpgradeCard(option)
+    private fun createUpgradeCard(option: UpgradeOption, index: Int): JPanel {
+        return UpgradeCard(option, index)
     }
 
-    inner class UpgradeCard(private val option: UpgradeOption) : JPanel() {
+    inner class UpgradeCard(private val option: UpgradeOption, index: Int) : JPanel() {
         private var popup: JBPopup? = null
+
+        private val cardBackground = when(index) {
+            0 -> GameColors.jbBlueLight
+            1 -> GameColors.jbRedLight
+            else -> GameColors.jbOrangeLight
+        }
+
+        private val textColor = when(index) {
+            0 -> JBColor(Color(2, 82, 163, 255), Color(2, 82, 163, 255))
+            1 -> JBColor(Color(196, 0, 43, 255), Color(196, 0, 43, 255))
+            else -> JBColor(Color(181, 92, 0, 255), Color(181, 92, 0, 255))
+        }
 
         init {
             layout = BoxLayout(this, BoxLayout.X_AXIS)
             preferredSize = Dimension(800, 120)
             maximumSize = Dimension(Int.MAX_VALUE, 120)
-            background = GameColors.black
+            background = cardBackground
             border = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GameColors.jbRed, 2),
                 JBUI.Borders.empty(10)
@@ -87,7 +100,7 @@ class UpgradeMenu(
         }
 
         private fun createIconSection(): JComponent {
-            val targetSize = 48
+            val targetSize = 64
             val scaledIcon = option.icon.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH)
             return JLabel(ImageIcon(scaledIcon)).apply {
                 preferredSize = Dimension(targetSize, targetSize)
@@ -103,19 +116,14 @@ class UpgradeMenu(
                 isOpaque = false
                 alignmentY = 0.5f
 
-                add(JLabel("${option.title}: ${option.subTitle}").apply {
-                    font = Fonts.pixelFont.deriveFont(1, 16.0f)
-                    foreground = GameColors.white
-                })
-
-                add(JLabel(option.description).apply {
-                    font = Fonts.pixelFont.deriveFont(13.0f)
-                    foreground = GameColors.white
+                add(JLabel("${option.title}${if(option.subTitle.isNotEmpty()) " - ${option.subTitle}" else ""}").apply {
+                    font = Fonts.pixelFont.deriveFont(Font.BOLD, 24.0f)
+                    foreground = textColor
                 })
 
                 add(JLabel(option.effect).apply {
-                    font = Fonts.pixelFont.deriveFont(1, 13.0f)
-                    foreground = GameColors.jbOrange
+                    font = Fonts.pixelFont.deriveFont(Font.PLAIN, 16.0f)
+                    foreground = textColor
                     border = JBUI.Borders.emptyTop(4)
                 })
             }
@@ -124,18 +132,18 @@ class UpgradeMenu(
         private fun setupMouseListeners() {
             addMouseListener(object : MouseAdapter() {
                 override fun mouseEntered(e: MouseEvent) {
-                    background = GameColors.black
+                    background = cardBackground
                     border = BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(GameColors.jbOrange, 3),
+                        BorderFactory.createLineBorder(GameColors.jbGreen, 3),
                         JBUI.Borders.empty(10)
                     )
                     repaint()
                 }
 
                 override fun mouseExited(e: MouseEvent) {
-                    background = GameColors.black
+                    background = cardBackground
                     border = BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(GameColors.jbRed, 2),
+                        BorderFactory.createLineBorder(cardBackground, 2),
                         JBUI.Borders.empty(10)
                     )
                     repaint()

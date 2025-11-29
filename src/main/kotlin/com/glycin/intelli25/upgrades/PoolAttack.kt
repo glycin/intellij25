@@ -27,7 +27,6 @@ class PoolAttack(
     private val poolMap = mutableMapOf<Int, Pool>()
     override val attackIcon = UpgradePNG.coffee
     override val title = "Build & Deployment tools"
-    override val maxLevel: Int = 5
     override val unlockDescription: String
         get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
     override val unlockEffect: String
@@ -90,6 +89,8 @@ class PoolAttack(
         2 -> listOf(upgradeOne, upgradeTwo, upgradeThree)
         else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
     }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     init {
         scope.launch(Dispatchers.Default) {

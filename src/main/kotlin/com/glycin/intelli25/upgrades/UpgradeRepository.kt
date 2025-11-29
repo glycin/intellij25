@@ -8,6 +8,7 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import java.awt.image.BufferedImage
+import kotlin.random.Random
 
 class UpgradeRepository(
     private val ggState: GameGlobalState,
@@ -174,9 +175,17 @@ class UpgradeRepository(
             }
         } else emptyList()
 
-        val weaponUpgrades = attackManager.getUpgrades()
+        val weaponUpgrades = attackManager.getUpgrades() + weaponUnlocks
+        val chosenWeaponUpgrades = if(weaponUpgrades.isNotEmpty()) {
+            if(weaponUpgrades.count() == 1) {
+                weaponUpgrades.take(1)
+            } else {
+                val randomChance = Random.nextInt(0, 100)
+                weaponUpgrades.shuffled().take(if(randomChance >= 80) 2 else 1)
+            }
+        } else emptyList()
 
-        return (weaponUnlocks + weaponUpgrades + basicUpgrades).shuffled().take(3)
+        return (basicUpgrades.shuffled().take(3 - chosenWeaponUpgrades.size) + chosenWeaponUpgrades).shuffled()
     }
 
     private fun defaultLevelUp(title: String, inventoryIcon: BufferedImage?) {

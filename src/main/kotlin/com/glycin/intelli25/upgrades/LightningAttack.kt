@@ -25,7 +25,6 @@ class LightningAttack(
 
     override val attackIcon = UpgradePNG.coffee
     override val title = "Kotlin"
-    override val maxLevel: Int = 5
     override val unlockDescription: String
         get() = "Unlocks the power of Kotlin, the JVM language made by JetBrains."
     override val unlockEffect: String
@@ -92,6 +91,8 @@ class LightningAttack(
         2 -> listOf(upgradeOne)
         else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
     }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     init {
         scope.launch(Dispatchers.Default) {

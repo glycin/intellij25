@@ -34,7 +34,6 @@ class BasicAttack(
 
     override val attackIcon = UpgradePNG.coffee
     override val title = "Productivity"
-    override val maxLevel: Int = 9
     private val basicAttackDamage: Int = 100 //TODO: Set back to 10
     private var invincibleBullet = false
 
@@ -137,6 +136,8 @@ class BasicAttack(
         2 -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour, upgradeFive, upgradeSix)
         else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour, upgradeFive, upgradeSix, upgradeSeven, upgradeEight)
     }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     init {
         scope.launch(Dispatchers.Default) {

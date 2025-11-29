@@ -18,7 +18,6 @@ class AreaAttack(
 ) : Attack(ggState, player) {
     override val attackIcon = UpgradePNG.leaf
     override val title: String = "Enterprise Ready"
-    override val maxLevel: Int = 7
     override val unlockDescription: String
         get() = "Unlocks the power of integrations for Enterprise grade production environments"
     override val unlockEffect: String
@@ -104,6 +103,8 @@ class AreaAttack(
         2 -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
         else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour, upgradeFive, upgradeSix)
     }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     override fun draw(g: Graphics2D) {
         g.color = GameColors.white
