@@ -41,7 +41,7 @@ class EnemyManager(
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
                         val p = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
-                        val spawned = Enemy.createOfType(idCounter, p, player, Enemy.getAllowedTypes(ggState.enemyTier).random())
+                        val spawned = Enemy.createOfType(idCounter, p, player, Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random())
                         enemyMap[spawned.id] = spawned
                     }
                 }
@@ -53,13 +53,13 @@ class EnemyManager(
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
                     val elapsedSeconds = elapsedTimeMs.addAndGet(1000L) / 1000L
-                    if(elapsedSeconds > 0 && elapsedSeconds % 30 == 0L){
+                    if(elapsedSeconds > 0 && elapsedSeconds % 60 == 0L){
                         println("Now at seconds: $elapsedSeconds")
                         ggState.spawnCountPerCooldown *= 2
                         ggState.enemySpawnCooldown -= 100L
                     }
 
-                    if(elapsedSeconds > 0 && elapsedSeconds % 120 == 0L){
+                    if(elapsedSeconds > 0 && elapsedSeconds % 180 == 0L){
                         println("Increasing enemy tier!")
                         ggState.enemyTier++
                     }

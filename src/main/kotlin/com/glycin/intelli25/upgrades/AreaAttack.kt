@@ -21,7 +21,7 @@ class AreaAttack(
     override val unlockDescription: String
         get() = "Unlocks the power of integrations for Enterprise grade production environments"
     override val unlockEffect: String
-        get() = "This weapon adds a protective area that damages enemies when they get close"
+        get() = "New weapon that adds a damaging area around Runzo."
 
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 10

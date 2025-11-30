@@ -8,8 +8,6 @@ import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.pointOnCircle
-import com.intellij.icons.AllIcons
-import com.intellij.util.IconUtil
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
 
@@ -23,7 +21,7 @@ class RotatingAttack(
     override val unlockDescription: String
         get() = "Unlocks the power of AI, the latest transformative innovation in tech."
     override val unlockEffect: String
-        get() = "This weapon adds a drone that flies around you and damages enemies."
+        get() = "New weapon that adds a drone that flies around and protects Runzo."
 
     private val radius = 250f
     private val basicAttackDamage: Int = 20

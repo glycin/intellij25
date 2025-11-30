@@ -11,12 +11,16 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.glycin.intelli25.util.startGame
+import com.intellij.openapi.ui.Messages
+import com.intellij.platform.ide.progress.ModalTaskOwner.project
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Font
+import java.awt.GradientPaint
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.GridBagLayout
+import java.awt.RenderingHints
 import javax.swing.BorderFactory
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -31,7 +35,7 @@ class LevelOneScreen(
         isOpaque = false
         layout = BorderLayout()
 
-        val baseContent = LevelOneScreenContent {
+        val baseContent = LevelOneScreenContent(project) {
             if(saveState.dialoguesSeen == 0) {
                 val projectScope = project.service<GameService>().getProjectScope()
                 val dialogueScreen = LevelOneDialogueScreen(projectScope) {
@@ -54,19 +58,19 @@ class LevelOneScreen(
 }
 
 private class LevelOneScreenContent(
+    private val project: Project,
     private val onStart: (JPanel) -> Unit,
 ): JPanel() {
 
     init {
         isOpaque = false
-        background = GameColors.white
         layout = BorderLayout()
 
         val titleLabel = JLabel("Runzo, the IJ Survivor").apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
-            foreground = GameColors.jb2001Blue
+            foreground = GameColors.white
             horizontalAlignment = SwingConstants.CENTER
-            border = BorderFactory.createEmptyBorder(50, 0, 0, 0)
+            border = BorderFactory.createEmptyBorder(20, 0, 20, 0)
         }
         add(titleLabel, BorderLayout.NORTH)
 
@@ -74,8 +78,8 @@ private class LevelOneScreenContent(
             isOpaque = false
         }
         val startButton = StartButton(
-            backgroundColor = GameColors.jb2001Blue,
-            hoverColor = GameColors.jb2001Orange,
+            backgroundColor = GameColors.black,
+            hoverColor = GameColors.jbOrange,
             text = "Start Game",
         ).apply {
             addActionListener {
@@ -84,58 +88,50 @@ private class LevelOneScreenContent(
         }
         buttonPanel.add(startButton)
         add(buttonPanel, BorderLayout.CENTER)
+
+        val bottomPanel = JPanel(BorderLayout()).apply {
+            isOpaque = false
+            border = BorderFactory.createEmptyBorder(0, 10, 10, 0)
+        }
+
+        val howToPlayButton = StartButton(
+            backgroundColor = GameColors.black,
+            hoverColor = GameColors.jbOrange,
+            text = "How to play",
+        ).apply {
+            addActionListener {
+                showHowToPlayDialog()
+            }
+        }
+        bottomPanel.add(howToPlayButton, BorderLayout.LINE_START)
+        add(bottomPanel, BorderLayout.PAGE_END)
     }
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
         if(g is Graphics2D) {
-            val standardSize = 20
-            g.color = GameColors.white
-            g.fillRect(0, 0, width, height)
-            g.color = GameColors.black
-            g.font = Font("Monaco", Font.PLAIN, 10)
-            g.drawString("IntelliJ IDEA - [D:\\dev\\runee_survivor.ipr] - D:\\dev\\runee_survivor\\src\\Main.java", 5, 10)
-
-            g.font = Font("Courier New", Font.ITALIC, 14)
-            g.color = Color.lightGray
-            val commentLines = listOf(
-                "/*",
-                " * Created by IntelliJ IDEA",
-                " * To change template for new class use",
-                " * \"Source Code\" options (Tools | IDE Options), Template tab.",
-                " */",
-                "",
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
+            val gradient = GradientPaint(
+                width.toFloat(), 0f, GameColors.jbRed,
+                0f, height.toFloat(), GameColors.jbBlue
             )
-            val fontMetrics = g.fontMetrics
-            var y = 80 + fontMetrics.ascent
-            for (line in commentLines) {
-                g.drawString(line, 40, y)
-                y += fontMetrics.height
-            }
-
-            g.font = Font("Courier New", Font.BOLD, 14)
-            g.color = Color(48,48,152)
-            val startY = y + fontMetrics.ascent
-            g.drawString("public class", 40, startY)
-            g.drawString("  public static void", 40, startY + fontMetrics.height)
-
-            g.font = Font("Courier New", Font.PLAIN, 14)
-            g.color = GameColors.black
-            g.drawString("             Main {", 40, startY)
-            g.drawString("                     main(String[] args) {", 40, startY + fontMetrics.height)
-            g.drawString("      System.out.println(                              );", 40, startY + (fontMetrics.height * 2))
-            g.drawString("  )", 40, startY + (fontMetrics.height * 3))
-            g.drawString("}", 40, startY + (fontMetrics.height * 4))
-
-            g.color = Color(46, 151, 46)
-            g.drawString("                         \"HELP ME, I AM STUCK IN HERE\"", 40, startY + (fontMetrics.height * 2))
-
-            g.color = GameColors.jb2001Grey
-            g.fillRect(0, 40, standardSize, height)
-            g.fillRect(0, height - standardSize, width, standardSize)
-            g.fillRect(0, 20, width, standardSize)
-
-            g.drawImage(PNG.firstLogo, (width / 2) - 64, height - 256, 256, 128, null)
+            g.paint = gradient
+            g.fillRect(0, 0, width, height)
         }
+    }
+
+    private fun showHowToPlayDialog() {
+        Messages.showInfoMessage(
+            project,
+            """
+            How to play:
+            - Move with W A S D.
+            - Defeat enemies and collect the coins they drop.
+            - After the top bar is filled choose your upgrade!
+            - Mix and match upgrades to become overpowered!
+            - Survive as long as you can!
+        """.trimIndent(),
+            "How To Play Runzo"
+        )
     }
 }

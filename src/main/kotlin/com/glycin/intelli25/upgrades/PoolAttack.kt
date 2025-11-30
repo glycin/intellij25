@@ -30,7 +30,7 @@ class PoolAttack(
     override val unlockDescription: String
         get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
     override val unlockEffect: String
-        get() = "This weapon allows pools to spawn randomly around you that linger and hurt enemies."
+        get() = "New weapon that spawns pools around Runzo that damage enemies."
 
     private var size = 60
     private var spawnCooldown = 10000L

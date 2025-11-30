@@ -28,7 +28,7 @@ class LightningAttack(
     override val unlockDescription: String
         get() = "Unlocks the power of Kotlin, the JVM language made by JetBrains."
     override val unlockEffect: String
-        get() = "This weapon randomly strikes an area around you for heavy damage"
+        get() = "New weapon that randomly strikes enemies for heavy damage"
 
     private val basicAttackDamage: Int = 50
     private val maxFrameAlive: Int = 60

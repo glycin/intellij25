@@ -73,7 +73,7 @@ private class LevelTwoScreenContent(
             isOpaque = false
         }
         val startButton = StartButton(
-            backgroundColor = GameColors.jb2001Blue,
+            backgroundColor = GameColors.black,
             hoverColor = GameColors.jbOrange,
             text = "Start Game",
         ).apply {
@@ -90,12 +90,11 @@ private class LevelTwoScreenContent(
         if(g is Graphics2D) {
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
             val gradient = GradientPaint(
-                width.toFloat(), 0f, GameColors.jb2001Blue,
-                0f, height.toFloat(), GameColors.jb2001Orange
+                width.toFloat(), 0f, GameColors.jbRed,
+                0f, height.toFloat(), GameColors.jbBlue
             )
             g.paint = gradient
             g.fillRect(0, 0, width, height)
-            g.drawImage(PNG.secondLogo, (width / 2) - 64, height - 256, 128, 128, null)
         }
     }
 }

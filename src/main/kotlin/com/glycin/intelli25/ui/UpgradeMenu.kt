@@ -86,7 +86,7 @@ class UpgradeMenu(
             maximumSize = Dimension(Int.MAX_VALUE, 120)
             background = cardBackground
             border = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GameColors.jbRed, 2),
+                BorderFactory.createLineBorder(cardBackground, 2),
                 JBUI.Borders.empty(10)
             )
             cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)

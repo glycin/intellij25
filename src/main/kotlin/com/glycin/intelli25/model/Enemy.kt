@@ -137,20 +137,23 @@ class Enemy(
                 )
             }
         }
-        fun getAllowedTypes(enemyTier: Int): List<EnemyType> {
-            return EnemyType.entries.filter { it.tier <= enemyTier }
+
+        fun getAllowedTypes(chosenLevel: Int, enemyTier: Int): List<EnemyType> {
+            return EnemyType.entries.filter {
+                it.minLevel <= chosenLevel && it.tier <= enemyTier
+            }
         }
     }
 }
 
-enum class EnemyType(val tier: Int) {
-    BUG(1),
-    BLOCKER(1),
-    BURNING_CALENDAR(2),
-    PHANTOM(2),
-    DEMON(3),
-    BEES(3),
-    VAMPIRE(3),
+enum class EnemyType(val minLevel: Int, val tier: Int) {
+    BUG(1 , 1),
+    BLOCKER(1, 2),
+    BURNING_CALENDAR(1, 3),
+    PHANTOM(2, 1),
+    DEMON(2, 2),
+    BEES(3, 3),
+    VAMPIRE(3, 4),
 }
 
 private enum class EnemyFacing{
