@@ -22,6 +22,7 @@ class UpgradeRepository(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
             "Git integration" to FreezingAttack(scope, ggState, player),
             "Tools" to TargetedAttack(scope, enemyManager, ggState, player),
+            "Cool stuff" to MassDestructionAttack(enemyManager, scope, ggState, player)
         )
         2 -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),

@@ -78,12 +78,6 @@ class EnemyManager(
         }
     }
 
-    fun removeAllPickups(pickups: List<Pickup>) {
-        pickups.forEach {
-            pickupsMap.remove(it.id)
-        }
-    }
-
     fun removePickup(pickup: Pickup) {
         pickupsMap.remove(pickup.id)
     }
@@ -107,5 +101,16 @@ class EnemyManager(
             Vec2.distance(playerPosition, it.midPoint())
         }
         return enemies.take(count)
+    }
+
+    fun destroyAll() {
+        val enemies = enemyMap.values.toList()
+        enemies.forEach { e ->
+            val pickup = e.getPickup()
+            pickupsMap[e.id] = pickup
+            ggState.score += e.points
+            pickup.picked = true
+            enemyMap.remove(e.id)
+        }
     }
 }
