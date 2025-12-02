@@ -1,6 +1,7 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.managers.AttackManager
+import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.upgradeOption
@@ -13,11 +14,14 @@ import kotlin.random.Random
 class UpgradeRepository(
     private val ggState: GameGlobalState,
     private val player: Player,
+    enemyManager: EnemyManager,
     scope: CoroutineScope,
 ) {
     private val attackUpgrades = when(ggState.chosenGameLevel) {
         1 -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
+            "Git integration" to FreezingAttack(scope, ggState, player),
+            "Tools" to TargetedAttack(scope, enemyManager, ggState, player),
         )
         2 -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
@@ -170,6 +174,7 @@ class UpgradeRepository(
                         ggState.weaponsEquipped++
                         attackUpgrades.remove(key)
                         defaultLevelUp(attack.title, attack.attackIcon)
+                        attack.activate()
                     }
                 }
             }

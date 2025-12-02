@@ -95,6 +95,8 @@ class RotatingAttack(
         }
     }
 
+    override fun activate() {}
+
     override fun getDamage(enemyMidPos: Vec2): Int {
         val inRange = objectPositions.any {
             Vec2.distance(enemyMidPos, it) <= widthHeight

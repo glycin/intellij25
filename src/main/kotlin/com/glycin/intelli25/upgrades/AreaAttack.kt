@@ -7,8 +7,6 @@ import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.UpgradePNG
-import com.intellij.icons.AllIcons
-import com.intellij.util.IconUtil
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
 
@@ -25,7 +23,6 @@ class AreaAttack(
 
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 10
-
     private val upgradeOne = upgradeOption {
         icon = attackIcon
         upgradePathTitle = title
@@ -113,6 +110,8 @@ class AreaAttack(
     }
 
     override fun move() { }
+
+    override fun activate() { }
 
     override fun getDamage(enemyMidPos: Vec2): Int {
         return if(Vec2.distance(enemyMidPos, player.midPoint()) <= (diameter / 2)) {

@@ -20,7 +20,7 @@ import java.awt.Graphics2D
 class PoolAttack(
     ggState: GameGlobalState,
     player: Player,
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
 ): Attack(ggState, player) {
 
     private var nextId = 0
@@ -92,7 +92,7 @@ class PoolAttack(
 
     override val maxLevel: Int = upgrades.size + 1
 
-    init {
+    override fun activate() {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive){
                 if(!ggState.inUpgradeMenu) {

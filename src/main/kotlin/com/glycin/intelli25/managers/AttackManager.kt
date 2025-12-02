@@ -1,7 +1,6 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
-import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.upgrades.Attack

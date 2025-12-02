@@ -21,11 +21,11 @@ import java.awt.Graphics2D
 class BasicAttack(
     ggState: GameGlobalState,
     player: Player,
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
 ) : Attack(ggState, player) {
 
     private var nextId = 0L
-    private var bullets = concurrentMapOf<Long, Bullet>()
+    private val bullets = concurrentMapOf<Long, Bullet>()
     private var attackDelay: Long = 2000L //ms
     override val unlockDescription: String
         get() = "This is already unlocked"
@@ -34,7 +34,7 @@ class BasicAttack(
 
     override val attackIcon = UpgradePNG.coffee
     override val title = "Productivity"
-    private val basicAttackDamage: Int = 100 //TODO: Set back to 10
+    private val basicAttackDamage: Int = 10
     private var invincibleBullet = false
 
     private val upgradeOne = upgradeOption {
@@ -139,7 +139,7 @@ class BasicAttack(
 
     override val maxLevel: Int = upgrades.size + 1
 
-    init {
+    override fun activate() {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
@@ -223,7 +223,7 @@ class BasicAttack(
         return upgrades[currentLevel - 1]
     }
 
-    fun addBullet(playerPosition: Vec2, direction: Vec2) {
+    private fun addBullet(playerPosition: Vec2, direction: Vec2) {
         bullets[nextId] = Bullet(nextId, playerPosition, direction, basicAttackDamage)
         nextId++
     }

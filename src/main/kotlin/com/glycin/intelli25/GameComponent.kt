@@ -36,7 +36,6 @@ class GameComponent(
                 if(!ggState.inUpgradeMenu){
                     player.regenerate()
                     ggState.elapsedTime += 1000L
-                    println("Elapsed time: ${ggState.elapsedTime / 1000L} seconds, max duration: ${ggState.gameDuration / 1000L} seconds")
                     if(ggState.elapsedTime >= ggState.gameDuration) {
                         dispose()
                         onGameBeaten()

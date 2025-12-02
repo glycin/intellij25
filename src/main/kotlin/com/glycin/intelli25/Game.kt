@@ -54,18 +54,19 @@ class Game(
                 uiComponent?.showUpgradePopup(generateUpgradeOptions())
             }
 
-            upgradeRepository = UpgradeRepository(ggState, player, scope)
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
             attackManager = AttackManager(ggState, scope).also {
-                val basicAttack = BasicAttack(ggState, player, scope)
+                val basicAttack = BasicAttack(ggState, player, scope).apply { activate() }
                 it.addAttack(basicAttack)
                 player.upgrades[basicAttack.title] = basicAttack.attackIcon
             }
             val enemyManager = EnemyManager(ggState, player, scope)
             collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState, scope) //TODO: Create one update manager that handles all updating in the game
+            upgradeRepository = UpgradeRepository(ggState, player, enemyManager, scope)
+
             gameComponent = GameComponent(ggState, player, attackManager, enemyManager, scope) {
                 dispose()
                 val saveState = service<GameSaveState>()

@@ -2,7 +2,6 @@ package com.glycin.intelli25.model
 
 import com.glycin.intelli25.util.PNG
 import java.awt.Graphics2D
-import java.awt.Rectangle
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
@@ -14,9 +13,6 @@ class Bullet(
     val radius: Int = 15,
     val speed: Float = 10.0f,
 ) {
-    val innerRadius: Int = radius - 5
-
-    fun rect() = Rectangle(position.x.roundToInt(), position.y.roundToInt(), innerRadius, innerRadius)
     fun midPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2))
 
     fun move() {

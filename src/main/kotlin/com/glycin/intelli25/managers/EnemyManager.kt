@@ -28,7 +28,7 @@ class EnemyManager(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
-                    enemyMap.forEach { e -> e.value.move() }
+                    enemyMap.takeIf { !ggState.frozen }?.forEach { e -> e.value.move() }
                     pickupsMap.filter { p -> p.value.picked }.forEach { it.value.move() }
                 }
                 delay(ggState.deltaTime)
@@ -64,7 +64,7 @@ class EnemyManager(
                         ggState.enemyTier++
                     }
                 }
-                delay(1000L) // Update every second
+                delay(1000L)
             }
         }
     }
@@ -98,5 +98,14 @@ class EnemyManager(
 
     fun drawPickups(g: Graphics2D) {
         pickupsMap.values.forEach {e -> e.draw(g) }
+    }
+
+    fun getClosestEnemies(count: Int, playerPosition: Vec2): List<Enemy> {
+        if(enemyMap.size <= count) { return emptyList() }
+
+        val enemies = enemyMap.values.toList().sortedBy {
+            Vec2.distance(playerPosition, it.midPoint())
+        }
+        return enemies.take(count)
     }
 }

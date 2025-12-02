@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 class LightningAttack(
     ggState: GameGlobalState,
     player: Player,
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
 ): Attack(ggState, player) {
 
     override val attackIcon = UpgradePNG.coffee
@@ -94,7 +94,8 @@ class LightningAttack(
 
     override val maxLevel: Int = upgrades.size + 1
 
-    init {
+    override fun activate()
+    {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {

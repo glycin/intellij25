@@ -17,6 +17,8 @@ abstract class Attack(
     abstract val title: String
     abstract val unlockDescription: String
     abstract val unlockEffect: String
+
+    abstract fun activate()
     abstract fun draw(g: Graphics2D)
     abstract fun move()
     abstract fun getDamage(enemyMidPos: Vec2): Int

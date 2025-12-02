@@ -26,6 +26,7 @@ data class GameGlobalState(
     var enemySpawnCooldown: Long = 3000L,
     var spawnCountPerCooldown: Int = 1,
     var enemyTier: Int = 1,
+    var frozen: Boolean = false,
 
     // Inventory
     val maxWeapons: Int = 3,
