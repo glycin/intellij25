@@ -65,8 +65,8 @@ class Enemy(
                     type = type,
                     player = player,
                     damage = 1,
-                    maxHp = 20,
-                    speed = 1f,
+                    maxHp = 10,
+                    speed = 0.5f,
                     image = EnemyPNG.bug,
                 )
                 EnemyType.BLOCKER -> Enemy(
@@ -76,7 +76,7 @@ class Enemy(
                     type = type,
                     player = player,
                     damage = 2,
-                    maxHp = 40,
+                    maxHp = 20,
                     speed = 1.5f,
                     image = EnemyPNG.blocker,
                 )

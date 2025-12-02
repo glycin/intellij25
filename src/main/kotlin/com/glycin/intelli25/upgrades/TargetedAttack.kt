@@ -24,7 +24,7 @@ class TargetedAttack(
 ): Attack(ggState, player) {
 
     private var cooldown = 5000L
-    private val damage = 5
+    private val damage = 10
     private var projectileCount = 1
     private var nextId = 0L
     private val projectiles = concurrentMapOf<Long, TargetedProjectile>()
@@ -40,9 +40,8 @@ class TargetedAttack(
         scope.launch(Dispatchers.Default) {
             while(ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
-                    val enemies = enemyManager.getClosestEnemies(projectileCount, player.midPoint())
-                    (0..projectileCount).forEach { i ->
-                        addProjectile(enemies[i])
+                    enemyManager.getClosestEnemies(projectileCount, player.midPoint()).forEach {
+                        addProjectile(it)
                     }
                 }
                 delay(cooldown)
@@ -60,14 +59,16 @@ class TargetedAttack(
 
     override fun getDamage(enemyMidPos: Vec2): Int {
         val attacksToRemove = ArrayList<TargetedProjectile>()
-        val damage = projectiles.values.sumOf { b ->
-            if(Vec2.distance(enemyMidPos, b.midPoint()) <= b.radius) {
-                attacksToRemove.add(b)
-                b.damage * ggState.damageMultiplier
+        val damage = projectiles.values.sumOf { tp ->
+            if(Vec2.distance(enemyMidPos, tp.midPoint()) <= tp.radius) {
+                attacksToRemove.add(tp)
+                tp.damage * ggState.damageMultiplier
             } else {
                 0
             }
         }
+
+        attacksToRemove.addAll(projectiles.values.filter { it.target.currentHp <= 0 })
 
         attacksToRemove.forEach {
             projectiles.remove(it.id)
