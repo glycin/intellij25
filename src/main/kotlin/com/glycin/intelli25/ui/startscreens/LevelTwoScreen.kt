@@ -34,15 +34,17 @@ class LevelTwoScreen(
         val baseContent = LevelTwoScreenContent {
             if(saveState.dialoguesSeen == 1) {
                 val projectScope = project.service<GameService>().getProjectScope()
-                val dialogueScreen = LevelTwoDialogueScreen(projectScope) {
-                    toolWindow.hide()
-                    saveState.dialoguesSeen++
-                    startGame(project, toolWindow, parent as ToolWindowBaseComponent)
-                }
-                remove(it)
-                add(dialogueScreen)
-                revalidate()
-                repaint()
+                val dialogueScreen = DialogueScreen(
+                    title = "My teenage years...",
+                    texts = CutsceneTexts.screenTwo,
+                    scope = projectScope,
+                    onReadyToStart = {
+                        toolWindow.hide()
+                        saveState.dialoguesSeen++
+                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                    }
+                )
+
             } else {
                 toolWindow.hide()
                 startGame(project, toolWindow, parent as ToolWindowBaseComponent)

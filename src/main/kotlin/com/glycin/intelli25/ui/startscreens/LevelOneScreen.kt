@@ -3,7 +3,6 @@ package com.glycin.intelli25.ui.startscreens
 import com.glycin.intelli25.GameService
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
-import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
@@ -12,10 +11,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.glycin.intelli25.util.startGame
 import com.intellij.openapi.ui.Messages
-import com.intellij.platform.ide.progress.ModalTaskOwner.project
 import java.awt.BorderLayout
-import java.awt.Color
-import java.awt.Font
 import java.awt.GradientPaint
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -31,6 +27,9 @@ class LevelOneScreen(
     private val toolWindow: ToolWindow,
     private val saveState: GameSaveState,
 ): JPanel() {
+
+    lateinit var wrapper: DialogueScreenWrapper
+
     init{
         isOpaque = false
         layout = BorderLayout()
@@ -38,15 +37,25 @@ class LevelOneScreen(
         val baseContent = LevelOneScreenContent(project) {
             if(saveState.dialoguesSeen == 0) {
                 val projectScope = project.service<GameService>().getProjectScope()
-                val dialogueScreen = LevelOneDialogueScreen(projectScope) {
+                val dialogueScreen = DialogueScreen(
+                    title = "Origins...",
+                    texts = CutsceneTexts.screenOne,
+                    scope = projectScope,
+                    onReadyToStart = {
+                        toolWindow.hide()
+                        saveState.dialoguesSeen++
+                        wrapper.enableOk()
+                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                    }
+                )
+
+                wrapper = DialogueScreenWrapper(project, dialogueScreen)
+
+                if (wrapper.showAndGet()) {
                     toolWindow.hide()
-                    saveState.dialoguesSeen++
                     startGame(project, toolWindow, parent as ToolWindowBaseComponent)
                 }
-                remove(it)
-                add(dialogueScreen)
-                revalidate()
-                repaint()
+
             } else {
                 toolWindow.hide()
                 startGame(project, toolWindow, parent as ToolWindowBaseComponent)

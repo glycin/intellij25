@@ -19,6 +19,11 @@ class GameService(
     fun getProjectScope() = scope
 
     fun startGame(toolWindow: ToolWindow, baseComponent: ToolWindowBaseComponent) {
+        if(game != null) {
+            println("Game is already running!")
+            return
+        }
+        
         println("Starting game service")
         FileEditorManager.getInstance(project).selectedTextEditor?.let { e ->
             game = Game(project, e, scope, toolWindow, baseComponent)

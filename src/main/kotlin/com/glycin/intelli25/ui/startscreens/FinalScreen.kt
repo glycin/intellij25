@@ -28,13 +28,14 @@ class FinalScreen(
 
         val baseContent = FinalScreenContent {
             val projectScope = project.service<GameService>().getProjectScope()
-            val dialogueScreen = FinalDialogueScreen(projectScope) {
-                toolWindow.hide()
-            }
-            remove(it)
-            add(dialogueScreen)
-            revalidate()
-            repaint()
+            val dialogueScreen = DialogueScreen(
+                "FREEDOM!",
+                texts = CutsceneTexts.screenFour,
+                scope = projectScope,
+                onReadyToStart = {
+                    toolWindow.hide()
+                }
+            )
         }
 
         add(baseContent)

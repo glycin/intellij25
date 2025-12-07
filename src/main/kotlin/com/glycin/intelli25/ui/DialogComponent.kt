@@ -1,14 +1,11 @@
 package com.glycin.intelli25.ui
 
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.PNG
 import kotlinx.coroutines.CoroutineScope
 import java.awt.BorderLayout
-import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.BorderFactory
-import javax.swing.JButton
 import javax.swing.JPanel
 
 private const val SCROLL_X_PADDING = 5
@@ -19,45 +16,27 @@ class DialogComponent(
     deltaTime: Long,
     texts: List<String>,
     scope: CoroutineScope,
-    private val onClose: () -> Unit
-): JPanel() {
+    private val onReadyToStart: (() -> Unit)? = null
+) : JPanel() {
 
     private val scrollPane: DialogScrollPane
-    private val nextButton: JButton
-    private var readyToStart = false
+    private var finishedAllTexts = false
 
     init {
         layout = BorderLayout()
         isOpaque = false
-        scrollPane = DialogScrollPane(texts, scope, deltaTime){
-            nextButton.text = "Start!"
-            readyToStart = true
+
+        scrollPane = DialogScrollPane(texts, scope, deltaTime) {
+            finishedAllTexts = true
+            onReadyToStart?.invoke()
         }.apply {
-            setBounds(width + SCROLL_X_PADDING, 0 + SCROLL_Y_PADDING, width - SCROLL_X_PADDING, height - SCROLL_BOTTOM_PADDING)
+            setBounds(
+                width + SCROLL_X_PADDING,
+                0 + SCROLL_Y_PADDING,
+                width - SCROLL_X_PADDING,
+                height - SCROLL_BOTTOM_PADDING
+            )
         }
-
-        nextButton = JButton("Next").apply {
-            isFocusable = false
-            font = Fonts.pixelFont.deriveFont(Font.BOLD, 16f)
-            foreground = GameColors.jbOrange
-            background = GameColors.transparent
-            isContentAreaFilled = false
-            isOpaque = false
-            addActionListener {
-                if(readyToStart){
-                    onClose()
-                } else {
-                    scrollPane.nextText()
-                }
-            }
-        }
-
-        val buttonPanel = JPanel(BorderLayout()).apply {
-            isOpaque = false
-            border = BorderFactory.createEmptyBorder(10, 20, 0, 20)
-            add(nextButton, BorderLayout.EAST)
-        }
-        add(buttonPanel, BorderLayout.NORTH)
 
         val centerPanel = object : JPanel() {
             override fun paintComponent(g: Graphics) {
@@ -74,6 +53,12 @@ class DialogComponent(
         }
 
         add(centerPanel, BorderLayout.CENTER)
+    }
+
+    fun advance() {
+        if (!finishedAllTexts) {
+            scrollPane.nextText()
+        }
     }
 
     fun deactivate() {

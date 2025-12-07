@@ -16,8 +16,8 @@ class GameToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val gameState = service<GameSaveState>()
         //TODO: Testing remove
-        //gameState.dialoguesSeen = 0
-        //gameState.levelsBeaten = 0
+        gameState.dialoguesSeen = 0
+        gameState.levelsBeaten = 0
 
         if (gameScreenContainer == null) {
             gameScreenContainer = ToolWindowBaseComponent(project, toolWindow, gameState)

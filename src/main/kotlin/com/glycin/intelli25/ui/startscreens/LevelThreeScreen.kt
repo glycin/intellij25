@@ -33,15 +33,24 @@ class LevelThreeScreen(
         val baseContent = LevelThreeScreenContent {
             if(saveState.dialoguesSeen == 2) {
                 val projectScope = project.service<GameService>().getProjectScope()
-                val dialogueScreen = LevelThreeDialogueScreen(projectScope) {
+                val dialogueScreen = DialogueScreen(
+                    title = "Adulthood...",
+                    texts = CutsceneTexts.screenThree,
+                    scope = projectScope,
+                    onReadyToStart =  {
+                        toolWindow.hide()
+                        saveState.dialoguesSeen++
+                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                    }
+                )
+
+                val wrapper = DialogueScreenWrapper(project, dialogueScreen)
+
+                if (wrapper.showAndGet()) {
                     toolWindow.hide()
-                    saveState.dialoguesSeen++
                     startGame(project, toolWindow, parent as ToolWindowBaseComponent)
                 }
-                remove(it)
-                add(dialogueScreen)
-                revalidate()
-                repaint()
+
             } else {
                 toolWindow.hide()
                 startGame(project, toolWindow, parent as ToolWindowBaseComponent)

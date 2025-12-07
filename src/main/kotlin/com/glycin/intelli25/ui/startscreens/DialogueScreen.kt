@@ -13,15 +13,20 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-class LevelTwoDialogueScreen(
-    private val scope: CoroutineScope,
-    private val onFinish: () -> Unit
-): JPanel() {
+class DialogueScreen(
+    val title: String,
+    texts: List<String>,
+    scope: CoroutineScope,
+    private val onReadyToStart: (() -> Unit)? = null
+) : JPanel() {
+
+    private val dialoguePanel: DialogComponent
+
     init {
         isOpaque = false
         layout = BorderLayout()
 
-        val titleLabel = JLabel("My teenage years...").apply {
+        val titleLabel = JLabel(title).apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
             foreground = GameColors.white
             horizontalAlignment = SwingConstants.LEFT
@@ -29,13 +34,12 @@ class LevelTwoDialogueScreen(
         }
         add(titleLabel, BorderLayout.NORTH)
 
-        val dialoguePanel = DialogComponent(
+        dialoguePanel = DialogComponent(
             deltaTime = 1000 / 120L,
-            texts = CutsceneTexts.screenTwo,
-            scope = scope
-        ){
-            onFinish()
-        }.apply {
+            texts = texts,
+            scope = scope,
+            onReadyToStart = { onReadyToStart?.invoke() }
+        ).apply {
             border = BorderFactory.createEmptyBorder(0, 100, 40, 100)
             isOpaque = false
         }
@@ -43,9 +47,13 @@ class LevelTwoDialogueScreen(
         add(dialoguePanel, BorderLayout.SOUTH) // bottom of screen
     }
 
+    fun advance() = dialoguePanel.advance()
+
+    fun deactivate() = dialoguePanel.deactivate()
+
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
-        if(g is Graphics2D) {
+        if (g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
             g.drawImage(PNG.RUNZO, width / 2, height / 4, 128, 128, null)
