@@ -6,6 +6,7 @@ import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.GameColors
 import kotlinx.coroutines.CoroutineScope
 import java.awt.BorderLayout
+import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.BorderFactory
@@ -25,7 +26,8 @@ class DialogueScreen(
     init {
         isOpaque = false
         layout = BorderLayout()
-
+        preferredSize = Dimension(800, 600)
+        minimumSize = Dimension(600, 400)
         val titleLabel = JLabel(title).apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
             foreground = GameColors.white

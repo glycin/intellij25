@@ -20,7 +20,7 @@ data class GameGlobalState(
     var xpPickUpRangeMultiplier: Int = 1,
     var xpMultiplier: Int = 1,
     var regenRatePerSecondMultiplier: Int = 1,
-    var enemyDamageMultiplier: Int = 10,
+    var enemySpeedPenalty: Float = 0.0f,
 
     // Enemy state
     var enemySpawnCooldown: Long = 3000L,

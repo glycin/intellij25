@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.TargetedProjectile
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.UpgradePNG
 import com.jetbrains.rd.util.concurrentMapOf
@@ -30,11 +31,68 @@ class TargetedAttack(
     private val projectiles = concurrentMapOf<Long, TargetedProjectile>()
 
     override val attackIcon: BufferedImage? = UpgradePNG.coffee
-    override val title: String = "Tools"
+    override val title: String = "Impeccable style"
     override val unlockDescription: String
-        get() = "Some description"
+        get() = "Serving developers with style"
     override val unlockEffect: String
         get() = "New weapon that fires a projectile to the closest enemy"
+
+    private val upgradeOne = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Dark theme"
+        description = "IntelliJ added a dark theme"
+        effect = "Decreases weapon cooldown"
+        onSelect = {
+            cooldown = 3500L
+            generalLevelUp()
+        }
+    }
+
+    private val upgradeTwo = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Jetbrains Monotype"
+        description = "IntelliJ added the jb monotype"
+        effect = "Adds an extra projectile"
+        onSelect = {
+            projectileCount++
+            generalLevelUp()
+        }
+    }
+
+    private val upgradeThree = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "New UI"
+        description = "IntelliJ got a redesign"
+        effect = "Further decreases cooldown"
+        onSelect = {
+            cooldown = 2500L
+            generalLevelUp()
+        }
+    }
+
+    private val upgradeFour = upgradeOption {
+        icon = attackIcon
+        upgradePathTitle = title
+        subTitle = "Custom themes"
+        description = "Intellij added custom theme support!"
+        effect = "Further decreases cooldown and adds two additional projectiles"
+        onSelect = {
+            cooldown = 1500L
+            projectileCount += 2
+            generalLevelUp()
+        }
+    }
+
+    private val upgrades = when(ggState.chosenGameLevel) {
+        1 -> emptyList()
+        2 -> listOf(upgradeOne)
+        else -> listOf(upgradeOne, upgradeTwo, upgradeThree, upgradeFour)
+    }
+
+    override val maxLevel: Int = upgrades.size + 1
 
     override fun activate() {
         scope.launch(Dispatchers.Default) {
@@ -78,10 +136,9 @@ class TargetedAttack(
     }
 
     override fun getNextUpgrade(): UpgradeOption? {
-        TODO("Not yet implemented")
+        if(currentLevel >= maxLevel) { return null}
+        return upgrades[currentLevel - 1]
     }
-
-    override val maxLevel: Int = 1
 
     private fun addProjectile(target: Enemy) {
         val new = TargetedProjectile(

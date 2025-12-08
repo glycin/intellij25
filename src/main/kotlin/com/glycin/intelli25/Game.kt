@@ -24,6 +24,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.awt.KeyboardFocusManager
+import java.awt.event.ComponentEvent
+import java.awt.event.ComponentListener
 
 private const val FPS = 120L
 private const val GAME_DURATION = 10 * 60 * 1000L // 10 Minutes
@@ -49,6 +51,7 @@ class Game(
         scope.launch(Dispatchers.EDT) {
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
+
             ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime(), GAME_DURATION)
             val player = Player(Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25), ggState = ggState, width = 64, height = 64) {
                 uiComponent?.showUpgradePopup(generateUpgradeOptions())
@@ -75,11 +78,11 @@ class Game(
                 scope.launch(Dispatchers.EDT) {
                     toolWindow.show()
                 }
-            }.also { ec ->
-                ec.bounds = editor.contentComponent.bounds
-                ec.isOpaque = false
-                ec.isFocusable = true
-                ec.requestFocusInWindow()
+            }.also { gc ->
+                gc.bounds = editor.contentComponent.bounds
+                gc.isOpaque = false
+                gc.isFocusable = true
+                gc.requestFocusInWindow()
             }
 
             uiComponent = UiComponent(player, ggState, scope).also { uic ->
@@ -92,6 +95,20 @@ class Game(
                 c.add(uiComponent)
                 c.setComponentZOrder(uiComponent, 0)
                 c.setComponentZOrder(gameComponent, 1)
+
+                c.addComponentListener(object : ComponentListener {
+                    override fun componentResized(e: ComponentEvent?) {
+                        ggState.maxX = editor.scrollingModel.visibleArea.width
+                        ggState.maxY = editor.scrollingModel.visibleArea.height
+                        uiComponent?.updateBounds(editor.contentComponent.bounds)
+                        gameComponent?.bounds = editor.contentComponent.bounds
+                    }
+
+                    override fun componentMoved(e: ComponentEvent?) {}
+                    override fun componentShown(e: ComponentEvent?) {}
+                    override fun componentHidden(e: ComponentEvent?) {}
+                })
+
                 c.repaint()
                 c.revalidate()
             }

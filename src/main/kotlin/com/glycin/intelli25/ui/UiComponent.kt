@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.awt.Rectangle
 import javax.swing.JComponent
 import javax.swing.JPanel
 
@@ -69,6 +70,11 @@ class UiComponent(
         }
 
         scope.launch(Dispatchers.EDT) { popup.showInCenterOf(parent) }
+    }
+
+    fun updateBounds(newBounds: Rectangle) {
+        this.bounds = newBounds
+        gameUiComponent?.bounds = newBounds
     }
 
     override fun dispose() {

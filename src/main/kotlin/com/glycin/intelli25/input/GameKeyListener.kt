@@ -12,19 +12,19 @@ class GameKeyListener(
     override fun dispatchKeyEvent(e: KeyEvent?): Boolean {
         if(e?.id == KeyEvent.KEY_PRESSED) {
             when(e.keyCode) {
-                KeyEvent.VK_W, KeyEvent.VK_UP -> player.keyMap["UP"] = true
-                KeyEvent.VK_A, KeyEvent.VK_LEFT -> player.keyMap["LEFT"] = true
-                KeyEvent.VK_S, KeyEvent.VK_DOWN -> player.keyMap["DOWN"] = true
-                KeyEvent.VK_D, KeyEvent.VK_RIGHT -> player.keyMap["RIGHT"] = true
+                KeyEvent.VK_W -> player.keyMap["UP"] = true
+                KeyEvent.VK_A -> player.keyMap["LEFT"] = true
+                KeyEvent.VK_S -> player.keyMap["DOWN"] = true
+                KeyEvent.VK_D -> player.keyMap["RIGHT"] = true
             }
         }
 
         if(e?.id == KeyEvent.KEY_RELEASED) {
             when(e.keyCode) {
-                KeyEvent.VK_W, KeyEvent.VK_UP -> player.keyMap["UP"] = false
-                KeyEvent.VK_A, KeyEvent.VK_LEFT -> player.keyMap["LEFT"] = false
-                KeyEvent.VK_S, KeyEvent.VK_DOWN -> player.keyMap["DOWN"] = false
-                KeyEvent.VK_D, KeyEvent.VK_RIGHT -> player.keyMap["RIGHT"] = false
+                KeyEvent.VK_W -> player.keyMap["UP"] = false
+                KeyEvent.VK_A -> player.keyMap["LEFT"] = false
+                KeyEvent.VK_S -> player.keyMap["DOWN"] = false
+                KeyEvent.VK_D -> player.keyMap["RIGHT"] = false
             }
         }
 

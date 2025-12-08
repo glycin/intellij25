@@ -44,19 +44,19 @@ class Player(
 
         var dir = Vec2.zero
 
-        if (keyMap["UP"] == true){
+        if (keyMap["UP"] == true && position.y > ggState.minY){
             dir += Vec2.up
         }
 
-        if (keyMap["LEFT"] == true){
+        if (keyMap["LEFT"] == true && position.x > ggState.minX) {
             dir += Vec2.left
         }
 
-        if (keyMap["DOWN"] == true){
+        if (keyMap["DOWN"] == true && (position.y + height) <= ggState.maxY) {
             dir += Vec2.down
         }
 
-        if (keyMap["RIGHT"] == true){
+        if (keyMap["RIGHT"] == true && (position.x + width) <= ggState.maxX) {
             dir += Vec2.right
         }
 

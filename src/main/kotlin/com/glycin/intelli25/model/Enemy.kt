@@ -1,6 +1,7 @@
 package com.glycin.intelli25.model
 
 import com.glycin.intelli25.util.EnemyPNG
+import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
@@ -10,7 +11,6 @@ class Enemy(
     val id: Int,
     var position: Vec2,
     val points : Int,
-    val type: EnemyType = EnemyType.entries.random(),
     val damage: Int = 1,
     val maxHp: Int = 20,
     private var player: Player,
@@ -18,6 +18,7 @@ class Enemy(
     private var height: Int = 50,
     private val speed: Float = 1f,
     private val image: BufferedImage?,
+    private val ggState: GameGlobalState,
 ) {
     var currentHp = maxHp
     private var facing = EnemyFacing.LEFT
@@ -28,7 +29,7 @@ class Enemy(
 
     fun move() {
         val dir = (player.midPoint() - position).normalized()
-        position += dir * speed
+        position += dir * (speed - ggState.enemySpeedPenalty).coerceAtLeast(0.1f)
 
         facing = if(dir.x < 0) {
             EnemyFacing.LEFT
@@ -56,84 +57,84 @@ class Enemy(
     }
 
     companion object{
-        fun createOfType(id: Int, position: Vec2, player: Player, type: EnemyType): Enemy {
+        fun createOfType(id: Int, position: Vec2, player: Player, type: EnemyType, ggState: GameGlobalState): Enemy {
             return when(type){
                 EnemyType.BUG -> Enemy(
                     id = id,
                     position = position,
                     points = 10,
-                    type = type,
                     player = player,
                     damage = 1,
                     maxHp = 10,
-                    speed = 0.5f,
+                    speed = 0.7f,
                     image = EnemyPNG.bug,
+                    ggState = ggState
                 )
                 EnemyType.BLOCKER -> Enemy(
                     id = id,
                     position = position,
                     points = 20,
-                    type = type,
                     player = player,
                     damage = 2,
                     maxHp = 20,
                     speed = 1.5f,
                     image = EnemyPNG.blocker,
+                    ggState = ggState
                 )
                 EnemyType.BURNING_CALENDAR -> Enemy(
                     id = id,
                     position = position,
                     points = 30,
-                    type = type,
                     player = player,
                     damage = 3,
                     maxHp = 50,
                     speed = 1.9f,
                     image = EnemyPNG.calendar,
+                    ggState = ggState
                 )
                 EnemyType.PHANTOM -> Enemy(
                     id = id,
                     position = position,
                     points = 50,
-                    type = type,
                     player = player,
                     damage = 10,
                     maxHp = 100,
-                    speed = 0.2f,
+                    speed = 0.5f,
                     image = EnemyPNG.phantom,
+                    ggState = ggState
                 )
                 EnemyType.DEMON -> Enemy(
                     id = id,
                     position = position,
                     points = 50,
-                    type = type,
                     player = player,
                     damage = 10,
                     maxHp = 20,
                     speed = 2.5f,
                     image = EnemyPNG.demon,
+                    ggState = ggState
                 )
                 EnemyType.BEES -> Enemy(
                     id = id,
                     position = position,
                     points = 30,
-                    type = type,
                     player = player,
                     damage = 3,
                     maxHp = 10,
                     speed = 3f,
                     image = EnemyPNG.bees,
+                    ggState = ggState
                 )
                 EnemyType.VAMPIRE -> Enemy(
                     id = id,
                     position = position,
                     points = 30,
-                    type = type,
                     player = player,
                     damage = 3,
                     maxHp = 10,
                     speed = 3f,
                     image = EnemyPNG.vampire,
+                    ggState = ggState
                 )
             }
         }

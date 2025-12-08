@@ -9,6 +9,7 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import java.awt.image.BufferedImage
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class UpgradeRepository(
@@ -20,21 +21,24 @@ class UpgradeRepository(
     private val attackUpgrades = when(ggState.chosenGameLevel) {
         1 -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
-            "Git integration" to FreezingAttack(scope, ggState, player),
-            "Tools" to TargetedAttack(scope, enemyManager, ggState, player),
-            "Cool stuff" to MassDestructionAttack(enemyManager, scope, ggState, player)
+            "Version control" to FreezingAttack(scope, ggState, player),
         )
         2 -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
+            "Version control" to FreezingAttack(scope, ggState, player),
             "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
-            "Kotlin" to LightningAttack(ggState, player, scope)
+            "Kotlin" to LightningAttack(ggState, player, scope),
+            "Impeccable style" to TargetedAttack(scope, enemyManager, ggState, player),
         )
         else -> mutableMapOf(
-            "AI Assistant" to RotatingAttack(ggState, player),
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
+            "Version control" to FreezingAttack(scope, ggState, player),
             "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
-            "Kotlin" to LightningAttack(ggState, player, scope)
+            "Kotlin" to LightningAttack(ggState, player, scope),
+            "Impeccable style" to TargetedAttack(scope, enemyManager, ggState, player),
+            "AI Assistant" to RotatingAttack(ggState, player),
         )
+        //"Cool stuff" to MassDestructionAttack(enemyManager, scope, ggState, player),
     }
 
     private val pizzaUpgrade = upgradeOption {
@@ -90,9 +94,9 @@ class UpgradeRepository(
         upgradePathTitle = "Firewall shield"
         subTitle = ""
         description = "The best defense is..."
-        effect = "Decreases enemy damage"
+        effect = "Decreases enemy speed"
         onSelect = {
-            ggState.enemyDamageMultiplier -= 1
+            ggState.enemySpeedPenalty += 0.2f
             defaultLevelUp(title, upgradeIcon)
         }
     }
@@ -120,9 +124,9 @@ class UpgradeRepository(
         upgradePathTitle = "Intention Actions"
         subTitle = ""
         description = "For when your intentions are clear"
-        effect = "Increases your damage"
+        effect = "Decrease the amount of enemies spawned"
         onSelect = {
-            ggState.damageMultiplier *= 2 //TODO: We have this twice
+            ggState.spawnCountPerCooldown = (ggState.spawnCountPerCooldown / 1.3f).roundToInt()
             defaultLevelUp(title, upgradeIcon)
         }
     }
@@ -157,8 +161,41 @@ class UpgradeRepository(
         }
     }
 
+    private val codeFreezeUpgrade = upgradeOption {
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Code freeze"
+
+        icon = upgradeIcon
+        upgradePathTitle = title
+        subTitle = ""
+        description = "For when you need to be sure nothing will break"
+        effect = "Decrease the speed in which new enemies appear"
+        onSelect = {
+            ggState.enemySpawnCooldown += 200L
+            defaultLevelUp(title, upgradeIcon)
+        }
+    }
+
+    private val pushToProd = upgradeOption {
+        val upgradeIcon = UpgradePNG.coffee
+        val title = "Push to Prod"
+
+        icon = upgradeIcon
+        upgradePathTitle = title
+        subTitle = ""
+        description = "For when you feel adventurous"
+        effect = "Increase the amount of enemies appearing"
+        onSelect = {
+            ggState.enemySpawnCooldown -= 300L
+            ggState.spawnCountPerCooldown = (ggState.spawnCountPerCooldown * 1.3f).roundToInt()
+            defaultLevelUp(title, upgradeIcon)
+        }
+    }
+
     private val basicUpgrades = listOf(
-        pizzaUpgrade, coffeeUpgrade, performanceUpgrade, firewallUpgrade, autoRefactoringUpgrade, intentionActionsUpgrade, codeInspectionsUpgrade, dukeUpgrade
+        pizzaUpgrade, coffeeUpgrade, performanceUpgrade, firewallUpgrade, autoRefactoringUpgrade,
+        intentionActionsUpgrade, codeInspectionsUpgrade, dukeUpgrade, codeFreezeUpgrade,
+        pushToProd
     )
 
     fun getRandomUpgrades(attackManager: AttackManager): List<UpgradeOption> {

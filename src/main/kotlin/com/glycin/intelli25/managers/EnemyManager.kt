@@ -41,7 +41,13 @@ class EnemyManager(
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
                         val p = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
-                        val spawned = Enemy.createOfType(idCounter, p, player, Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random())
+                        val spawned = Enemy.createOfType(
+                            id = idCounter,
+                            position = p,
+                            player = player,
+                            type = Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random(),
+                            ggState = ggState,
+                        )
                         enemyMap[spawned.id] = spawned
                     }
                 }
