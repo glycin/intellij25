@@ -1,5 +1,6 @@
 package com.glycin.intelli25
 
+import com.glycin.intelli25.model.GameStartupSettings
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -18,7 +19,7 @@ class GameService(
 
     fun getProjectScope() = scope
 
-    fun startGame(toolWindow: ToolWindow, baseComponent: ToolWindowBaseComponent) {
+    fun startGame(toolWindow: ToolWindow, baseComponent: ToolWindowBaseComponent, gameStartupSettings: GameStartupSettings) {
         if(game != null) {
             println("Game is already running!")
             return
@@ -26,7 +27,7 @@ class GameService(
         
         println("Starting game service")
         FileEditorManager.getInstance(project).selectedTextEditor?.let { e ->
-            game = Game(project, e, scope, toolWindow, baseComponent)
+            game = Game(project, e, scope, toolWindow, baseComponent, gameStartupSettings)
         }
     }
 }

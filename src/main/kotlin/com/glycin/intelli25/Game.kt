@@ -4,6 +4,7 @@ import com.glycin.intelli25.input.GameKeyListener
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.model.GameStartupSettings
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
@@ -29,7 +30,6 @@ import java.awt.event.ComponentEvent
 import java.awt.event.ComponentListener
 
 private const val FPS = 120L
-private const val GAME_DURATION = 10 * 60 * 1000L // 10 Minutes
 
 class Game(
     private val project: Project,
@@ -37,6 +37,7 @@ class Game(
     private val scope: CoroutineScope,
     private val toolWindow: ToolWindow,
     private val toolWindowBaseComponent: ToolWindowBaseComponent,
+    gameStartupSettings: GameStartupSettings,
 ): Disposable {
 
     private var gameComponent: GameComponent? = null
@@ -53,7 +54,16 @@ class Game(
             val maxX = editor.scrollingModel.visibleArea.width
             val maxY = editor.scrollingModel.visibleArea.height
 
-            ggState = GameGlobalState(0, 0, maxX, maxY, FPS.getDeltaTime(), GAME_DURATION)
+            ggState = GameGlobalState(
+                minX = 0,
+                minY = 0,
+                maxX = maxX,
+                maxY = maxY,
+                deltaTime = FPS.getDeltaTime(),
+                gameDuration = gameStartupSettings.gameDuration,
+                chosenGameLevel = gameStartupSettings.chosenGameLevel,
+            )
+
             val player = Player(Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25), ggState = ggState, width = 64, height = 64) {
                 uiComponent?.showUpgradePopup(generateUpgradeOptions())
             }

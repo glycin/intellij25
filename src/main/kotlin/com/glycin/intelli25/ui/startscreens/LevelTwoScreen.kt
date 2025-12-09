@@ -1,6 +1,7 @@
 package com.glycin.intelli25.ui.startscreens
 
 import com.glycin.intelli25.GameService
+import com.glycin.intelli25.model.GameStartupSettings
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.util.PNG
@@ -52,12 +53,22 @@ class LevelTwoScreen(
 
                 if (wrapper.showAndGet()) {
                     toolWindow.hide()
-                    startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                    startGame(
+                        project,
+                        toolWindow,
+                        parent as ToolWindowBaseComponent,
+                        GameStartupSettings.createLevelTwoSettings()
+                    )
                 }
 
             } else {
                 toolWindow.hide()
-                startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                startGame(
+                    project,
+                    toolWindow,
+                    parent as ToolWindowBaseComponent,
+                    GameStartupSettings.createLevelTwoSettings()
+                )
             }
         }
 
