@@ -77,7 +77,5 @@ class UiComponent(
         gameUiComponent?.bounds = newBounds
     }
 
-    override fun dispose() {
-        TODO("Not yet implemented")
-    }
+    override fun dispose() {}
 }

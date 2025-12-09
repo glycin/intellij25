@@ -26,6 +26,8 @@ class LevelThreeScreen(
     private val toolWindow: ToolWindow,
     private val saveState: GameSaveState,
 ): JPanel() {
+    lateinit var wrapper: DialogueScreenWrapper
+
     init{
         isOpaque = false
         layout = BorderLayout()
@@ -40,11 +42,11 @@ class LevelThreeScreen(
                     onReadyToStart =  {
                         toolWindow.hide()
                         saveState.dialoguesSeen++
-                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                        wrapper.enableOk()
                     }
                 )
 
-                val wrapper = DialogueScreenWrapper(project, dialogueScreen)
+                wrapper = DialogueScreenWrapper(project, dialogueScreen)
 
                 if (wrapper.showAndGet()) {
                     toolWindow.hide()

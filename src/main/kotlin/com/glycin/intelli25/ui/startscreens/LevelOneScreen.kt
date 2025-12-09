@@ -45,7 +45,6 @@ class LevelOneScreen(
                         toolWindow.hide()
                         saveState.dialoguesSeen++
                         wrapper.enableOk()
-                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
                     }
                 )
 

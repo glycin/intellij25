@@ -18,6 +18,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.ex.EditorEx
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
@@ -96,19 +97,17 @@ class Game(
                 c.setComponentZOrder(uiComponent, 0)
                 c.setComponentZOrder(gameComponent, 1)
 
-                c.addComponentListener(object : ComponentListener {
-                    override fun componentResized(e: ComponentEvent?) {
-                        ggState.maxX = editor.scrollingModel.visibleArea.width
-                        ggState.maxY = editor.scrollingModel.visibleArea.height
-                        uiComponent?.updateBounds(editor.contentComponent.bounds)
-                        gameComponent?.bounds = editor.contentComponent.bounds
-                    }
-
-                    override fun componentMoved(e: ComponentEvent?) {}
-                    override fun componentShown(e: ComponentEvent?) {}
-                    override fun componentHidden(e: ComponentEvent?) {}
-                })
-
+                editor.scrollingModel.addVisibleAreaListener { e ->
+                    val visibleRect = e.newRectangle
+                    ggState.maxX = visibleRect.width
+                    ggState.maxY = visibleRect.height
+                    uiComponent?.updateBounds(visibleRect)
+                    gameComponent?.bounds = visibleRect
+                    uiComponent?.revalidate()
+                    uiComponent?.repaint()
+                    gameComponent?.revalidate()
+                    gameComponent?.repaint()
+                }
                 c.repaint()
                 c.revalidate()
             }

@@ -27,6 +27,9 @@ class LevelTwoScreen(
     private val toolWindow: ToolWindow,
     private val saveState: GameSaveState,
 ): JPanel() {
+
+    lateinit var wrapper: DialogueScreenWrapper
+
     init{
         isOpaque = false
         layout = BorderLayout()
@@ -41,9 +44,16 @@ class LevelTwoScreen(
                     onReadyToStart = {
                         toolWindow.hide()
                         saveState.dialoguesSeen++
-                        startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                        wrapper.enableOk()
                     }
                 )
+
+                wrapper = DialogueScreenWrapper(project, dialogueScreen)
+
+                if (wrapper.showAndGet()) {
+                    toolWindow.hide()
+                    startGame(project, toolWindow, parent as ToolWindowBaseComponent)
+                }
 
             } else {
                 toolWindow.hide()
