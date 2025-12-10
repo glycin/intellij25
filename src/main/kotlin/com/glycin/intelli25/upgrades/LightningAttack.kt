@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.randomPointInCircle
 import com.intellij.icons.AllIcons
@@ -22,7 +23,7 @@ class LightningAttack(
     player: Player,
     private val scope: CoroutineScope,
 ): Attack(ggState, player) {
-
+    private val attackSprites = SpriteSheetImageLoader.loadSprites("sprites/effects/lightning.png", 64, 128, 10)
     override val attackIcon = UpgradePNG.coffee
     override val title = "Kotlin"
     override val unlockDescription: String

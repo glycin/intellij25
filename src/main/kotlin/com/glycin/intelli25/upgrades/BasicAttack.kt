@@ -40,7 +40,7 @@ class BasicAttack(
         description = "IntelliJ added html and css support"
         effect = "Increase firing speed of projectiles"
         onSelect = {
-            attackDelay = 1600L
+            attackDelay = 1500L
             generalLevelUp()
         }
     }
@@ -52,7 +52,6 @@ class BasicAttack(
         description = "IntelliJ added SQL support"
         effect = "Adds two additional projectile lines"
         onSelect = {
-            attackDelay = 1200L
             generalLevelUp()
         }
     }
@@ -197,7 +196,7 @@ class BasicAttack(
         val bulletsToRemove = ArrayList<Bullet>()
 
         val damage = bullets.values.sumOf { b ->
-            if(Vec2.distance(enemyMidPos, b.midPoint()) <= b.radius) {
+            if(Vec2.distance(enemyMidPos, b.midPoint()) <= (b.radius * 2)) {
                 bulletsToRemove.add(b)
                 b.damage * ggState.damageMultiplier
             } else {

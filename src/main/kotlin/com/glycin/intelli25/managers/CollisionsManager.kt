@@ -29,7 +29,7 @@ class CollisionsManager(
 
     fun checkPlayerToEnemy() {
         val enemiesInRange = enemyManager.getEnemies().filter { e ->
-            e.rect().intersects(player.rect()) || e.rect().contains(player.midPoint().toPoint())
+            Vec2.distance(e.midPoint(), player.midPoint()) <= player.width
         }
 
         if (enemiesInRange.isNotEmpty()){

@@ -16,6 +16,7 @@ class PlayerAnimator {
     private var currentAnimationIndex = 0
     private var skipFrameCount = 0
 
+    //TODO: We dont have an animation, just render stuff
     fun animate(state: PlayerState) {
         when(state) {
             PlayerState.WALK -> showAnimation(walking)

@@ -13,19 +13,17 @@ class Enemy(
     val points : Int,
     val damage: Int = 1,
     val maxHp: Int = 20,
-    private var player: Player,
-    private var width: Int = 50,
-    private var height: Int = 50,
+    var width: Int = 50,
+    var height: Int = 50,
     private val speed: Float = 1f,
     private val image: BufferedImage?,
+    private var player: Player,
     private val ggState: GameGlobalState,
 ) {
     var currentHp = maxHp
     private var facing = EnemyFacing.LEFT
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
-
-    fun rect() = Rectangle(position.x.roundToInt(), position.y.roundToInt(), width, height)
 
     fun move() {
         val dir = (player.midPoint() - position).normalized()

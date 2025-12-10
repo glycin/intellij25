@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.UpgradePNG
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
@@ -22,7 +23,7 @@ class AreaAttack(
         get() = "New weapon that adds a damaging area around Runzo."
 
     private val basicAttackDamage: Int = 1
-    private var diameter = player.width + 10
+    private var diameter = player.width + 20
     private val upgradeOne = upgradeOption {
         icon = attackIcon
         upgradePathTitle = title
@@ -103,10 +104,17 @@ class AreaAttack(
 
     override val maxLevel: Int = upgrades.size + 1
 
+    private var angle = 0.0
+
     override fun draw(g: Graphics2D) {
-        g.color = GameColors.white
         val playerMid = player.midPoint()
-        g.drawOval(playerMid.x.roundToInt() - (diameter / 2), playerMid.y.roundToInt() - (diameter / 2), diameter, diameter)
+        val x = playerMid.x.roundToInt() - (diameter / 2)
+        val y = playerMid.y.roundToInt() - (diameter / 2)
+        val oldTransform = g.transform
+        angle -= 0.005 //TODO: Reset the angle after ....
+        g.rotate(angle, playerMid.x.toDouble(), playerMid.y.toDouble())
+        g.drawImage(PNG.FORCE_FIELD, x, y, diameter, diameter, null)
+        g.transform = oldTransform
     }
 
     override fun move() { }

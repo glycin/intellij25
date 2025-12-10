@@ -22,23 +22,7 @@ object PNG {
         getPng("/sprites/bullet.png", PNG::class.java)
     }
 
-    val firstLogo : BufferedImage? by lazy {
-        try {
-            val url = PNG::class.java.getResource("/screens/intellij-2001.png")
-            url?.let { ImageIO.read(it) }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    val secondLogo : BufferedImage? by lazy {
-        try {
-            val url = PNG::class.java.getResource("/screens/intellij-2010.png")
-            url?.let { ImageIO.read(it) }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
+    val FORCE_FIELD : BufferedImage? by lazy {
+        getPng("/sprites/effects/force_field.png", PNG::class.java)
     }
 }
