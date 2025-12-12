@@ -25,4 +25,8 @@ object PNG {
     val FORCE_FIELD : BufferedImage? by lazy {
         getPng("/sprites/effects/force_field.png", PNG::class.java)
     }
+
+    val START_BACKGROUND : BufferedImage? by lazy {
+        getPng("/screens/game-start-splash.png", PNG::class.java)
+    }
 }

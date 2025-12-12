@@ -7,6 +7,7 @@ import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
+import com.glycin.intelli25.util.PNG
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -97,7 +98,7 @@ private class LevelOneScreenContent(
             isOpaque = false
         }
         val startButton = StartButton(
-            backgroundColor = GameColors.black,
+            backgroundColor = GameColors.jbRed,
             hoverColor = GameColors.jbOrange,
             text = "Start Game",
         ).apply {
@@ -114,7 +115,7 @@ private class LevelOneScreenContent(
         }
 
         val howToPlayButton = StartButton(
-            backgroundColor = GameColors.black,
+            backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             text = "How to play",
         ).apply {
@@ -129,13 +130,9 @@ private class LevelOneScreenContent(
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
         if(g is Graphics2D) {
-            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
-            val gradient = GradientPaint(
-                width.toFloat(), 0f, GameColors.jbRed,
-                0f, height.toFloat(), GameColors.jbBlue
-            )
-            g.paint = gradient
+            g.color = GameColors.black
             g.fillRect(0, 0, width, height)
+            g.drawImage(PNG.START_BACKGROUND, (width / 2) - 512, (height / 2) - 512, 1024, 1024, null)
         }
     }
 
