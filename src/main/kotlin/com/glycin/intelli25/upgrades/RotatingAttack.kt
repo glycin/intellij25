@@ -6,6 +6,7 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.pointOnCircle
 import java.awt.Graphics2D
@@ -15,6 +16,8 @@ class RotatingAttack(
     ggState: GameGlobalState,
     player: Player
 ): Attack(ggState, player) {
+
+    private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
 
     override val attackIcon = UpgradePNG.coffee
     override val title = "Artificial Intelligence"
@@ -26,7 +29,7 @@ class RotatingAttack(
     private val radius = 250f
     private val basicAttackDamage: Int = 20
     private var speed =  0.005f
-    private var widthHeight = 25
+    private val widthHeight = 64
     private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
     private var pointValues = mutableListOf(0.0f)
 
@@ -81,9 +84,15 @@ class RotatingAttack(
     override val maxLevel: Int = upgrades.size + 1
 
     override fun draw(g: Graphics2D) {
-        g.color = GameColors.jbGreen
         objectPositions.forEach { vector ->
-            g.fillRect(vector.x.roundToInt(), vector.y.roundToInt(), widthHeight, widthHeight)
+            g.drawImage(
+                droneImage,
+                vector.x.roundToInt(),
+                vector.y.roundToInt(),
+                widthHeight,
+                widthHeight,
+                null
+            )
         }
     }
 
@@ -99,7 +108,8 @@ class RotatingAttack(
 
     override fun getDamage(enemyMidPos: Vec2): Int {
         val inRange = objectPositions.any {
-            Vec2.distance(enemyMidPos, it) <= widthHeight
+            val objetMidPoint = Vec2(it.x + (widthHeight / 2), it.y + (widthHeight / 2))
+            Vec2.distance(enemyMidPos, objetMidPoint) <= widthHeight
         }
 
         return if (inRange) basicAttackDamage * ggState.damageMultiplier else 0
