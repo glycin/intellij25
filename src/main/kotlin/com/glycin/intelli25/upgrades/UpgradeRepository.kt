@@ -27,14 +27,14 @@ class UpgradeRepository(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
             "Version control" to FreezingAttack(scope, ggState, player),
             "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
-            "Kotlin" to LightningAttack(ggState, player, scope),
+            "Kotlin" to LightningAttack(ggState, player, enemyManager, scope),
             "Impeccable style" to TargetedAttack(scope, enemyManager, ggState, player),
         )
         else -> mutableMapOf(
             "Enterprise Ready Integration" to AreaAttack(ggState, player),
             "Version control" to FreezingAttack(scope, ggState, player),
             "Build & Deployment Tools" to PoolAttack(ggState, player, scope),
-            "Kotlin" to LightningAttack(ggState, player, scope),
+            "Kotlin" to LightningAttack(ggState, player, enemyManager, scope),
             "Impeccable style" to TargetedAttack(scope, enemyManager, ggState, player),
             "AI Assistant" to RotatingAttack(ggState, player),
         )

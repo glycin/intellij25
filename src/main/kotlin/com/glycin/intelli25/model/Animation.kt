@@ -2,7 +2,8 @@ package com.glycin.intelli25.model
 
 import java.awt.image.BufferedImage
 
-abstract class Animation(
+class Animation(
+    val position: Vec2,
     private val sprites: List<BufferedImage>,
     private val loop: Boolean = false,
     private val frameDelay: Int = 12,

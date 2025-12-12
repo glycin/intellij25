@@ -1,5 +1,7 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.model.Animation
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
@@ -9,8 +11,6 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.randomPointInCircle
-import com.intellij.icons.AllIcons
-import com.intellij.util.IconUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,9 +21,14 @@ import kotlin.math.roundToInt
 class LightningAttack(
     ggState: GameGlobalState,
     player: Player,
+    private val enemyManager: EnemyManager,
     private val scope: CoroutineScope,
 ): Attack(ggState, player) {
-    private val attackSprites = SpriteSheetImageLoader.loadSprites("sprites/effects/lightning.png", 64, 128, 10)
+    private val animationBaseWidth = 128
+    private val animationBaseHeight = 256
+    private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
+    private var attackAnimation: Animation? = null
+
     override val attackIcon = UpgradePNG.coffee
     override val title = "Kotlin"
     override val unlockDescription: String
@@ -32,11 +37,8 @@ class LightningAttack(
         get() = "New weapon that randomly strikes enemies for heavy damage"
 
     private val basicAttackDamage: Int = 50
-    private val maxFrameAlive: Int = 60
-    private var frameAliveCount: Int = 0
-    private var activeLightningPosition: Vec2? = null
-    private var lightningRadius = 20
-    private var attackCooldown = 5000L //ms
+    private var lightningRadius = 40
+    private var attackCooldown =  5000L
 
     private val upgradeOne = upgradeOption {
         icon = attackIcon
@@ -57,7 +59,7 @@ class LightningAttack(
         description = "IntelliJ added support for KMP"
         effect = "Increases lighting strike impact radius"
         onSelect = {
-            lightningRadius = 40
+            lightningRadius = 80
             generalLevelUp()
         }
     }
@@ -81,7 +83,7 @@ class LightningAttack(
         description = "IntelliJ can create and run kotlin notebooks"
         effect = "Decreases cooldown even further and increases impact radius"
         onSelect = {
-            lightningRadius = 80
+            lightningRadius = 120
             attackCooldown = 900L
             generalLevelUp()
         }
@@ -100,7 +102,14 @@ class LightningAttack(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
-                    activeLightningPosition = randomPointInCircle(ggState.maxX - 300f, player.midPoint())
+                    randomPointInCircle(ggState.maxX - 300f, Vec2(ggState.maxX / 2.0f, ggState.maxY / 2.0f)).let { pos ->
+                        attackAnimation = Animation(pos, attackSprites) {
+                            attackAnimation = null
+                        }
+                        enemyManager.getEnemiesInCircle(pos, lightningRadius).forEach { e ->
+                            enemyManager.damage(e,basicAttackDamage * ggState.damageMultiplier)
+                        }
+                    }
                 }
                 delay(attackCooldown)
             }
@@ -108,26 +117,24 @@ class LightningAttack(
     }
 
     override fun draw(g: Graphics2D) {
-        g.color = GameColors.jbOrange
-        activeLightningPosition?.let {
-            g.fillOval(activeLightningPosition!!.x.roundToInt(), activeLightningPosition!!.y.roundToInt(), lightningRadius * 2, lightningRadius * 2)
-            frameAliveCount++
-            if(frameAliveCount >= maxFrameAlive) {
-                activeLightningPosition = null
-                frameAliveCount = 0
-            }
+        attackAnimation?.let {
+            it.doAnimation()
+            val animationWidth = animationBaseWidth + lightningRadius
+            val animationHeight = animationBaseHeight + lightningRadius
+            g.drawImage(
+                it.getCurrentSprite(),
+                it.position.x.roundToInt() - (animationWidth / 2) + (lightningRadius / 2),
+                it.position.y.roundToInt() - (animationHeight - lightningRadius / 2),
+                animationWidth,
+                animationHeight,
+                null
+            )
         }
     }
 
     override fun move() { }
 
-    override fun getDamage(enemyMidPos: Vec2): Int {
-        return activeLightningPosition?.let { pos ->
-            if(Vec2.distance(enemyMidPos, pos) <= lightningRadius) {
-                basicAttackDamage * ggState.damageMultiplier
-            } else 0
-        } ?: 0
-    }
+    override fun getDamage(enemyMidPos: Vec2): Int = 0
 
     override fun getNextUpgrade(): UpgradeOption? {
         if(currentLevel >= maxLevel) { return null}

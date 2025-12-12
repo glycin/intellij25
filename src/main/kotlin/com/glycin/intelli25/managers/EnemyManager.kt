@@ -109,6 +109,14 @@ class EnemyManager(
         return enemies.take(count)
     }
 
+    fun getEnemiesInCircle(pos: Vec2, radius: Int): List<Enemy> {
+        if(enemyMap.isEmpty()) return emptyList()
+
+        return enemyMap.values.toList().filter {
+            Vec2.distance(it.midPoint(), pos) <= radius
+        }
+    }
+
     fun destroyAll() {
         val enemies = enemyMap.values.toList()
         enemies.forEach { e ->
