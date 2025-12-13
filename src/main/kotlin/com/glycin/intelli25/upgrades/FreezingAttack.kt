@@ -1,17 +1,21 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.model.Animation
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
+import java.awt.TexturePaint
+import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import kotlin.random.Random
 
@@ -21,6 +25,8 @@ class FreezingAttack(
     player: Player,
 ): Attack(ggState, player) {
 
+    private val effectSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/snow.png", 64, 64, 16)
+    private var effectAnimation: Animation? = null
     private var minCooldown = 30_000L
     private var maxCooldown = 90_000L
     private var freezeTime = 5_000L
@@ -81,8 +87,27 @@ class FreezingAttack(
 
     override fun draw(g: Graphics2D) {
         if(ggState.frozen) {
-            g.color = GameColors.jbBlue
-            g.fillRect(0, 0, ggState.maxX, ggState.maxY)
+            effectAnimation?.doAnimation()
+            effectAnimation?.getCurrentSprite()?.let { image ->
+                val anchorRect = Rectangle2D.Float(
+                    0f,
+                    0f,
+                    image.width.toFloat(),
+                    image.height.toFloat()
+                )
+
+                val texturePaint = TexturePaint(image, anchorRect)
+                val originalPaint = g.paint
+                g.paint = texturePaint
+                val fillArea = Rectangle2D.Float(
+                    0f,
+                    0f,
+                    ggState.maxX.toFloat(),
+                    ggState.maxY.toFloat()
+                )
+                g.fill(fillArea)
+                g.paint = originalPaint
+            }
         }
     }
 
@@ -93,7 +118,13 @@ class FreezingAttack(
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu && ggState.elapsedTime > nextActivationTime) {
                     ggState.frozen = true
+                    effectAnimation = Animation(
+                        position = Vec2.zero,
+                        sprites = effectSprites,
+                        loop = true,
+                    )
                     delay(freezeTime)
+                    effectAnimation = null
                     ggState.frozen = false
                     nextActivationTime = ggState.elapsedTime + Random.nextLong(minCooldown, maxCooldown)
                 }

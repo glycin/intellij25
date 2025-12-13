@@ -66,7 +66,7 @@ class UpgradeRepository(
         description = "A tasty sip for a bolt of energy"
         effect = "Increases your movement speed"
         onSelect = {
-            ggState.speedMultiplier *= 2
+            ggState.speedMultiplier *= 1.5f
             defaultLevelUp(title, upgradeIcon)
         }
     }

@@ -15,7 +15,7 @@ data class GameGlobalState(
 
     // Upgrade Modifiers
     var damageMultiplier: Int = 1,
-    var speedMultiplier: Int = 1,
+    var speedMultiplier: Float = 1.0f,
     var healthMultiplier: Int = 1,
     var xpPickUpRangeMultiplier: Int = 1,
     var xpMultiplier: Int = 1,
