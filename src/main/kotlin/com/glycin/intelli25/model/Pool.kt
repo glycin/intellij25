@@ -1,5 +1,6 @@
 package com.glycin.intelli25.model
 
+import com.glycin.intelli25.util.PNG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -33,6 +34,13 @@ class Pool(
     }
 
     fun draw(g: Graphics2D) {
-        g.fillRect(position.x.roundToInt(), position.y.roundToInt(), width, height)
+        g.drawImage(
+            PNG.POOL,
+            position.x.roundToInt(),
+            position.y.roundToInt(),
+            width,
+            height,
+            null
+        )
     }
 }

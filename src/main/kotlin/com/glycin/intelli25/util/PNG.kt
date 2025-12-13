@@ -29,4 +29,8 @@ object PNG {
     val START_BACKGROUND : BufferedImage? by lazy {
         getPng("/screens/game-start-splash.png", PNG::class.java)
     }
+
+    val POOL : BufferedImage? by lazy {
+        getPng("/sprites/effects/puddle.png", PNG::class.java)
+    }
 }

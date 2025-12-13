@@ -30,7 +30,7 @@ class PoolAttack(
     override val unlockDescription: String
         get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
     override val unlockEffect: String
-        get() = "New weapon that spawns pools around Runzo that damage enemies."
+        get() = "New weapon that spawns toxic pools around Runzo that hurt enemies"
 
     private var size = 60
     private var spawnCooldown = 10000L
@@ -119,7 +119,6 @@ class PoolAttack(
     }
 
     override fun draw(g: Graphics2D) {
-        g.color = GameColors.jbPurple
         poolMap.values.forEach { it.draw(g) }
     }
 
