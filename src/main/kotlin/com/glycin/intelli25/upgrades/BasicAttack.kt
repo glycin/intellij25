@@ -28,7 +28,7 @@ class BasicAttack(
     override val unlockEffect: String
         get() = "This is already unlocked"
 
-    override val attackIcon = UpgradePNG.terminal
+    override val attackIcon = UpgradePNG.laptop
     override val title = "Productivity"
     private val basicAttackDamage: Int = 10
     private var invincibleBullet = false

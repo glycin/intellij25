@@ -25,8 +25,8 @@ object UpgradePNG {
         getPng("$BASE_PATH/leaf.png",UpgradePNG::class.java)
     }
 
-    val terminal : BufferedImage? by lazy {
-        getPng("$BASE_PATH/terminal.png",UpgradePNG::class.java)
+    val laptop: BufferedImage? by lazy {
+        getPng("$BASE_PATH/laptop.png",UpgradePNG::class.java)
     }
 
     val git : BufferedImage? by lazy {
