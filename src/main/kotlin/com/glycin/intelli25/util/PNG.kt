@@ -33,4 +33,8 @@ object PNG {
     val POOL : BufferedImage? by lazy {
         getPng("/sprites/effects/puddle.png", PNG::class.java)
     }
+
+    val FIREWORK_MISSILE : BufferedImage? by lazy {
+        getPng("/sprites/effects/firework.png", PNG::class.java)
+    }
 }

@@ -1,6 +1,7 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.model.Animation
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.TargetedProjectile
@@ -8,7 +9,9 @@ import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.UpgradePNG
+import com.intellij.refactoring.introduceParameter.onClickCallback
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
+import kotlin.math.roundToInt
 
 class TargetedAttack(
     private val scope: CoroutineScope,
@@ -24,6 +28,13 @@ class TargetedAttack(
     player: Player,
 ): Attack(ggState, player) {
 
+    private val boomEffects = SpriteSheetImageLoader.loadSprites(
+        "/sprites/effects/firework_boom.png",
+        256,
+        256,
+        30,
+    )
+    private val animations = mutableListOf<Animation>()
     private var cooldown = 5000L
     private val damage = 10
     private var projectileCount = 1
@@ -109,6 +120,18 @@ class TargetedAttack(
 
     override fun draw(g: Graphics2D) {
         projectiles.values.forEach { it.draw(g) }
+        animations.removeIf { it.done }
+        animations.forEach { anim ->
+            anim.doAnimation()
+            g.drawImage(
+                anim.getCurrentSprite(),
+                anim.position.x.roundToInt() - 128,
+                anim.position.y.roundToInt() - 128,
+                256,
+                256,
+                null
+            )
+        }
     }
 
     override fun move() {
@@ -120,6 +143,10 @@ class TargetedAttack(
         val damage = projectiles.values.sumOf { tp ->
             if(Vec2.distance(enemyMidPos, tp.midPoint()) <= tp.radius) {
                 attacksToRemove.add(tp)
+                animations.add(Animation(
+                    position = enemyMidPos,
+                    sprites = boomEffects,
+                ))
                 tp.damage * ggState.damageMultiplier
             } else {
                 0
