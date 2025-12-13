@@ -25,7 +25,7 @@ class PoolAttack(
 
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()
-    override val attackIcon = UpgradePNG.coffee
+    override val attackIcon = UpgradePNG.buildTools
     override val title = "Build & Deployment tools"
     override val unlockDescription: String
         get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"

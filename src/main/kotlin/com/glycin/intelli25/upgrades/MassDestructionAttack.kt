@@ -24,7 +24,7 @@ class MassDestructionAttack(
 
     private var triggerChance = 1//%
     override val maxLevel: Int = 1
-    override val attackIcon: BufferedImage? = UpgradePNG.coffee
+    override val attackIcon: BufferedImage? = UpgradePNG.profiler
     override val title: String = "Quality of life"
     override val unlockDescription: String
         get() = "Some description"

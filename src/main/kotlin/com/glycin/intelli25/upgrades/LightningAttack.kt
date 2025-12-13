@@ -29,7 +29,7 @@ class LightningAttack(
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
     private var attackAnimation: Animation? = null
 
-    override val attackIcon = UpgradePNG.coffee
+    override val attackIcon = UpgradePNG.kotlin
     override val title = "Kotlin"
     override val unlockDescription: String
         get() = "Unlocks the power of Kotlin, the JVM language made by JetBrains."

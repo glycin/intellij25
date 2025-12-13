@@ -32,7 +32,7 @@ class FreezingAttack(
     private var freezeTime = 5_000L
     private var nextActivationTime = 0L
 
-    override val attackIcon: BufferedImage? = UpgradePNG.coffee
+    override val attackIcon: BufferedImage? = UpgradePNG.git
     override val title: String = "Version control"
     override val unlockDescription: String
         get() = "New weapon that occasionally freezes all enemies in place"

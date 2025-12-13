@@ -41,7 +41,7 @@ class TargetedAttack(
     private var nextId = 0L
     private val projectiles = concurrentMapOf<Long, TargetedProjectile>()
 
-    override val attackIcon: BufferedImage? = UpgradePNG.coffee
+    override val attackIcon: BufferedImage? = UpgradePNG.style
     override val title: String = "Impeccable style"
     override val unlockDescription: String
         get() = "Serving developers with style"

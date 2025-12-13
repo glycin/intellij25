@@ -19,7 +19,7 @@ class RotatingAttack(
 
     private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
 
-    override val attackIcon = UpgradePNG.coffee
+    override val attackIcon = UpgradePNG.junie
     override val title = "Artificial Intelligence"
     override val unlockDescription: String
         get() = "Unlocks the power of AI, the latest transformative innovation in tech."

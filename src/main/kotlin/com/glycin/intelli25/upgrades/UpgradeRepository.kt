@@ -45,7 +45,7 @@ class UpgradeRepository(
         val upgradeIcon = UpgradePNG.pizza
         val title = "Pizza slice"
 
-        icon = UpgradePNG.pizza
+        icon = upgradeIcon
         upgradePathTitle = "Pizza slice"
         subTitle = ""
         description = "Yum"
@@ -60,7 +60,7 @@ class UpgradeRepository(
         val upgradeIcon = UpgradePNG.coffee
         val title = "Coffee"
 
-        icon = UpgradePNG.coffee
+        icon = upgradeIcon
         upgradePathTitle = "Coffee"
         subTitle = ""
         description = "A tasty sip for a bolt of energy"
@@ -72,10 +72,10 @@ class UpgradeRepository(
     }
 
     private val performanceUpgrade = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.performance
         val title = "Performance fix"
 
-        icon = UpgradePNG.coffee
+        icon = upgradeIcon
         upgradePathTitle = "Performance fix"
         subTitle = ""
         description = "Code running so well!"
@@ -90,7 +90,7 @@ class UpgradeRepository(
         val upgradeIcon = UpgradePNG.firewall
         val title = "Firewall shield"
 
-        icon = UpgradePNG.firewall
+        icon = upgradeIcon
         upgradePathTitle = "Firewall shield"
         subTitle = ""
         description = "The best defense is..."
@@ -105,7 +105,7 @@ class UpgradeRepository(
         val upgradeIcon = UpgradePNG.duck
         val title = "Auto Refactoring"
 
-        icon = UpgradePNG.duck
+        icon = upgradeIcon
         upgradePathTitle = "Auto Refactoring"
         subTitle = ""
         description = "For when you don't want to do things yourself"
@@ -117,10 +117,10 @@ class UpgradeRepository(
     }
 
     private val intentionActionsUpgrade = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.intentions
         val title = "Intention Actions"
 
-        icon = UpgradePNG.coffee
+        icon = upgradeIcon
         upgradePathTitle = "Intention Actions"
         subTitle = ""
         description = "For when your intentions are clear"
@@ -132,10 +132,10 @@ class UpgradeRepository(
     }
 
     private val codeInspectionsUpgrade = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.inspections
         val title = "Code Inspections"
 
-        icon = UpgradePNG.coffee
+        icon = upgradeIcon
         upgradePathTitle = "Code Inspections"
         subTitle = ""
         description = "Go go gadget inspections!"
@@ -147,7 +147,7 @@ class UpgradeRepository(
     }
 
     private val dukeUpgrade = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.duke
         val title = "The Duke"
 
         icon = upgradeIcon
@@ -162,7 +162,7 @@ class UpgradeRepository(
     }
 
     private val codeFreezeUpgrade = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.freeze
         val title = "Code freeze"
 
         icon = upgradeIcon
@@ -177,7 +177,7 @@ class UpgradeRepository(
     }
 
     private val pushToProd = upgradeOption {
-        val upgradeIcon = UpgradePNG.coffee
+        val upgradeIcon = UpgradePNG.push
         val title = "Push to Prod"
 
         icon = upgradeIcon
