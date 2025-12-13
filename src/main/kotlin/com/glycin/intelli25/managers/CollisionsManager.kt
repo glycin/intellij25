@@ -28,6 +28,8 @@ class CollisionsManager(
     }
 
     fun checkPlayerToEnemy() {
+        if(ggState.inUpgradeMenu) return
+
         val enemiesInRange = enemyManager.getEnemies().filter { e ->
             Vec2.distance(e.midPoint(), player.midPoint()) <= player.width
         }

@@ -111,7 +111,10 @@ class AreaAttack(
         val x = playerMid.x.roundToInt() - (diameter / 2)
         val y = playerMid.y.roundToInt() - (diameter / 2)
         val oldTransform = g.transform
-        angle -= 0.005 //TODO: Reset the angle after ....
+        angle -= 0.005
+        val twoPi = (Math.PI * 2.0)
+        angle = (angle % twoPi + twoPi) % twoPi
+
         g.rotate(angle, playerMid.x.toDouble(), playerMid.y.toDouble())
         g.drawImage(PNG.FORCE_FIELD, x, y, diameter, diameter, null)
         g.transform = oldTransform
