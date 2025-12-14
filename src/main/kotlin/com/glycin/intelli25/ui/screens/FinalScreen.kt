@@ -1,13 +1,9 @@
-package com.glycin.intelli25.ui.startscreens
+package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.GameService
-import com.glycin.intelli25.model.GameStartupSettings
-import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
-import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
-import com.glycin.intelli25.util.startGame
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -22,59 +18,31 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-class LevelThreeScreen(
+class FinalScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
-    private val saveState: GameSaveState,
 ): JPanel() {
-    lateinit var wrapper: DialogueScreenWrapper
-
     init{
         isOpaque = false
         layout = BorderLayout()
 
-        val baseContent = LevelThreeScreenContent {
-            if(saveState.dialoguesSeen == 2) {
-                val projectScope = project.service<GameService>().getProjectScope()
-                val dialogueScreen = DialogueScreen(
-                    title = "Adulthood...",
-                    texts = CutsceneTexts.screenThree,
-                    scope = projectScope,
-                    onReadyToStart =  {
-                        toolWindow.hide()
-                        saveState.dialoguesSeen++
-                        wrapper.enableOk()
-                    }
-                )
-
-                wrapper = DialogueScreenWrapper(project, dialogueScreen)
-
-                if (wrapper.showAndGet()) {
+        val baseContent = FinalScreenContent {
+            val projectScope = project.service<GameService>().getProjectScope()
+            val dialogueScreen = DialogueScreen(
+                "FREEDOM!",
+                texts = CutsceneTexts.screenFour,
+                scope = projectScope,
+                onReadyToStart = {
                     toolWindow.hide()
-                    startGame(
-                        project,
-                        toolWindow,
-                        parent as ToolWindowBaseComponent,
-                        GameStartupSettings.createLevelThreeSettings()
-                    )
                 }
-
-            } else {
-                toolWindow.hide()
-                startGame(
-                    project,
-                    toolWindow,
-                    parent as ToolWindowBaseComponent,
-                    GameStartupSettings.createLevelThreeSettings()
-                )
-            }
+            )
         }
 
         add(baseContent)
     }
 }
 
-private class LevelThreeScreenContent(
+private class FinalScreenContent(
     private val onStart: (JPanel) -> Unit,
 ): JPanel() {
 
@@ -99,7 +67,7 @@ private class LevelThreeScreenContent(
             text = "Start Game",
         ).apply {
             addActionListener {
-                onStart(this@LevelThreeScreenContent)
+                onStart(this@FinalScreenContent)
             }
         }
         buttonPanel.add(startButton)
@@ -111,8 +79,8 @@ private class LevelThreeScreenContent(
         if(g is Graphics2D) {
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
             val gradient = GradientPaint(
-                width.toFloat(), 0f, GameColors.jbRed,
-                0f, height.toFloat(), GameColors.jbBlue
+                width.toFloat(), 0f, GameColors.jbOrange,
+                0f, height.toFloat(), GameColors.jbRed
             )
             g.paint = gradient
             g.fillRect(0, 0, width, height)

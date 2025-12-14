@@ -14,6 +14,14 @@ object PNG {
         getPng("/sprites/runzo/runzo_idle.png", PNG::class.java)
     }
 
+    val RUNZO_WALK : BufferedImage? by lazy {
+        getPng("/sprites/runzo/runzo_move.png", PNG::class.java)
+    }
+
+    val RUNZO_HURT : BufferedImage? by lazy {
+        getPng("/sprites/runzo/runzo_hurt.png", PNG::class.java)
+    }
+
     val COIN : BufferedImage? by lazy {
         getPng("/sprites/coin.png", PNG::class.java)
     }

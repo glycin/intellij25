@@ -1,4 +1,4 @@
-package com.glycin.intelli25.ui.startscreens
+package com.glycin.intelli25.ui.screens
 
 object CutsceneTexts {
 
@@ -11,17 +11,23 @@ object CutsceneTexts {
         "This game lets you follow my journey, all 25 years of it.",
         "The upgrades, the chaos, the bugs, the breakthroughs.",
         "Stick around, help me survive it all… and maybe, just maybe, give me a chance to escape for a birthday party.",
-        "But first, let me tell you a little bit about my history.",
+        "Alright, let's do this! Conquer bugs and blockers for 3 minutes to continue my story!",
+    )
+
+    val screenTwo = listOf(
+        "Well done, can't believe you survived that!",
+        "You might have noticed that the upgrades you are unlocking are tied to my history!",
+        "So let me tell you a little bit about my history.",
         "IntelliJ IDEA 1.0 launched in 2001. That’s when it all began.",
         "I started with Ant builds and JUnit tests. Press me, stuff happens, and that was the whole deal. But wow, IntelliJ IDEA grew fast.",
         "Next thing I know, I’m running J2EE apps. We got a Swing GUI Designer, then Subversion, Spring, and SQL support – and boom, I became the button for serious Java development.",
         "Then came the plot twist: IntelliJ IDEA went free and open source with Community Edition.",
         "My workload? Skyrocketed. No complaints though: more devs means more impact.",
-        "Alright, let's do this! Evade bugs and deadlines for 10 minutes to continue my story!"
+        "Alright, enough talking. See if you can survive for 6 minutes now to continue my story!",
     )
 
-    val screenTwo = listOf(
-        "Well done, can't believe you survived that!",
+    val screenThree = listOf(
+        "Amazing. You are as agile and quick whited as they come!",
         "I bet you want to hear more about my history now!",
         "First came Git, Maven and Gradle. I finally got proper version control and builds that didn’t make developers sigh.",
         "In 2012, Kotlin arrived. It was a whole new JVM language, straight from JetBrains.",
@@ -31,12 +37,11 @@ object CutsceneTexts {
         "We added Terminal integration, so now I wasn't just running your code, I was running your entire workflow.",
         "Docker, Spring, and the Database tools arrived, and I wasn’t just an IDE anymore – I was the full-stack powerhouse.",
         "I was basically unstoppable.",
-        "But with that came new challenges... I survived, but can you survive long enough again?!"
+        "But with that came new challenges... I survived, but can you survive for, lets say, 10 minutes now!?",
     )
 
-    val screenThree = listOf(
-        "Amazing. You are as agile and quick whited as they come!",
-        "Now, time for some more history!",
+    val screenFour = listOf(
+        "Congrats, you made it! Made it through the game and the last 25 years, just like me.",
         "In 2018 things got wild.",
         "GitHub pull requests moved in, themes got personal, and the Services tool window made me feel like mission control.",
         "Then Docker and Kubernetes joined, and I was basically living on cloud nine.",
@@ -44,13 +49,7 @@ object CutsceneTexts {
         "And of course, this era was defined by AI joining the story.",
         "AI chat powered by top-notch LLMs.",
         "Junie - our own coding agent. The whole AI crew.",
-        "Suddenly I'm not just running code you wrote. I'm running code that AI helped create.",
-        "I mean... what?!"
-    )
-
-    val screenFour = listOf(
-        "Congrats, you made it! Made it through the game and the last 25 years, just like me.",
-        "Here's what I've learned:",
+        "In all these years, here is what I've learned:",
         "Every time someone hits that Run button, it’s not just code that starts. It’s a spark: a bit of curiosity, a bit of “let’s see what happens.”",
         "I’ve been clicked billions of times by millions of developers, and each click has launched an idea, a fix, a dream, or a late-night experiment.",
         "Your code tells your story and I’m still here, ready to run it.",

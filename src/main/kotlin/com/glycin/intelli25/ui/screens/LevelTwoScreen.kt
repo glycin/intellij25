@@ -1,9 +1,13 @@
-package com.glycin.intelli25.ui.startscreens
+package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.GameService
+import com.glycin.intelli25.model.GameStartupSettings
+import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
+import com.glycin.intelli25.util.startGame
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -18,31 +22,60 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-class FinalScreen(
+class LevelTwoScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
+    private val saveState: GameSaveState,
 ): JPanel() {
+
+    lateinit var wrapper: DialogueScreenWrapper
+
     init{
         isOpaque = false
         layout = BorderLayout()
 
-        val baseContent = FinalScreenContent {
-            val projectScope = project.service<GameService>().getProjectScope()
-            val dialogueScreen = DialogueScreen(
-                "FREEDOM!",
-                texts = CutsceneTexts.screenFour,
-                scope = projectScope,
-                onReadyToStart = {
+        val baseContent = LevelTwoScreenContent {
+            if(saveState.dialoguesSeen == 1) {
+                val projectScope = project.service<GameService>().getProjectScope()
+                val dialogueScreen = DialogueScreen(
+                    title = "My teenage years...",
+                    texts = CutsceneTexts.screenTwo,
+                    scope = projectScope,
+                    onReadyToStart = {
+                        toolWindow.hide()
+                        saveState.dialoguesSeen++
+                        wrapper.enableOk()
+                    }
+                )
+
+                wrapper = DialogueScreenWrapper(project, dialogueScreen)
+
+                if (wrapper.showAndGet()) {
                     toolWindow.hide()
+                    startGame(
+                        project,
+                        toolWindow,
+                        parent as ToolWindowBaseComponent,
+                        GameStartupSettings.createLevelTwoSettings()
+                    )
                 }
-            )
+
+            } else {
+                toolWindow.hide()
+                startGame(
+                    project,
+                    toolWindow,
+                    parent as ToolWindowBaseComponent,
+                    GameStartupSettings.createLevelTwoSettings()
+                )
+            }
         }
 
         add(baseContent)
     }
 }
 
-private class FinalScreenContent(
+private class LevelTwoScreenContent(
     private val onStart: (JPanel) -> Unit,
 ): JPanel() {
 
@@ -67,7 +100,7 @@ private class FinalScreenContent(
             text = "Start Game",
         ).apply {
             addActionListener {
-                onStart(this@FinalScreenContent)
+                onStart(this@LevelTwoScreenContent)
             }
         }
         buttonPanel.add(startButton)
@@ -79,8 +112,8 @@ private class FinalScreenContent(
         if(g is Graphics2D) {
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
             val gradient = GradientPaint(
-                width.toFloat(), 0f, GameColors.jbOrange,
-                0f, height.toFloat(), GameColors.jbRed
+                width.toFloat(), 0f, GameColors.jbRed,
+                0f, height.toFloat(), GameColors.jbBlue
             )
             g.paint = gradient
             g.fillRect(0, 0, width, height)

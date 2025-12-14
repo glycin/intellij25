@@ -1,4 +1,4 @@
-package com.glycin.intelli25.ui.startscreens
+package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.GameService
 import com.glycin.intelli25.model.GameStartupSettings
@@ -7,12 +7,10 @@ import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.util.GameColors
-import com.glycin.intelli25.util.PNG
+import com.glycin.intelli25.util.startGame
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
-import com.glycin.intelli25.util.startGame
-import com.intellij.openapi.ui.Messages
 import java.awt.BorderLayout
 import java.awt.GradientPaint
 import java.awt.Graphics
@@ -24,26 +22,25 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
 
-class LevelOneScreen(
+class LevelThreeScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
     private val saveState: GameSaveState,
 ): JPanel() {
-
     lateinit var wrapper: DialogueScreenWrapper
 
     init{
         isOpaque = false
         layout = BorderLayout()
 
-        val baseContent = LevelOneScreenContent(project) {
-            if(saveState.dialoguesSeen == 0) {
+        val baseContent = LevelThreeScreenContent {
+            if(saveState.dialoguesSeen == 2) {
                 val projectScope = project.service<GameService>().getProjectScope()
                 val dialogueScreen = DialogueScreen(
-                    title = "Origins...",
-                    texts = CutsceneTexts.screenOne,
+                    title = "Adulthood...",
+                    texts = CutsceneTexts.screenThree,
                     scope = projectScope,
-                    onReadyToStart = {
+                    onReadyToStart =  {
                         toolWindow.hide()
                         saveState.dialoguesSeen++
                         wrapper.enableOk()
@@ -58,7 +55,7 @@ class LevelOneScreen(
                         project,
                         toolWindow,
                         parent as ToolWindowBaseComponent,
-                        GameStartupSettings.createLevelOneSettings()
+                        GameStartupSettings.createLevelThreeSettings()
                     )
                 }
 
@@ -68,7 +65,7 @@ class LevelOneScreen(
                     project,
                     toolWindow,
                     parent as ToolWindowBaseComponent,
-                    GameStartupSettings.createLevelOneSettings()
+                    GameStartupSettings.createLevelThreeSettings()
                 )
             }
         }
@@ -77,8 +74,7 @@ class LevelOneScreen(
     }
 }
 
-private class LevelOneScreenContent(
-    private val project: Project,
+private class LevelThreeScreenContent(
     private val onStart: (JPanel) -> Unit,
 ): JPanel() {
 
@@ -98,56 +94,28 @@ private class LevelOneScreenContent(
             isOpaque = false
         }
         val startButton = StartButton(
-            backgroundColor = GameColors.jbRed,
+            backgroundColor = GameColors.black,
             hoverColor = GameColors.jbOrange,
             text = "Start Game",
         ).apply {
             addActionListener {
-                onStart(this@LevelOneScreenContent)
+                onStart(this@LevelThreeScreenContent)
             }
         }
         buttonPanel.add(startButton)
         add(buttonPanel, BorderLayout.CENTER)
-
-        val bottomPanel = JPanel(BorderLayout()).apply {
-            isOpaque = false
-            border = BorderFactory.createEmptyBorder(0, 10, 10, 0)
-        }
-
-        val howToPlayButton = StartButton(
-            backgroundColor = GameColors.jbPurple,
-            hoverColor = GameColors.jbOrange,
-            text = "How to play",
-        ).apply {
-            addActionListener {
-                showHowToPlayDialog()
-            }
-        }
-        bottomPanel.add(howToPlayButton, BorderLayout.LINE_START)
-        add(bottomPanel, BorderLayout.PAGE_END)
     }
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
         if(g is Graphics2D) {
-            g.color = GameColors.black
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
+            val gradient = GradientPaint(
+                width.toFloat(), 0f, GameColors.jbRed,
+                0f, height.toFloat(), GameColors.jbBlue
+            )
+            g.paint = gradient
             g.fillRect(0, 0, width, height)
-            g.drawImage(PNG.START_BACKGROUND, (width / 2) - 512, (height / 2) - 512, 1024, 1024, null)
         }
-    }
-
-    private fun showHowToPlayDialog() {
-        Messages.showInfoMessage(
-            project,
-            """
-            How to play:
-            - Move with W A S D.
-            - Defeat enemies and collect the coins they drop.
-            - After the top bar is filled choose your upgrade!
-            - Mix and match upgrades to become overpowered!
-            - Survive as long as you can!
-        """.trimIndent(),
-            "How To Play Runzo"
-        )
     }
 }

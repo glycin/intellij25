@@ -1,4 +1,4 @@
-package com.glycin.intelli25.ui.startscreens
+package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.ui.DialogComponent
 import com.glycin.intelli25.ui.Fonts

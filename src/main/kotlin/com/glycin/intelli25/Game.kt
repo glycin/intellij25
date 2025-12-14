@@ -11,6 +11,8 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.ui.UiComponent
+import com.glycin.intelli25.ui.screens.GameOverScreen
+import com.glycin.intelli25.ui.screens.GameOverScreenWrapper
 import com.glycin.intelli25.upgrades.BasicAttack
 import com.glycin.intelli25.upgrades.UpgradeRepository
 import com.glycin.intelli25.util.GameGlobalState
@@ -19,15 +21,12 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.ex.EditorEx
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.awt.KeyboardFocusManager
-import java.awt.event.ComponentEvent
-import java.awt.event.ComponentListener
 
 private const val FPS = 120L
 
@@ -64,9 +63,22 @@ class Game(
                 chosenGameLevel = gameStartupSettings.chosenGameLevel,
             )
 
-            val player = Player(Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25), ggState = ggState, width = 64, height = 64) {
-                uiComponent?.showUpgradePopup(generateUpgradeOptions())
-            }
+            val player = Player(
+                position = Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25),
+                ggState = ggState,
+                width = 64,
+                height = 64,
+                onLevelUp = {
+                    uiComponent?.showUpgradePopup(generateUpgradeOptions())
+                },
+                onDeath = {
+                    GameOverScreenWrapper(
+                        screen = GameOverScreen.getGameOverScreen(ggState),
+                        toolWindow = toolWindow,
+                        project = project,
+                    ).show()
+                }
+            )
 
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
@@ -86,9 +98,12 @@ class Game(
                 val saveState = service<GameSaveState>()
                 saveState.levelsBeaten++
                 toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
-                scope.launch(Dispatchers.EDT) {
-                    toolWindow.show()
-                }
+                GameOverScreenWrapper(
+                    screen = GameOverScreen.getSurvivedScreen(ggState),
+                    toolWindow = toolWindow,
+                    project = project,
+                ).show()
+
             }.also { gc ->
                 gc.bounds = editor.contentComponent.bounds
                 gc.isOpaque = false

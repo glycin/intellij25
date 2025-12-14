@@ -36,6 +36,8 @@ class CollisionsManager(
 
         if (enemiesInRange.isNotEmpty()){
             player.hurt(enemiesInRange.sumOf { it.damage })
+        } else {
+            player.unhurt()
         }
     }
 

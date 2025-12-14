@@ -13,6 +13,7 @@ class Player(
     val height: Int,
     private val ggState: GameGlobalState,
     private val onLevelUp: () -> Unit,
+    private val onDeath: () -> Unit,
 ) {
     var experience = 0.0f
     var experienceNeeded = 10
@@ -36,8 +37,6 @@ class Player(
     private var facing = PlayerFacing.LEFT
 
     fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
-
-    fun rect() : Rectangle = Rectangle(position.x.roundToInt(), position.y.roundToInt(), width, height)
 
     fun update() {
         if(ggState.inUpgradeMenu) return
@@ -66,10 +65,12 @@ class Player(
             facing = PlayerFacing.RIGHT
         }
 
-        if(dir != Vec2.zero) {
-            if(state != PlayerState.WALK) { state = PlayerState.WALK }
-        } else {
-            state = PlayerState.IDLE
+        if(state != PlayerState.HURT) {
+            if(dir != Vec2.zero) {
+                if(state != PlayerState.WALK) { state = PlayerState.WALK }
+            } else {
+                state = PlayerState.IDLE
+            }
         }
 
         animator.animate(state)
@@ -82,7 +83,7 @@ class Player(
     }
 
     fun draw(g: Graphics2D) {
-        val currentSprite = animator.getCurrentSprite()
+        val currentSprite = animator.currentSprite
 
         if(facing == PlayerFacing.LEFT) {
             g.drawImage(currentSprite, position.x.roundToInt() + width, position.y.roundToInt(), -width, height, null)
@@ -103,6 +104,17 @@ class Player(
 
     fun hurt(damage: Int) {
         currentHp -= damage
+        state = PlayerState.HURT
+        if(currentHp <= 0) {
+            onDeath.invoke()
+        }
+    }
+
+    //TODO: Test this
+    fun unhurt() {
+        if(state == PlayerState.HURT) {
+            state = PlayerState.IDLE
+        }
     }
 
     fun maxHp() = baseMaxHp * ggState.healthMultiplier

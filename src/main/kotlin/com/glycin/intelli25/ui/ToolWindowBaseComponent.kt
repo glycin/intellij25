@@ -1,10 +1,10 @@
 package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.persistence.GameSaveState
-import com.glycin.intelli25.ui.startscreens.FinalScreen
-import com.glycin.intelli25.ui.startscreens.LevelOneScreen
-import com.glycin.intelli25.ui.startscreens.LevelThreeScreen
-import com.glycin.intelli25.ui.startscreens.LevelTwoScreen
+import com.glycin.intelli25.ui.screens.FinalScreen
+import com.glycin.intelli25.ui.screens.LevelOneScreen
+import com.glycin.intelli25.ui.screens.LevelThreeScreen
+import com.glycin.intelli25.ui.screens.LevelTwoScreen
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import java.awt.CardLayout
