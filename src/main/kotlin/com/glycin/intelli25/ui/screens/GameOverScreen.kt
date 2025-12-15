@@ -18,9 +18,9 @@ import javax.swing.SwingConstants
 
 class GameOverScreen(
     val title: String,
+    val survived: Boolean,
     private val ggState: GameGlobalState,
     private val subText: String,
-    private val survived: Boolean,
 ): JPanel(){
 
     init {
@@ -31,7 +31,7 @@ class GameOverScreen(
 
         val titleLabel = JLabel(title).apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
-            foreground = GameColors.white
+            foreground = GameColors.green
             horizontalAlignment = SwingConstants.CENTER
             border = BorderFactory.createEmptyBorder(20, 20, 20, 0)
         }
@@ -40,28 +40,32 @@ class GameOverScreen(
         val centerPanel = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            border = BorderFactory.createEmptyBorder(50, 0, 0, 0)
+            border = BorderFactory.createEmptyBorder(120, 0, 0, 0)
         }
 
         val scoreLabel = JLabel("Final Score: ${ggState.score}").apply {
             font = Fonts.pixelFont.deriveFont(20.0f)
+            background = GameColors.black
             foreground = GameColors.white
             alignmentX = CENTER_ALIGNMENT
             border = BorderFactory.createEmptyBorder(10, 0, 10, 0)
         }
         centerPanel.add(scoreLabel)
 
-        if(subText.isNotEmpty()) {
-            val subTextLabel = JLabel(subText).apply {
+        if (subText.isNotEmpty()) {
+            val wrapped = "<html><div style='text-align: center; width: 800px;'>$subText</div></html>"
+            val subTextLabel = JLabel(wrapped).apply {
                 font = Fonts.pixelFont.deriveFont(18.0f)
-                foreground = GameColors.white
+                foreground = GameColors.red
                 alignmentX = CENTER_ALIGNMENT
                 border = BorderFactory.createEmptyBorder(10, 0, 10, 0)
+                preferredSize = Dimension(500, preferredSize.height)
             }
             centerPanel.add(subTextLabel)
         }
 
         centerPanel.add(Box.createVerticalStrut(150))
+
         val wrapperPanel = JPanel(GridBagLayout()).apply {
             isOpaque = false
             add(centerPanel)
@@ -75,8 +79,15 @@ class GameOverScreen(
         if (g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
-            val image = if (survived) PNG.START_BACKGROUND else PNG.RUNZO
-            g.drawImage(image, width / 2, height / 4, 128, 128, null)
+            val image = if (survived) PNG.STORY_SCREEN_5 else PNG.STORY_SCREEN_2
+            image?.let { img ->
+                val imgWidth = img.width
+                val imgHeight = img.height
+
+                val x = (width - imgWidth) / 2
+                val y = height / 2 - imgHeight / 2
+                g.drawImage(image, x, y, imgWidth, imgWidth, null)
+            }
         }
     }
 

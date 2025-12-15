@@ -2,7 +2,6 @@ package com.glycin.intelli25.model
 
 import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
-import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
 
@@ -110,7 +109,6 @@ class Player(
         }
     }
 
-    //TODO: Test this
     fun unhurt() {
         if(state == PlayerState.HURT) {
             state = PlayerState.IDLE

@@ -17,9 +17,8 @@ class GameOverScreenWrapper(
             isModal = true
             init()
 
-            setOKButtonText("Continue!")
-            isOKActionEnabled = false
-            cancelAction.putValue(Action.NAME, "Close")
+            setOKButtonText(if(screen.survived) "Continue!" else "Try Again!")
+            setCancelButtonText("Close")
         }
 
         override fun createCenterPanel(): JComponent = screen

@@ -2,9 +2,7 @@ package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
 import com.intellij.util.ui.JBUI
-import java.awt.Color
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JButton
@@ -14,16 +12,22 @@ class StartButton(
     private val hoverColor: Color,
     textColor: Color = GameColors.white,
     text: String,
-): JButton(text) {
+    private val arc: Int = 40,
+) : JButton(text) {
     private var hover = false
 
     init {
         font = Fonts.pixelFont.deriveFont(16.0f)
         preferredSize = JBUI.size(320, 100)
+        minimumSize = preferredSize
+        maximumSize = preferredSize
+
         foreground = textColor
         isFocusPainted = false
         isBorderPainted = false
         isContentAreaFilled = false
+        isOpaque = false
+        horizontalAlignment = CENTER
 
         addMouseListener(object : MouseAdapter() {
             override fun mouseEntered(e: MouseEvent?) {
@@ -38,16 +42,24 @@ class StartButton(
     }
 
     override fun paintComponent(g: Graphics) {
-        if(g is Graphics2D) {
-            g.color = backgroundColor
-            g.fillRect(0, 0, width, height)
-            super.paintComponent(g)
+        val g2 = g.create() as Graphics2D
 
-            if (hover) {
-                g.color = hoverColor
-                g.stroke = java.awt.BasicStroke(4f)
-                g.drawRect(2, 2, width - 4, height - 4)
-            }
+        g2.setRenderingHint(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        )
+
+        g2.color = backgroundColor
+        g2.fillRoundRect(0, 0, width - 1, height - 1, arc, arc)
+
+        super.paintComponent(g2)
+
+        if (hover) {
+            g2.color = hoverColor
+            g2.stroke = BasicStroke(4f)
+            g2.drawRoundRect(2, 2, width - 5, height - 5, arc, arc)
         }
+
+        g2.dispose()
     }
 }

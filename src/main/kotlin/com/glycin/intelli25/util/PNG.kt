@@ -34,15 +34,35 @@ object PNG {
         getPng("/sprites/effects/force_field.png", PNG::class.java)
     }
 
-    val START_BACKGROUND : BufferedImage? by lazy {
-        getPng("/screens/game-start-splash.png", PNG::class.java)
-    }
-
     val POOL : BufferedImage? by lazy {
         getPng("/sprites/effects/puddle.png", PNG::class.java)
     }
 
     val FIREWORK_MISSILE : BufferedImage? by lazy {
         getPng("/sprites/effects/firework.png", PNG::class.java)
+    }
+
+    val START_BACKGROUND : BufferedImage? by lazy {
+        getPng("/screens/game-start-splash.png", PNG::class.java)
+    }
+
+    val STORY_SCREEN_1 : BufferedImage? by lazy {
+        getPng("/screens/story_screen_1.png", PNG::class.java)
+    }
+
+    val STORY_SCREEN_2 : BufferedImage? by lazy {
+        getPng("/screens/story_screen_2.png", PNG::class.java)
+    }
+
+    val STORY_SCREEN_3 : BufferedImage? by lazy {
+        getPng("/screens/story_screen_3.png", PNG::class.java)
+    }
+
+    val STORY_SCREEN_4 : BufferedImage? by lazy {
+        getPng("/screens/story_screen_4.png", PNG::class.java)
+    }
+
+    val STORY_SCREEN_5 : BufferedImage? by lazy {
+        getPng("/screens/story_screen_5.png", PNG::class.java)
     }
 }

@@ -30,4 +30,8 @@ class GameService(
             game = Game(project, e, scope, toolWindow, baseComponent, gameStartupSettings)
         }
     }
+
+    fun resetGame() {
+        game = null
+    }
 }

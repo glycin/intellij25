@@ -11,17 +11,22 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.ui.UiComponent
+import com.glycin.intelli25.ui.screens.CutsceneTexts
+import com.glycin.intelli25.ui.screens.DialogueScreen
+import com.glycin.intelli25.ui.screens.DialogueScreenWrapper
 import com.glycin.intelli25.ui.screens.GameOverScreen
 import com.glycin.intelli25.ui.screens.GameOverScreenWrapper
 import com.glycin.intelli25.upgrades.BasicAttack
 import com.glycin.intelli25.upgrades.UpgradeRepository
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.getDeltaTime
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +42,7 @@ class Game(
     private val toolWindow: ToolWindow,
     private val toolWindowBaseComponent: ToolWindowBaseComponent,
     gameStartupSettings: GameStartupSettings,
-): Disposable {
+) {
 
     private var gameComponent: GameComponent? = null
     private var uiComponent: UiComponent? = null
@@ -72,11 +77,14 @@ class Game(
                     uiComponent?.showUpgradePopup(generateUpgradeOptions())
                 },
                 onDeath = {
-                    GameOverScreenWrapper(
-                        screen = GameOverScreen.getGameOverScreen(ggState),
-                        toolWindow = toolWindow,
-                        project = project,
-                    ).show()
+                    scope.launch(Dispatchers.EDT) {
+                        stopGame()
+                        GameOverScreenWrapper(
+                            screen = GameOverScreen.getGameOverScreen(ggState),
+                            toolWindow = toolWindow,
+                            project = project,
+                        ).show()
+                    }
                 }
             )
 
@@ -94,16 +102,11 @@ class Game(
             upgradeRepository = UpgradeRepository(ggState, player, enemyManager, scope)
 
             gameComponent = GameComponent(ggState, player, attackManager, enemyManager, scope) {
-                dispose()
-                val saveState = service<GameSaveState>()
-                saveState.levelsBeaten++
-                toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
-                GameOverScreenWrapper(
-                    screen = GameOverScreen.getSurvivedScreen(ggState),
-                    toolWindow = toolWindow,
-                    project = project,
-                ).show()
-
+                when(ggState.chosenGameLevel) {
+                    0, 1, 2 -> levelOneTwoBeaten()
+                    3 -> levelThreeBeaten()
+                    else -> finalLevelBeaten()
+                }
             }.also { gc ->
                 gc.bounds = editor.contentComponent.bounds
                 gc.isOpaque = false
@@ -145,12 +148,54 @@ class Game(
         return upgradeRepository.getRandomUpgrades(attackManager)
     }
 
-    override fun dispose() {
+    private fun stopGame() {
         editor.contentComponent.remove(uiComponent)
         editor.contentComponent.remove(gameComponent)
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
         ggState.gameActive = false
+        project.getService(GameService::class.java).resetGame()
+    }
+
+    private fun levelOneTwoBeaten() {
+        stopGame()
+        val saveState = service<GameSaveState>()
+        saveState.levelsBeaten++
+        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+        scope.launch(Dispatchers.EDT) {
+            GameOverScreenWrapper(
+                screen = GameOverScreen.getSurvivedScreen(ggState),
+                toolWindow = toolWindow,
+                project = project,
+            ).show()
+        }
+    }
+
+    private fun levelThreeBeaten() {
+        stopGame()
+        val saveState = service<GameSaveState>()
+        saveState.levelsBeaten++
+        var wrapper : DialogueScreenWrapper? = null
+        scope.launch(Dispatchers.EDT) {
+            val dialogueScreen = DialogueScreen(
+                title = "Party time!",
+                texts = CutsceneTexts.screenFour,
+                scope = scope,
+                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
+                onReadyToStart = {
+                    toolWindow.show()
+                    wrapper?.enableOk()
+                },
+            )
+            wrapper = DialogueScreenWrapper(
+                project = project,
+                dialogue = dialogueScreen,
+            ).also { it.show() }
+        }
+    }
+
+    private fun finalLevelBeaten() {
+        stopGame()
     }
 }

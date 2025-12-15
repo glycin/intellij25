@@ -13,11 +13,11 @@ import javax.swing.JPanel
 class ToolWindowBaseComponent(
     project: Project,
     toolWindow: ToolWindow,
-    gameState: GameSaveState
+    saveState: GameSaveState
 ) : JPanel(CardLayout()) {
-    private val levelOne = LevelOneScreen(project, toolWindow, gameState)
-    private val levelTwo = LevelTwoScreen(project, toolWindow, gameState)
-    private val levelThree = LevelThreeScreen(project, toolWindow, gameState)
+    private val levelOne = LevelOneScreen(project, toolWindow, saveState)
+    private val levelTwo = LevelTwoScreen(project, toolWindow, saveState)
+    private val levelThree = LevelThreeScreen(project, toolWindow, saveState)
     private val finalScreen = FinalScreen(project, toolWindow)
 
     init {
