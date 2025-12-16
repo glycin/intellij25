@@ -32,6 +32,8 @@ class LevelThreeScreen(
     }
 
     private fun onStart() {
+        toolWindow.hide()
+
         if(saveState.dialoguesSeen == 2) {
             val projectScope = project.service<GameService>().getProjectScope()
             val dialogueScreen = DialogueScreen(
@@ -40,7 +42,6 @@ class LevelThreeScreen(
                 scope = projectScope,
                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
                 onReadyToStart =  {
-                    toolWindow.hide()
                     saveState.dialoguesSeen++
                     wrapper.enableOk()
                 }
@@ -49,7 +50,6 @@ class LevelThreeScreen(
             wrapper = DialogueScreenWrapper(project, dialogueScreen)
 
             if (wrapper.showAndGet()) {
-                toolWindow.hide()
                 startGame(
                     project,
                     toolWindow,
@@ -59,7 +59,6 @@ class LevelThreeScreen(
             }
 
         } else {
-            toolWindow.hide()
             startGame(
                 project,
                 toolWindow,

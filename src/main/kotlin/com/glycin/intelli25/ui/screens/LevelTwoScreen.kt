@@ -34,6 +34,8 @@ class LevelTwoScreen(
     }
 
     private fun onStart() {
+        toolWindow.hide()
+
         if(saveState.dialoguesSeen == 1) {
             val projectScope = project.service<GameService>().getProjectScope()
             val dialogueScreen = DialogueScreen(
@@ -42,7 +44,6 @@ class LevelTwoScreen(
                 scope = projectScope,
                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
                 onReadyToStart = {
-                    toolWindow.hide()
                     saveState.dialoguesSeen++
                     wrapper.enableOk()
                 }
@@ -51,7 +52,6 @@ class LevelTwoScreen(
             wrapper = DialogueScreenWrapper(project, dialogueScreen)
 
             if (wrapper.showAndGet()) {
-                toolWindow.hide()
                 startGame(
                     project,
                     toolWindow,
@@ -61,7 +61,6 @@ class LevelTwoScreen(
             }
 
         } else {
-            toolWindow.hide()
             startGame(
                 project,
                 toolWindow,

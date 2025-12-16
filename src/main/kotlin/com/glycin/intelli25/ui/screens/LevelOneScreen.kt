@@ -34,6 +34,7 @@ class LevelOneScreen(
     }
 
     private fun onStart() {
+        toolWindow.hide()
         if(saveState.dialoguesSeen == 0) {
             val projectScope = project.service<GameService>().getProjectScope()
             val dialogueScreen = DialogueScreen(
@@ -42,7 +43,6 @@ class LevelOneScreen(
                 scope = projectScope,
                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_1),
                 onReadyToStart = {
-                    toolWindow.hide()
                     saveState.dialoguesSeen++
                     wrapper.enableOk()
                 }
@@ -61,7 +61,6 @@ class LevelOneScreen(
             }
 
         } else {
-            toolWindow.hide()
             startGame(
                 project,
                 toolWindow,
