@@ -56,9 +56,11 @@ class InGameComponent(
     private fun drawTime(g: Graphics2D) {
         g.font = scoreFont
         g.color = GameColors.jbOrange
-        val timeMs = ggState.elapsedTime
-        val totalSeconds = timeMs / 1000
-        val minutes  = totalSeconds / 60
+        val maxTimeMs = ggState.gameDuration
+        val elapsedMs = ggState.elapsedTime
+        val remainingMs = (maxTimeMs - elapsedMs).coerceAtLeast(0L)
+        val totalSeconds = remainingMs / 1000
+        val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         val timeText = "%02d:%02d".format(minutes, seconds)
         val metrics = g.getFontMetrics(scoreFont)

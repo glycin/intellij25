@@ -21,12 +21,10 @@ import com.glycin.intelli25.upgrades.UpgradeRepository
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.getDeltaTime
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +45,7 @@ class Game(
     private var gameComponent: GameComponent? = null
     private var uiComponent: UiComponent? = null
     private var keyListener: GameKeyListener? = null
+    private var dialogueScreenWrapper: DialogueScreenWrapper? = null
 
     private lateinit var ggState: GameGlobalState
     private lateinit var upgradeRepository: UpgradeRepository
@@ -103,7 +102,8 @@ class Game(
 
             gameComponent = GameComponent(ggState, player, attackManager, enemyManager, scope) {
                 when(ggState.chosenGameLevel) {
-                    0, 1, 2 -> levelOneTwoBeaten()
+                    0, 1 -> levelOneBeaten()
+                    2 -> levelTwoBeaten()
                     3 -> levelThreeBeaten()
                     else -> finalLevelBeaten()
                 }
@@ -154,48 +154,116 @@ class Game(
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
+        dialogueScreenWrapper = null
         ggState.gameActive = false
         project.getService(GameService::class.java).resetGame()
     }
 
-    private fun levelOneTwoBeaten() {
+    private fun levelOneBeaten() {
         stopGame()
         val saveState = service<GameSaveState>()
-        saveState.levelsBeaten++
+        saveState.levelsBeaten = 1
         toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
         scope.launch(Dispatchers.EDT) {
-            GameOverScreenWrapper(
-                screen = GameOverScreen.getSurvivedScreen(ggState),
-                toolWindow = toolWindow,
-                project = project,
-            ).show()
+            if(saveState.dialoguesSeen >= 1) {
+                val projectScope = project.service<GameService>().getProjectScope()
+                val dialogueScreen = DialogueScreen(
+                    title = "When I was born...",
+                    texts = CutsceneTexts.screenTwo,
+                    scope = projectScope,
+                    backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
+                    onReadyToStart = {
+                        saveState.dialoguesSeen++
+                        dialogueScreenWrapper?.enableOk()
+                    }
+                )
+
+                dialogueScreenWrapper = DialogueScreenWrapper(project, "Continue!", dialogueScreen)
+                dialogueScreenWrapper?.let { wrapper ->
+                    if(wrapper.showAndGet()){
+                        showGameSurvivedScreen()
+                    }
+                }
+            } else {
+                showGameSurvivedScreen()
+            }
+        }
+    }
+
+    private fun levelTwoBeaten() {
+        stopGame()
+        val saveState = service<GameSaveState>()
+        saveState.levelsBeaten = 2
+        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+        scope.launch(Dispatchers.EDT) {
+            if(saveState.dialoguesSeen >= 2) {
+                val projectScope = project.service<GameService>().getProjectScope()
+                val dialogueScreen = DialogueScreen(
+                    title = "My teenage years",
+                    texts = CutsceneTexts.screenThree,
+                    scope = projectScope,
+                    backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
+                    onReadyToStart = {
+                        saveState.dialoguesSeen++
+                        dialogueScreenWrapper?.enableOk()
+                    }
+                )
+
+                dialogueScreenWrapper = DialogueScreenWrapper(project, "Continue!", dialogueScreen)
+                dialogueScreenWrapper?.let { wrapper ->
+                    if(wrapper.showAndGet()){
+                        showGameSurvivedScreen()
+                    }
+                }
+            } else {
+                showGameSurvivedScreen()
+            }
         }
     }
 
     private fun levelThreeBeaten() {
         stopGame()
         val saveState = service<GameSaveState>()
-        saveState.levelsBeaten++
-        var wrapper : DialogueScreenWrapper? = null
+        saveState.levelsBeaten = 3
+        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+
         scope.launch(Dispatchers.EDT) {
-            val dialogueScreen = DialogueScreen(
-                title = "Party time!",
-                texts = CutsceneTexts.screenFour,
-                scope = scope,
-                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
-                onReadyToStart = {
-                    toolWindow.show()
-                    wrapper?.enableOk()
-                },
-            )
-            wrapper = DialogueScreenWrapper(
-                project = project,
-                dialogue = dialogueScreen,
-            ).also { it.show() }
+            if (saveState.dialoguesSeen >= 2) {
+                val dialogueScreen = DialogueScreen(
+                    title = "Party time!",
+                    texts = CutsceneTexts.screenFour,
+                    scope = scope,
+                    backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
+                    onReadyToStart = {
+                        saveState.dialoguesSeen++
+                        dialogueScreenWrapper?.enableOk()
+                    },
+                )
+                dialogueScreenWrapper = DialogueScreenWrapper(
+                    project = project,
+                    startButtonText = "Continue!",
+                    dialogue = dialogueScreen,
+                )
+                dialogueScreenWrapper?.let { wrapper ->
+                    if(wrapper.showAndGet()){
+                        showGameSurvivedScreen()
+                    }
+                }
+            } else {
+                showGameSurvivedScreen()
+            }
         }
     }
 
     private fun finalLevelBeaten() {
         stopGame()
+    }
+
+    private fun showGameSurvivedScreen() {
+        GameOverScreenWrapper(
+            screen = GameOverScreen.getSurvivedScreen(ggState),
+            toolWindow = toolWindow,
+            project = project,
+        ).show()
     }
 }

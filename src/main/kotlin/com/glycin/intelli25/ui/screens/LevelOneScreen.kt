@@ -48,7 +48,7 @@ class LevelOneScreen(
                 }
             )
 
-            wrapper = DialogueScreenWrapper(project, dialogueScreen)
+            wrapper = DialogueScreenWrapper(project, "Start!", dialogueScreen)
 
             if (wrapper.showAndGet()) {
                 toolWindow.hide()

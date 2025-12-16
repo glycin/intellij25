@@ -16,8 +16,8 @@ class ToolWindowBaseComponent(
     saveState: GameSaveState
 ) : JPanel(CardLayout()) {
     private val levelOne = LevelOneScreen(project, toolWindow, saveState)
-    private val levelTwo = LevelTwoScreen(project, toolWindow, saveState)
-    private val levelThree = LevelThreeScreen(project, toolWindow, saveState)
+    private val levelTwo = LevelTwoScreen(project, toolWindow)
+    private val levelThree = LevelThreeScreen(project, toolWindow)
     private val finalScreen = FinalScreen(project, toolWindow)
 
     init {

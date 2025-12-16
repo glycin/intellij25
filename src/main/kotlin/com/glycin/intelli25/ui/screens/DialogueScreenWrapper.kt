@@ -7,6 +7,7 @@ import javax.swing.JComponent
 
 class DialogueScreenWrapper(
     project: Project,
+    startButtonText: String,
     private val dialogue: DialogueScreen
 ) : DialogWrapper(project) {
 
@@ -17,7 +18,7 @@ class DialogueScreenWrapper(
         isModal = true
         init()
 
-        setOKButtonText("Start!")
+        setOKButtonText(startButtonText)
         isOKActionEnabled = false
         cancelAction.putValue(Action.NAME, "Next")
     }
