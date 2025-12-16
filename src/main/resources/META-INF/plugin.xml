@@ -25,10 +25,10 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Runzo"
+        <toolWindow id="IDE Survivors"
                     anchor="right"
                     factoryClass="com.glycin.intelli25.ui.GameToolWindowFactory"
-                    icon="AllIcons.Toolwindows.ToolWindowRun"
+                    icon="/icon/runzo.svg"
                     canCloseContents="true"/>
     </extensions>
 </idea-plugin>

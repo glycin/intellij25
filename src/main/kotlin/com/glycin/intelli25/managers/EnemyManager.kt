@@ -65,7 +65,7 @@ class EnemyManager(
                         ggState.enemySpawnCooldown -= 100L
                     }
 
-                    if(elapsedSeconds > 0 && elapsedSeconds % 180 == 0L){
+                    if(elapsedSeconds > 0 && elapsedSeconds % 120 == 0L){
                         println("Increasing enemy tier!")
                         ggState.enemyTier++
                     }

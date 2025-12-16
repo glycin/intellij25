@@ -73,9 +73,9 @@ class Enemy(
                     position = position,
                     points = 20,
                     player = player,
-                    damage = 2,
+                    damage = 1,
                     maxHp = 20,
-                    speed = 1.5f,
+                    speed = 0.8f,
                     image = EnemyPNG.blocker,
                     ggState = ggState
                 )
@@ -148,7 +148,7 @@ class Enemy(
 enum class EnemyType(val minLevel: Int, val tier: Int) {
     BUG(1 , 1),
     BLOCKER(1, 2),
-    BURNING_CALENDAR(1, 3),
+    BURNING_CALENDAR(2, 3),
     PHANTOM(2, 1),
     DEMON(2, 2),
     BEES(3, 3),
