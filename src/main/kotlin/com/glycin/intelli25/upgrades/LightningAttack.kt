@@ -103,7 +103,7 @@ class LightningAttack(
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
                     randomPointInCircle(ggState.maxX - 300f, Vec2(ggState.maxX / 2.0f, ggState.maxY / 2.0f)).let { pos ->
-                        attackAnimation = Animation(pos, attackSprites) {
+                        attackAnimation = Animation(position = pos, sprites = attackSprites, frameDelay = 8) {
                             attackAnimation = null
                         }
                         enemyManager.getEnemiesInCircle(pos, lightningRadius).forEach { e ->

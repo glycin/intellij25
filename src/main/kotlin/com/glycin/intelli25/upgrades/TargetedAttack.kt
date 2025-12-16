@@ -146,6 +146,7 @@ class TargetedAttack(
                 animations.add(Animation(
                     position = enemyMidPos,
                     sprites = boomEffects,
+                    frameDelay = 6
                 ))
                 tp.damage * ggState.damageMultiplier
             } else {
