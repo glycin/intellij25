@@ -161,9 +161,8 @@ class GameScreenContent(
                     layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 }
 
-                val upgradesPanel = JPanel().apply {
+                val upgradesPanel = UpgradeAtlasPanel().apply {
                     layout = BoxLayout(this, BoxLayout.Y_AXIS)
-                    add(JLabel("Upgrades overview goes here..."))
                 }
 
                 val storyPanel = StoryPanel(

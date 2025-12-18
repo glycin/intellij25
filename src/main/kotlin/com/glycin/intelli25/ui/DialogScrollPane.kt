@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.Insets
+import javax.swing.BorderFactory
 import javax.swing.JTextPane
 import javax.swing.text.SimpleAttributeSet
 import javax.swing.text.StyleConstants
@@ -27,6 +28,7 @@ class DialogScrollPane(
     private var animationJob : Job? = null
 
     private val textPane: JTextPane = JTextPane().apply {
+        border = BorderFactory.createEmptyBorder()
         val color = GameColors.black
         preferredSize = Dimension(512, 100)
         isEditable = false
@@ -50,6 +52,7 @@ class DialogScrollPane(
         viewport.isOpaque = false
         textPane.isOpaque = false
         textPane.background = GameColors.transparent
+        border = BorderFactory.createEmptyBorder()
         setViewportView(textPane)
         viewportBorder = JBUI.Borders.empty(0, 0, 15, 0)
         verticalScrollBarPolicy = VERTICAL_SCROLLBAR_NEVER
