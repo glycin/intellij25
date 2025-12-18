@@ -27,7 +27,7 @@ class LevelOneScreen(
         val baseContent = GameScreenContent(
             project = project,
             startButtonText = "Start Game",
-            onStart = { onStart() }
+            onStart = { onStart() },
         )
         
         add(baseContent)

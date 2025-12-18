@@ -190,12 +190,11 @@ class Game(
         saveState.levelsBeaten = 1
         toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
         scope.launch(Dispatchers.EDT) {
-            if(saveState.dialoguesSeen >= 1) {
-                val projectScope = project.service<GameService>().getProjectScope()
+            if(saveState.dialoguesSeen < 2) {
                 val dialogueScreen = DialogueScreen(
                     title = "When I was born...",
                     texts = CutsceneTexts.screenTwo,
-                    scope = projectScope,
+                    scope = scope,
                     backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
                     onReadyToStart = {
                         saveState.dialoguesSeen++
@@ -221,12 +220,11 @@ class Game(
         saveState.levelsBeaten = 2
         toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
         scope.launch(Dispatchers.EDT) {
-            if(saveState.dialoguesSeen >= 2) {
-                val projectScope = project.service<GameService>().getProjectScope()
+            if(saveState.dialoguesSeen < 3) {
                 val dialogueScreen = DialogueScreen(
                     title = "My teenage years",
                     texts = CutsceneTexts.screenThree,
-                    scope = projectScope,
+                    scope = scope,
                     backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
                     onReadyToStart = {
                         saveState.dialoguesSeen++
@@ -253,7 +251,7 @@ class Game(
         toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
 
         scope.launch(Dispatchers.EDT) {
-            if (saveState.dialoguesSeen >= 2) {
+            if (saveState.dialoguesSeen < 4) {
                 val dialogueScreen = DialogueScreen(
                     title = "Party time!",
                     texts = CutsceneTexts.screenFour,

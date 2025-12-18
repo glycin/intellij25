@@ -1,6 +1,8 @@
 package com.glycin.intelli25.ui.screens
 
+import com.glycin.intelli25.GameService
 import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.model.StoryReplay
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
@@ -142,6 +144,8 @@ class GameScreenContent(
 
     private fun showDiaryDialog() {
         object : DialogWrapper(project, true) {
+            private var wrapper : DialogueScreenWrapper? = null
+
             init {
                 title = "My Diary"
                 init()
@@ -150,6 +154,7 @@ class GameScreenContent(
             override fun createCenterPanel(): JComponent {
                 val saveState = service<GameSaveState>()
                 val allEnemies = Enemy.getAllAsEntries(saveState)
+                val projectScope = project.service<GameService>().getProjectScope()
 
                 val tabbedPane = JBTabbedPane()
                 val enemyAtlasPanel = EnemyAtlasPanel(allEnemies).apply {
@@ -161,9 +166,57 @@ class GameScreenContent(
                     add(JLabel("Upgrades overview goes here..."))
                 }
 
-                val storyPanel = JPanel().apply {
+                val storyPanel = StoryPanel(
+                    listOf(
+                        StoryReplay("Replay intro", unlocked = saveState.dialoguesSeen >= 1) {
+                            val dialogueScreen = DialogueScreen(
+                                title = "Origins...",
+                                texts = CutsceneTexts.screenOne,
+                                scope = projectScope,
+                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_1),
+                                onReadyToStart = {
+                                    wrapper?.enableOk()
+                                }
+                            )
+                            wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
+                            wrapper?.show()
+                        },
+                        StoryReplay("Replay the 2001-2009 era", unlocked = saveState.dialoguesSeen >= 2) {
+                            val dialogueScreen = DialogueScreen(
+                                title = "When I was born...",
+                                texts = CutsceneTexts.screenTwo,
+                                scope = projectScope,
+                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
+                                onReadyToStart = { }
+                            )
+                            wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
+                            wrapper?.show()
+                         },
+                        StoryReplay("Replay the 2010-2017 era", unlocked = saveState.dialoguesSeen >= 3) {
+                            val dialogueScreen = DialogueScreen(
+                                title = "My teenage years",
+                                texts = CutsceneTexts.screenThree,
+                                scope = projectScope,
+                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
+                                onReadyToStart = { }
+                            )
+                            wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
+                            wrapper?.show()
+                        },
+                        StoryReplay("Replay the 2018-2026 era", unlocked = saveState.dialoguesSeen >= 4) {
+                            val dialogueScreen = DialogueScreen(
+                                title = "Party time!",
+                                texts = CutsceneTexts.screenFour,
+                                scope = projectScope,
+                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
+                                onReadyToStart = { }
+                            )
+                            wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
+                            wrapper?.show()
+                        },
+                    )
+                ).apply {
                     layout = BoxLayout(this, BoxLayout.Y_AXIS)
-                    add(JLabel("The story text goes here..."))
                 }
 
                 tabbedPane.addTab("Enemy Atlas", enemyAtlasPanel)

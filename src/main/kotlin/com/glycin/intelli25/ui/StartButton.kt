@@ -13,6 +13,7 @@ class StartButton(
     textColor: Color = GameColors.white,
     text: String,
     private val arc: Int = 40,
+    private val filled: Boolean = true,
 ) : JButton(text) {
     private var hover = false
 
@@ -50,7 +51,11 @@ class StartButton(
         )
 
         g2.color = backgroundColor
-        g2.fillRoundRect(0, 0, width - 1, height - 1, arc, arc)
+        if(filled) {
+            g2.fillRoundRect(0, 0, width - 1, height - 1, arc, arc)
+        } else {
+            g2.drawRoundRect(0, 0, width - 1, height - 1, arc, arc)
+        }
 
         super.paintComponent(g2)
 
