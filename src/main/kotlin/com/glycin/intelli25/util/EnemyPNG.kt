@@ -32,4 +32,8 @@ object EnemyPNG {
     val bees : BufferedImage? by lazy {
         getPng("$BASE_PATH/bees.png",EnemyPNG::class.java)
     }
+
+    val unknown : BufferedImage? by lazy {
+        getPng("$BASE_PATH/unknown_enemy.png",EnemyPNG::class.java)
+    }
 }

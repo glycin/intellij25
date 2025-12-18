@@ -18,7 +18,7 @@ class GameToolWindowFactory : ToolWindowFactory {
         //TODO: Testing remove
         gameState.dialoguesSeen = 0
         gameState.levelsBeaten = 0
-        println("${gameState.levelsBeaten} and ${gameState.dialoguesSeen}")
+
         if (gameScreenContainer == null) {
             gameScreenContainer = ToolWindowBaseComponent(project, toolWindow, gameState)
         }

@@ -1,11 +1,14 @@
 package com.glycin.intelli25.managers
 
 import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.Pickup
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.util.randomPointOnCircle
+import com.intellij.openapi.components.service
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 class EnemyManager(
     private val ggState: GameGlobalState,
+    private val seenEnemies: MutableSet<EnemyType>,
     player: Player,
     scope: CoroutineScope,
 ) {
@@ -41,11 +45,17 @@ class EnemyManager(
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
                         val p = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
+                        val type = Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random()
+
+                        if(!seenEnemies.contains(type)) {
+                            registerNewEnemy(type)
+                        }
+
                         val spawned = Enemy.createOfType(
                             id = idCounter,
                             position = p,
                             player = player,
-                            type = Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random(),
+                            type = type,
                             ggState = ggState,
                         )
                         enemyMap[spawned.id] = spawned
@@ -126,5 +136,10 @@ class EnemyManager(
             pickup.picked = true
             enemyMap.remove(e.id)
         }
+    }
+
+    private fun registerNewEnemy(newType: EnemyType) {
+        seenEnemies.add(newType)
+        service<GameSaveState>().enemiesSeen = seenEnemies.joinToString(",") { it.name }
     }
 }

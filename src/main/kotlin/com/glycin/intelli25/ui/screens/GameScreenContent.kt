@@ -1,11 +1,16 @@
 package com.glycin.intelli25.ui.screens
 
+import com.glycin.intelli25.model.Enemy
+import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.PNG
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
+import com.intellij.ui.components.JBTabbedPane
 import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -13,8 +18,10 @@ import java.awt.GridBagLayout
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
+import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.JTabbedPane
 import javax.swing.SwingConstants
 
 class GameScreenContent(
@@ -40,14 +47,26 @@ class GameScreenContent(
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
         }
+
+        buttonColumn.add(Box.createVerticalStrut(200))
+
         val startButton = StartButton(
             backgroundColor = GameColors.jbRed,
             hoverColor = GameColors.jbOrange,
             text = startButtonText,
         ).apply {
             alignmentX = CENTER_ALIGNMENT
+            addActionListener { onStart() }
+        }
+
+        val openDiaryButton = StartButton(
+            backgroundColor = GameColors.jbPurple,
+            hoverColor = GameColors.jbOrange,
+            text = "Open Diary",
+        ).apply {
+            alignmentX = CENTER_ALIGNMENT
             addActionListener {
-                onStart()
+                showDiaryDialog()
             }
         }
 
@@ -57,12 +76,25 @@ class GameScreenContent(
             text = "How to play",
         ).apply {
             alignmentX = CENTER_ALIGNMENT
+            addActionListener { showHowToPlayDialog() }
+        }
+
+        val creditsButton = StartButton(
+            backgroundColor = GameColors.jbPurple,
+            hoverColor = GameColors.jbOrange,
+            text = "Credits",
+        ).apply {
+            alignmentX = CENTER_ALIGNMENT
             addActionListener {
-                showHowToPlayDialog()
+                showCredits()
             }
         }
 
         buttonColumn.add(startButton)
+        buttonColumn.add(Box.createVerticalStrut(12))
+        buttonColumn.add(openDiaryButton)
+        buttonColumn.add(Box.createVerticalStrut(12))
+        buttonColumn.add(creditsButton)
         buttonColumn.add(Box.createVerticalStrut(12))
         buttonColumn.add(howToPlayButton)
 
@@ -78,7 +110,7 @@ class GameScreenContent(
         if(g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
-            g.drawImage(PNG.START_BACKGROUND, (width / 2) - 512, (height / 2) - 650, 1024, 1024, null)
+            g.drawImage(PNG.START_BACKGROUND, (width / 2) - 256, (height / 2) - 450, 512, 512, null)
         }
     }
 
@@ -90,10 +122,56 @@ class GameScreenContent(
             - Move with W A S D.
             - Defeat enemies and collect the coins they drop.
             - After the top bar is filled choose your upgrade!
-            - Mix and match upgrades to become overpowered!
+            - Mix and match upgrades to become strong enough to survive!
             - Survive as long as you can!
         """.trimIndent(),
-            "How To Play Runzo"
+            "How To Play IDE Survivors"
         )
+    }
+
+    private fun showCredits() {
+        Messages.showInfoMessage(
+            project,
+            """
+                This game was created by Alexander Chatzizacharias (https://github.com/glycin).
+                Sponsored by JetBrains for the 25th anniversary of IntelliJ.
+            """.trimIndent(),
+            "Credits"
+        )
+    }
+
+    private fun showDiaryDialog() {
+        object : DialogWrapper(project, true) {
+            init {
+                title = "My Diary"
+                init()
+            }
+
+            override fun createCenterPanel(): JComponent {
+                val saveState = service<GameSaveState>()
+                val allEnemies = Enemy.getAllAsEntries(saveState)
+
+                val tabbedPane = JBTabbedPane()
+                val enemyAtlasPanel = EnemyAtlasPanel(allEnemies).apply {
+                    layout = BoxLayout(this, BoxLayout.Y_AXIS)
+                }
+
+                val upgradesPanel = JPanel().apply {
+                    layout = BoxLayout(this, BoxLayout.Y_AXIS)
+                    add(JLabel("Upgrades overview goes here..."))
+                }
+
+                val storyPanel = JPanel().apply {
+                    layout = BoxLayout(this, BoxLayout.Y_AXIS)
+                    add(JLabel("The story text goes here..."))
+                }
+
+                tabbedPane.addTab("Enemy Atlas", enemyAtlasPanel)
+                tabbedPane.addTab("Upgrades", upgradesPanel)
+                tabbedPane.addTab("The story", storyPanel)
+
+                return tabbedPane
+            }
+        }.show()
     }
 }

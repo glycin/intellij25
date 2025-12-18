@@ -1,5 +1,6 @@
 package com.glycin.intelli25.model
 
+import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.util.EnemyPNG
 import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
@@ -140,6 +141,58 @@ class Enemy(
         fun getAllowedTypes(chosenLevel: Int, enemyTier: Int): List<EnemyType> {
             return EnemyType.entries.filter {
                 it.minLevel <= chosenLevel && it.tier <= enemyTier
+            }
+        }
+
+        fun getAllAsEntries(saveState: GameSaveState): List<EnemyEntry> {
+            val enemiesSeen = saveState.enemiesSeen.split(",")
+            return EnemyType.entries.map { it.toEntry(enemiesSeen) }
+        }
+
+        private fun EnemyType.toEntry(enemiesSeen: List<String>): EnemyEntry {
+            return when(this){
+                EnemyType.BUG -> EnemyEntry(
+                    name = "BUG",
+                    description = "You see them everyday!",
+                    image = EnemyPNG.bug,
+                    seen = enemiesSeen.contains("BUG")
+                )
+                EnemyType.BLOCKER -> EnemyEntry(
+                    name = "BLOCKER",
+                    description = "Sometimes you are all done, but you still have to wait on a thousand approvals...",
+                    image = EnemyPNG.blocker,
+                    seen = enemiesSeen.contains("BLOCKER")
+                )
+                EnemyType.BURNING_CALENDAR -> EnemyEntry(
+                    name = "DEADLINE",
+                    description = "When you are supposed to do scrum, but still have deadlines...",
+                    image = EnemyPNG.calendar,
+                    seen = enemiesSeen.contains("BURNING_CALENDAR")
+                )
+                EnemyType.PHANTOM -> EnemyEntry(
+                    name = "BURNOUT PHANTOM",
+                    description = "Listen to yourself, and take a break once in a while okay?",
+                    image = EnemyPNG.phantom,
+                    seen = enemiesSeen.contains("PHANTOM")
+                )
+                EnemyType.DEMON -> EnemyEntry(
+                    name = "DOOMSCROLL DEMON",
+                    description = "That endless dopamine hit",
+                    image = EnemyPNG.demon,
+                    seen = enemiesSeen.contains("DEMON")
+                )
+                EnemyType.BEES -> EnemyEntry(
+                    name = "Meeting Bees",
+                    description = "Buzz buzz, and your day is gone",
+                    image = EnemyPNG.bees,
+                    seen = enemiesSeen.contains("BEES")
+                )
+                EnemyType.VAMPIRE -> EnemyEntry(
+                    name = "Legacy Vampire",
+                    description = "Nothing kills productivity as fast as legacy code and processes",
+                    image = EnemyPNG.vampire,
+                    seen = enemiesSeen.contains("VAMPIRE")
+                )
             }
         }
     }

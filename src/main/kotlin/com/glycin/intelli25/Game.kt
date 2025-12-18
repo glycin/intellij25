@@ -4,6 +4,7 @@ import com.glycin.intelli25.input.GameKeyListener
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.GameStartupSettings
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
@@ -110,7 +111,11 @@ class Game(
                 it.addAttack(basicAttack)
                 player.upgrades[basicAttack.title] = basicAttack.attackIcon
             }
-            val enemyManager = EnemyManager(ggState, player, scope)
+
+            val saveState = service<GameSaveState>()
+            val seenEnemies = if(saveState.enemiesSeen.isNotEmpty()) saveState.enemiesSeen.split(",").map { EnemyType.valueOf(it) }.toMutableSet() else mutableSetOf()
+            val enemyManager = EnemyManager(ggState, seenEnemies, player, scope)
+
             collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState, scope) //TODO: Create one update manager that handles all updating in the game
             upgradeRepository = UpgradeRepository(ggState, player, enemyManager, scope)
 

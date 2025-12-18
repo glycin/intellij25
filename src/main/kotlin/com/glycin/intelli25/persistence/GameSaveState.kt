@@ -25,8 +25,15 @@ class GameSaveState: SerializablePersistentStateComponent<GameSaveState.SaveStat
             }
         }
 
+    var enemiesSeen: String
+        get() = state.enemiesSeen
+        set(value) {
+            updateState { it.copy(enemiesSeen = value) }
+        }
+
     data class SaveState (
         var levelsBeaten: Int = 0,
         var dialoguesSeen: Int = 0,
+        var enemiesSeen: String = "",
     )
 }
