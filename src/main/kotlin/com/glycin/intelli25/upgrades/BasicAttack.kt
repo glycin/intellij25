@@ -22,7 +22,7 @@ class BasicAttack(
 
     private var nextId = 0L
     private val bullets = concurrentMapOf<Long, Bullet>()
-    private var attackDelay: Long = 2000L //ms
+    private var attackDelay: Long = 1000L //ms
     override val unlockDescription: String
         get() = "This is already unlocked"
     override val unlockEffect: String
@@ -40,7 +40,7 @@ class BasicAttack(
         description = "IntelliJ added html and css support"
         effect = "Increase firing speed of projectiles"
         onSelect = {
-            attackDelay = 1500L
+            attackDelay = 750L
             generalLevelUp()
         }
     }
@@ -63,7 +63,7 @@ class BasicAttack(
         description = "IntelliJ added the search everywhere feature"
         effect = "Further increases firing speed of projectiles"
         onSelect = {
-            attackDelay = 1000L
+            attackDelay = 500L
             generalLevelUp()
         }
     }
@@ -86,7 +86,7 @@ class BasicAttack(
         description = "Added an embedded debugger!"
         effect = "Increase firing speed of projectiles"
         onSelect = {
-            attackDelay = 750L
+            attackDelay = 250L
             generalLevelUp()
         }
     }
@@ -109,7 +109,7 @@ class BasicAttack(
         description = "Now you can choose your JDK in the IDE!"
         effect = "Increase firing speed to the max!"
         onSelect = {
-            attackDelay = 400L
+            attackDelay = 100L
             generalLevelUp()
         }
     }

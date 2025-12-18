@@ -18,7 +18,6 @@ class Player(
     var experienceNeeded = 10
     var pickUpRange: Float = 50.0f
     var level = 1
-    var currentHp = 100
 
     val keyMap = mutableMapOf(
         "UP" to false,
@@ -29,8 +28,10 @@ class Player(
 
     val upgrades = mutableMapOf<String, BufferedImage?>()
 
-    private val baseMaxHp = 100
-    private val baseRegenRate = 1
+    private val baseMaxHp = 300
+    var currentHp = baseMaxHp
+
+    private val baseRegenRate = 5
     private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT

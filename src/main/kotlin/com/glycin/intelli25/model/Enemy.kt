@@ -85,8 +85,8 @@ class Enemy(
                     points = 30,
                     player = player,
                     damage = 3,
-                    maxHp = 50,
-                    speed = 1.9f,
+                    maxHp = 30,
+                    speed = 1f,
                     image = EnemyPNG.calendar,
                     ggState = ggState
                 )
@@ -95,9 +95,9 @@ class Enemy(
                     position = position,
                     points = 50,
                     player = player,
-                    damage = 10,
-                    maxHp = 100,
-                    speed = 0.5f,
+                    damage = 2,
+                    maxHp = 40,
+                    speed = 1.2f,
                     image = EnemyPNG.phantom,
                     ggState = ggState
                 )
@@ -107,8 +107,8 @@ class Enemy(
                     points = 50,
                     player = player,
                     damage = 10,
-                    maxHp = 20,
-                    speed = 2.5f,
+                    maxHp = 50,
+                    speed = 0.3f,
                     image = EnemyPNG.demon,
                     ggState = ggState
                 )
@@ -128,9 +128,9 @@ class Enemy(
                     position = position,
                     points = 30,
                     player = player,
-                    damage = 3,
-                    maxHp = 10,
-                    speed = 3f,
+                    damage = 20,
+                    maxHp = 100,
+                    speed = 1f,
                     image = EnemyPNG.vampire,
                     ggState = ggState
                 )
@@ -148,9 +148,9 @@ class Enemy(
 enum class EnemyType(val minLevel: Int, val tier: Int) {
     BUG(1 , 1),
     BLOCKER(1, 2),
-    BURNING_CALENDAR(2, 3),
-    PHANTOM(2, 1),
-    DEMON(2, 2),
+    BURNING_CALENDAR(2, 2),
+    PHANTOM(2, 3),
+    DEMON(2, 3),
     BEES(3, 3),
     VAMPIRE(3, 4),
 }

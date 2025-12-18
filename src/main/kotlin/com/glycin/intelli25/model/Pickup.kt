@@ -7,7 +7,7 @@ import kotlin.math.roundToInt
 class Pickup(
     val id: Int,
     var position: Vec2,
-    val xp: Int = 5,
+    val xp: Int = 10,
     private val width: Int,
     private val height: Int,
     private val player: Player,
