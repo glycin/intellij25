@@ -24,12 +24,15 @@ import com.glycin.intelli25.util.getDeltaTime
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.KeyboardFocusManager
+import java.awt.event.MouseWheelListener
 
 private const val FPS = 120L
 
@@ -46,6 +49,7 @@ class Game(
     private var uiComponent: UiComponent? = null
     private var keyListener: GameKeyListener? = null
     private var dialogueScreenWrapper: DialogueScreenWrapper? = null
+    private var mouseWheelBlocker: MouseWheelListener? = null //TODO: Workaround until I find a good way to pin the UI as the user scrolls around
 
     private lateinit var ggState: GameGlobalState
     private lateinit var upgradeRepository: UpgradeRepository
@@ -54,8 +58,14 @@ class Game(
 
     init {
         scope.launch(Dispatchers.EDT) {
-            val maxX = editor.scrollingModel.visibleArea.width
-            val maxY = editor.scrollingModel.visibleArea.height
+            val scrollingModel = editor.scrollingModel
+            editor.caretModel.moveToOffset(0)
+            scrollingModel.scrollToCaret(ScrollType.CENTER_UP)
+
+            delay(250) // Give the editor time to scroll up
+
+            val maxX = scrollingModel.visibleArea.width
+            val maxY = scrollingModel.visibleArea.height
 
             ggState = GameGlobalState(
                 minX = 0,
@@ -89,6 +99,10 @@ class Game(
 
             keyListener = GameKeyListener(player).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
+            }
+
+            mouseWheelBlocker = MouseWheelListener { e -> e.consume() }.also {
+                editor.contentComponent.addMouseWheelListener(it)
             }
 
             attackManager = AttackManager(ggState, scope).also {
@@ -129,6 +143,8 @@ class Game(
                     val visibleRect = e.newRectangle
                     ggState.maxX = visibleRect.width
                     ggState.maxY = visibleRect.height
+                    ggState.minX = visibleRect.x
+                    ggState.minY = visibleRect.y
                     uiComponent?.updateBounds(visibleRect)
                     gameComponent?.bounds = visibleRect
                     uiComponent?.revalidate()
@@ -154,6 +170,10 @@ class Game(
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
+        mouseWheelBlocker?.let { mwb ->
+            editor.contentComponent.removeMouseWheelListener(mwb)
+        }
+        mouseWheelBlocker = null
         dialogueScreenWrapper = null
         ggState.gameActive = false
         project.getService(GameService::class.java).resetGame()

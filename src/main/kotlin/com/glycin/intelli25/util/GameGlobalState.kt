@@ -2,8 +2,8 @@ package com.glycin.intelli25.util
 
 data class GameGlobalState(
     // World things
-    val minX: Int,
-    val minY: Int,
+    var minX: Int,
+    var minY: Int,
     var maxX: Int,
     var maxY: Int,
     var deltaTime: Long,

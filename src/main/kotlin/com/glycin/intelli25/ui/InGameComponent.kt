@@ -44,8 +44,8 @@ class InGameComponent(
     }
 
     private fun drawPlayerHp(g: Graphics2D) {
-        val x = player.position.x.roundToInt()
-        val y = player.position.y.roundToInt() + player.height + 10
+        val x = player.position.x.roundToInt() - ggState.minX
+        val y = (player.position.y.roundToInt() + player.height + 10) - ggState.minY
         val hpWidth = max((player.currentHp.toFloat() / player.maxHp().toFloat()) * player.width, 0f).roundToInt()
         g.color = GameColors.jbRed
         g.fillRect(x, y, player.width, 5)
