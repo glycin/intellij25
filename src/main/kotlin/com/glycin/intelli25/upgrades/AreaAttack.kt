@@ -4,56 +4,52 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.PNG
-import com.glycin.intelli25.util.UpgradePNG
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
 
 class AreaAttack(
     ggState: GameGlobalState,
-    player: Player
-) : Attack(ggState, player) {
-    override val attackIcon = UpgradePNG.leaf
-    override val title: String = "Enterprise Ready"
-    override val unlockDescription: String
-        get() = "Unlocks the power of integrations for Enterprise grade production environments"
-    override val unlockEffect: String
-        get() = "New weapon that adds a damaging area around Runzo."
+    player: Player,
+) : Attack(ggState, player, AttackConfig.ENTERPRISE_READY_FEATURE) {
 
     private val basicAttackDamage: Int = 1
-    private var diameter = player.width + 20
+    private var diameter = player.width + 30
+
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "JUnit Integration"
-        description = "IntelliJ added JUnit integration in IntelliJ"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
-            diameter = player.width + 50
+            diameter = player.width + 60
             generalLevelUp()
         }
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "J2EE Support"
-        description = "IntelliJ added J2EE support"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
-            diameter = player.width + 80
+            diameter = player.width + 90
             generalLevelUp()
         }
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Spring Framework"
-        description = "IntelliJ support for Spring framework"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             diameter = player.width + 120
             generalLevelUp()
@@ -61,37 +57,40 @@ class AreaAttack(
     }
 
     private val upgradeFour = upgradeOption {
+        val boost = attackDef.boosts[3]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Spring boot"
-        description = "Added support for spring boot!"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
-            diameter = player.width + 150
+            diameter = player.width + 160
             generalLevelUp()
         }
     }
 
     private val upgradeFive = upgradeOption {
+        val boost = attackDef.boosts[4]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Profiler"
-        description = "Added a built in profiler"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
-            diameter = player.width + 180
+            diameter = player.width + 190
             generalLevelUp()
         }
     }
 
     private val upgradeSix = upgradeOption {
+        val boost = attackDef.boosts[5]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Spring debugger"
-        description = "Added a spring debugger!"
-        effect = "Increase size of protective area"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
-            diameter = player.width + 220
+            diameter = player.width + 250
             generalLevelUp()
         }
     }

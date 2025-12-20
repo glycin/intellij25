@@ -10,13 +10,14 @@ import java.awt.image.BufferedImage
 abstract class Attack(
     val ggState: GameGlobalState,
     val player: Player,
+    val attackDef: AttackDef,
 ) {
     var currentLevel: Int = 1
     abstract val maxLevel: Int
-    abstract val attackIcon: BufferedImage?
-    abstract val title: String
-    abstract val unlockDescription: String
-    abstract val unlockEffect: String
+    val attackIcon: BufferedImage? = attackDef.image
+    val title: String = attackDef.title
+    val unlockDescription: String = attackDef.description
+    val unlockEffect: String = attackDef.effect
 
     abstract fun activate()
     abstract fun draw(g: Graphics2D)

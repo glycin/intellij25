@@ -10,15 +10,12 @@ import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
-import com.glycin.intelli25.util.UpgradePNG
-import com.intellij.refactoring.introduceParameter.onClickCallback
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
-import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
 
 class TargetedAttack(
@@ -26,7 +23,7 @@ class TargetedAttack(
     private val enemyManager: EnemyManager,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.STYLE_FEATURE) {
 
     private val boomEffects = SpriteSheetImageLoader.loadSprites(
         "/sprites/effects/firework_boom.png",
@@ -41,19 +38,13 @@ class TargetedAttack(
     private var nextId = 0L
     private val projectiles = concurrentMapOf<Long, TargetedProjectile>()
 
-    override val attackIcon: BufferedImage? = UpgradePNG.style
-    override val title: String = "Impeccable style"
-    override val unlockDescription: String
-        get() = "Serving developers with style"
-    override val unlockEffect: String
-        get() = "New weapon that fires a projectile to the closest enemy"
-
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Dark theme"
-        description = "IntelliJ added a dark theme"
-        effect = "Decreases weapon cooldown"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             cooldown = 3500L
             generalLevelUp()
@@ -61,11 +52,12 @@ class TargetedAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Jetbrains Monotype"
-        description = "IntelliJ added the jb monotype"
-        effect = "Adds an extra projectile"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             projectileCount++
             generalLevelUp()
@@ -73,11 +65,12 @@ class TargetedAttack(
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "New UI"
-        description = "IntelliJ got a redesign"
-        effect = "Further decreases cooldown"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             cooldown = 2500L
             generalLevelUp()
@@ -85,11 +78,12 @@ class TargetedAttack(
     }
 
     private val upgradeFour = upgradeOption {
+        val boost = attackDef.boosts[3]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Custom themes"
-        description = "Intellij added custom theme support!"
-        effect = "Further decreases cooldown and adds two additional projectiles"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             cooldown = 1500L
             projectileCount += 2

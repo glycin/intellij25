@@ -6,7 +6,6 @@ import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.util.UpgradePNG
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,27 +17,21 @@ class BasicAttack(
     ggState: GameGlobalState,
     player: Player,
     private val scope: CoroutineScope,
-) : Attack(ggState, player) {
+) : Attack(ggState, player, AttackConfig.PRODUCTIVITY_FEATURE) {
 
     private var nextId = 0L
     private val bullets = concurrentMapOf<Long, Bullet>()
     private var attackDelay: Long = 1000L //ms
-    override val unlockDescription: String
-        get() = "This is already unlocked"
-    override val unlockEffect: String
-        get() = "This is already unlocked"
-
-    override val attackIcon = UpgradePNG.laptop
-    override val title = "Productivity"
     private val basicAttackDamage: Int = 10
     private var invincibleBullet = false
 
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "HTML & CSS Support"
-        description = "IntelliJ added html and css support"
-        effect = "Increase firing speed of projectiles"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackDelay = 750L
             generalLevelUp()
@@ -46,22 +39,24 @@ class BasicAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "SQL Support"
-        description = "IntelliJ added SQL support"
-        effect = "Adds two additional projectile lines"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             generalLevelUp()
         }
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Search Everywhere"
-        description = "IntelliJ added the search everywhere feature"
-        effect = "Further increases firing speed of projectiles"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackDelay = 500L
             generalLevelUp()
@@ -69,22 +64,24 @@ class BasicAttack(
     }
 
     private val upgradeFour = upgradeOption {
+        val boost = attackDef.boosts[3]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Embedded terminal"
-        description = "Added an embedded terminal!"
-        effect = "Adds two additional projectile lines"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             generalLevelUp()
         }
     }
 
     private val upgradeFive = upgradeOption {
+        val boost = attackDef.boosts[4]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Debugger"
-        description = "Added an embedded debugger!"
-        effect = "Increase firing speed of projectiles"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackDelay = 250L
             generalLevelUp()
@@ -92,22 +89,24 @@ class BasicAttack(
     }
 
     private val upgradeSix = upgradeOption {
+        val boost = attackDef.boosts[5]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Decompiler"
-        description = "Added a decompiler for fast peeking!"
-        effect = "Fire additional projectile lines"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             generalLevelUp()
         }
     }
 
     private val upgradeSeven = upgradeOption {
+        val boost = attackDef.boosts[6]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "JDK in the IDE"
-        description = "Now you can choose your JDK in the IDE!"
-        effect = "Increase firing speed to the max!"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackDelay = 100L
             generalLevelUp()
@@ -115,11 +114,12 @@ class BasicAttack(
     }
 
     private val upgradeEight = upgradeOption {
+        val boost = attackDef.boosts[7]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Command completion"
-        description = "Added the command completion feature!"
-        effect = "Maximum productivity! Projectiles no longer disappear after hitting an enemy"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             invincibleBullet = true
             generalLevelUp()

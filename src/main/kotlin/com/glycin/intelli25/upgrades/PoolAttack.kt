@@ -5,12 +5,8 @@ import com.glycin.intelli25.model.Pool
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.randomPointInCircle
-import com.intellij.icons.AllIcons
-import com.intellij.util.IconUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,27 +17,21 @@ class PoolAttack(
     ggState: GameGlobalState,
     player: Player,
     private val scope: CoroutineScope,
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.BUILD_TOOLS_FEATURE) {
 
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()
-    override val attackIcon = UpgradePNG.buildTools
-    override val title = "Build & Deployment tools"
-    override val unlockDescription: String
-        get() = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays"
-    override val unlockEffect: String
-        get() = "New weapon that spawns toxic pools around Runzo that hurt enemies"
-
     private var size = 60
     private var spawnCooldown = 10000L
     private val baseDamage = 1
 
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Maven 3 Integration"
-        description = "Maven 3 Integration was added"
-        effect = "Increase spawn rate of the pools."
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             spawnCooldown = 7000L
             generalLevelUp()
@@ -49,11 +39,12 @@ class PoolAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Gradle Support"
-        description = "IntelliJ added gradle support"
-        effect = "Increase size of the spawned pools"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             size = 80
             generalLevelUp()
@@ -61,11 +52,12 @@ class PoolAttack(
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Docker Support"
-        description = "IntelliJ added docker support"
-        effect = "Further increase breakpoint spawn rate"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             spawnCooldown = 4500L
             generalLevelUp()
@@ -73,11 +65,12 @@ class PoolAttack(
     }
 
     private val upgradeFour = upgradeOption {
+        val boost = attackDef.boosts[3]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Kubernetes support"
-        description = "Added k8s support!"
-        effect = "Further increase breakpoint size"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             size = 120
             generalLevelUp()

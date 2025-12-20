@@ -6,10 +6,8 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
-import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.randomPointInCircle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,29 +21,22 @@ class LightningAttack(
     player: Player,
     private val enemyManager: EnemyManager,
     private val scope: CoroutineScope,
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.KOTLIN_FEATURE) {
     private val animationBaseWidth = 128
     private val animationBaseHeight = 256
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
     private var attackAnimation: Animation? = null
-
-    override val attackIcon = UpgradePNG.kotlin
-    override val title = "Kotlin"
-    override val unlockDescription: String
-        get() = "Unlocks the power of Kotlin, the JVM language made by JetBrains."
-    override val unlockEffect: String
-        get() = "New weapon that randomly strikes enemies for heavy damage"
-
     private val basicAttackDamage: Int = 50
     private var lightningRadius = 40
     private var attackCooldown =  5000L
 
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Kotlin support"
-        description = "IntelliJ added kotlin support"
-        effect = "Decreases lightning strike cooldown"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackCooldown = 3000L
             generalLevelUp()
@@ -53,11 +44,12 @@ class LightningAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Kotlin multi-platform"
-        description = "IntelliJ added support for KMP"
-        effect = "Increases lighting strike impact radius"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             lightningRadius = 80
             generalLevelUp()
@@ -65,11 +57,12 @@ class LightningAttack(
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "K2 Mode"
-        description = "IntelliJ added support for the K2 compiler"
-        effect = "Decreases lightning strike cooldown even further"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             attackCooldown = 1500L
             generalLevelUp()
@@ -77,11 +70,12 @@ class LightningAttack(
     }
 
     private val upgradeFour = upgradeOption {
+        val boost = attackDef.boosts[3]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Kotlin notebooks"
-        description = "IntelliJ can create and run kotlin notebooks"
-        effect = "Decreases cooldown even further and increases impact radius"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             lightningRadius = 120
             attackCooldown = 900L

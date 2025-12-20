@@ -14,7 +14,7 @@ data class UpgradeOption(
 class UpgradeOptionBuilder {
     var icon: BufferedImage? = null
     var upgradePathTitle: String? = null
-    var subTitle: String? = null
+    var subTitle: String = ""
     var description: String? = null
     var effect: String? = null
     var onSelect: ((UpgradeOption) -> Unit)? = null
@@ -22,7 +22,6 @@ class UpgradeOptionBuilder {
     fun build(): UpgradeOption {
         requireNotNull(icon) { "icon must be set" }
         requireNotNull(upgradePathTitle) { "title must be set" }
-        requireNotNull(subTitle) { "subTitle must be set" }
         requireNotNull(description) { "description must be set" }
         requireNotNull(effect) { "effect must be set" }
         requireNotNull(onSelect) { "onSelect must be set" }

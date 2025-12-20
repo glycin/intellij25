@@ -31,9 +31,23 @@ class GameSaveState: SerializablePersistentStateComponent<GameSaveState.SaveStat
             updateState { it.copy(enemiesSeen = value) }
         }
 
+    var weaponsSeen: Map<String, List<String>>
+        get() = state.weaponsSeen
+        set(value) {
+            updateState { it.copy(weaponsSeen = value) }
+        }
+
+    var boostsSeen: List<String>
+        get() = state.boostsSeen
+        set(value) {
+            updateState { it.copy(boostsSeen = value) }
+        }
+
     data class SaveState (
         var levelsBeaten: Int = 0,
         var dialoguesSeen: Int = 0,
         var enemiesSeen: String = "",
+        var weaponsSeen: Map<String, List<String>> = emptyMap(),
+        var boostsSeen: List<String> = emptyList(),
     )
 }

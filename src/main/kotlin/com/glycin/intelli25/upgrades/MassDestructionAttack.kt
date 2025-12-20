@@ -6,13 +6,11 @@ import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
-import java.awt.image.BufferedImage
 import kotlin.random.Random
 
 class MassDestructionAttack(
@@ -20,16 +18,10 @@ class MassDestructionAttack(
     private val scope: CoroutineScope,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.PRODUCTIVITY_FEATURE) { //TODO: Fix when this is made
 
     private var triggerChance = 1//%
     override val maxLevel: Int = 1
-    override val attackIcon: BufferedImage? = UpgradePNG.profiler
-    override val title: String = "Quality of life"
-    override val unlockDescription: String
-        get() = "Some description"
-    override val unlockEffect: String
-        get() = "New weapon, that rarely destroys all enemies"
 
     override fun activate() {
         scope.launch(Dispatchers.Default) {

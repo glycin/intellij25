@@ -5,10 +5,8 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
-import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -16,14 +14,13 @@ import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 import java.awt.TexturePaint
 import java.awt.geom.Rectangle2D
-import java.awt.image.BufferedImage
 import kotlin.random.Random
 
 class FreezingAttack(
     private val scope: CoroutineScope,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.VERSIONING_FEATURE) {
 
     private val effectSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/snow.png", 64, 64, 16)
     private var effectAnimation: Animation? = null
@@ -32,19 +29,13 @@ class FreezingAttack(
     private var freezeTime = 5_000L
     private var nextActivationTime = 0L
 
-    override val attackIcon: BufferedImage? = UpgradePNG.git
-    override val title: String = "Version control"
-    override val unlockDescription: String
-        get() = "New weapon that occasionally freezes all enemies in place"
-    override val unlockEffect: String
-        get() = "New weapon that occasionally freezes all enemies in place"
-
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "CVS & VSS"
-        description = "IntelliJ added CVS and VSS support"
-        effect = "Increases the time enemies stay frozen"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             freezeTime = 10_000L
             generalLevelUp()
@@ -52,11 +43,12 @@ class FreezingAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Subversion"
-        description = "IntelliJ added Subversion support"
-        effect = "Increases how often this weapon activates"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             minCooldown = 25_000L
             maxCooldown = 75_000L
@@ -65,11 +57,12 @@ class FreezingAttack(
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Git"
-        description = "IntelliJ added git support"
-        effect = "Increases how often this weapon activates and how long enemies are frozen"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             minCooldown = 15_000L
             maxCooldown = 50_000L

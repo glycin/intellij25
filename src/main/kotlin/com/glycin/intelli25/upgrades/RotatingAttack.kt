@@ -4,10 +4,8 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOption
-import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
-import com.glycin.intelli25.util.UpgradePNG
 import com.glycin.intelli25.util.pointOnCircle
 import java.awt.Graphics2D
 import kotlin.math.roundToInt
@@ -15,17 +13,9 @@ import kotlin.math.roundToInt
 class RotatingAttack(
     ggState: GameGlobalState,
     player: Player
-): Attack(ggState, player) {
+): Attack(ggState, player, AttackConfig.AI_FEATURE) {
 
     private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
-
-    override val attackIcon = UpgradePNG.junie
-    override val title = "Artificial Intelligence"
-    override val unlockDescription: String
-        get() = "Unlocks the power of AI, the latest transformative innovation in tech."
-    override val unlockEffect: String
-        get() = "New weapon that adds a drone that flies around and protects Runzo."
-
     private val radius = 250f
     private val basicAttackDamage: Int = 20
     private var speed =  0.005f
@@ -34,11 +24,12 @@ class RotatingAttack(
     private var pointValues = mutableListOf(0.0f)
 
     private val upgradeOne = upgradeOption {
+        val boost = attackDef.boosts[0]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "AI Chat"
-        description = ""
-        effect = "Increase rotating speed of the AI assistant"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             speed =  0.015f
             generalLevelUp()
@@ -46,11 +37,12 @@ class RotatingAttack(
     }
 
     private val upgradeTwo = upgradeOption {
+        val boost = attackDef.boosts[1]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "Junie"
-        description = "IntelliJ added Junie"
-        effect = "Add an additional AI assistant"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 1.0f
@@ -60,11 +52,12 @@ class RotatingAttack(
     }
 
     private val upgradeThree = upgradeOption {
+        val boost = attackDef.boosts[2]
         icon = attackIcon
         upgradePathTitle = title
-        subTitle = "K2 Mode"
-        description = "IntelliJ added support for the K2 compiler"
-        effect = "Add an additional AI assistant and increase rotation speed of the drones"
+        subTitle = boost.title
+        description = boost.description
+        effect = boost.effect
         onSelect = {
             speed =  0.025f
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
