@@ -20,6 +20,7 @@ class LevelTwoScreen(
         val baseContent = GameScreenContent(
             project = project,
             onStart = { onStart() },
+            toolWindow = toolWindow,
             startButtonText = "Start Level Two"
         )
 

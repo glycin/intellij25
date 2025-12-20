@@ -20,6 +20,7 @@ class LevelThreeScreen(
         val baseContent = GameScreenContent(
             project = project,
             onStart = { onStart() },
+            toolWindow = toolWindow,
             startButtonText = "Start Level Three",
         )
         add(baseContent)

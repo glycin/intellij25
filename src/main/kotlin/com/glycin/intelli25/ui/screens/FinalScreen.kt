@@ -20,6 +20,7 @@ class FinalScreen(
         val baseContent = GameScreenContent(
             project = project,
             startButtonText = "Start Game",
+            toolWindow = toolWindow,
             onStart = { onStart() }
         )
 

@@ -12,6 +12,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTabbedPane
 import java.awt.BorderLayout
 import java.awt.Graphics
@@ -23,12 +24,12 @@ import javax.swing.BoxLayout
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JTabbedPane
 import javax.swing.SwingConstants
 
 class GameScreenContent(
     private val project: Project,
     private val onStart: () -> Unit,
+    private val toolWindow: ToolWindow,
     startButtonText: String,
 ): JPanel() {
 
@@ -68,6 +69,7 @@ class GameScreenContent(
         ).apply {
             alignmentX = CENTER_ALIGNMENT
             addActionListener {
+                toolWindow.hide()
                 showDiaryDialog()
             }
         }
