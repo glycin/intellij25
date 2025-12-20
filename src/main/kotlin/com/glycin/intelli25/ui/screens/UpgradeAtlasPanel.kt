@@ -1,32 +1,36 @@
 package com.glycin.intelli25.ui.screens
-
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.upgrades.AttackConfig
+import com.glycin.intelli25.upgrades.AttackDef
+import com.glycin.intelli25.upgrades.UpgradeBoostDef
 import com.glycin.intelli25.util.GameColors
 import com.intellij.ui.components.JBScrollPane
 import java.awt.*
 import javax.swing.*
 
-data class UpgradeMenuItem(
-    val id: String,
-    val title: String
-)
+sealed class UpgradeMenuItem {
+    data class FeatureItem(val feature: AttackDef) : UpgradeMenuItem()
+    data class BoostItem(val boost: UpgradeBoostDef) : UpgradeMenuItem()
+}
 
-class UpgradeAtlasPanel() : JPanel(BorderLayout()) {
+class UpgradeAtlasPanel : JPanel(BorderLayout()) {
 
-    val featureItems = List(5) { i ->
-        UpgradeMenuItem("feature_$i", "Feature ${i + 1}")
-    }
-    val upgradeItems = List(10) { i ->
-        UpgradeMenuItem("upgrade_$i", "Upgrade ${i + 1}")
-    }
+    private val featureItems: List<UpgradeMenuItem.FeatureItem> =
+        AttackConfig.ALL_FEATURES.map { UpgradeMenuItem.FeatureItem(it) }
+
+    private val boostItems: List<UpgradeMenuItem.BoostItem> =
+        UpgradeBoostDef.entries.map { UpgradeMenuItem.BoostItem(it) }
 
     private val contentPanel = JPanel(BorderLayout()).apply {
         isOpaque = false
-        // Placeholder; you’ll replace this later with real content.
-        add(JLabel("Select an item on the left").apply {
-            horizontalAlignment = SwingConstants.CENTER
-        }, BorderLayout.CENTER)
+        add(
+            JLabel("Select an item on the left").apply {
+                font = Fonts.pixelFont.deriveFont(Font.BOLD, 20f)
+                horizontalAlignment = SwingConstants.CENTER
+            },
+            BorderLayout.CENTER
+        )
     }
 
     init {
@@ -46,8 +50,8 @@ class UpgradeAtlasPanel() : JPanel(BorderLayout()) {
         menuPanel.add(Box.createVerticalStrut(12))
 
         menuPanel.add(groupHeader("Boosts"))
-        upgradeItems.forEachIndexed { i, item ->
-            menuPanel.add(createMenuButton(item, i))
+        boostItems.forEachIndexed { i, item ->
+            menuPanel.add(createMenuButton(item, featureItems.size + i))
         }
 
         val menuScroll = JBScrollPane(menuPanel).apply {
@@ -77,33 +81,43 @@ class UpgradeAtlasPanel() : JPanel(BorderLayout()) {
         }
 
     private fun createMenuButton(item: UpgradeMenuItem, index: Int): JComponent {
-        val color = when(index % 3) {
+        val color = when (index % 3) {
             0 -> GameColors.jbBlueLight
             1 -> GameColors.jbOrangeLight
             else -> GameColors.jbRedLight
         }
+
+        val text = when (item) {
+            is UpgradeMenuItem.FeatureItem -> item.feature.title
+            is UpgradeMenuItem.BoostItem -> item.boost.title
+        }
+
         return StartButton(
             backgroundColor = color,
             hoverColor = GameColors.jbGreen,
             textColor = GameColors.white,
-            text = item.title,
+            text = text,
         ).apply {
             alignmentX = CENTER_ALIGNMENT
             isFocusPainted = false
             maximumSize = Dimension(Int.MAX_VALUE, 40)
-            addActionListener {
-                showItemContent(item)
-            }
+            addActionListener { showItemContent(item) }
         }
     }
 
     private fun showItemContent(item: UpgradeMenuItem) {
         contentPanel.removeAll()
-        // Placeholder content – you’ll replace this later.
-        val label = JLabel("<html><h3>${item.title}</h3><p>Content coming soon...</p></html>").apply {
-            border = BorderFactory.createEmptyBorder(16, 16, 16, 16)
+
+        when (item) {
+            is UpgradeMenuItem.FeatureItem -> {
+                contentPanel.add(FeatureDetailPanel(item.feature), BorderLayout.CENTER)
+            }
+
+            is UpgradeMenuItem.BoostItem -> {
+                contentPanel.add(BoostDetailPanel(item.boost), BorderLayout.CENTER)
+            }
         }
-        contentPanel.add(label, BorderLayout.CENTER)
+
         contentPanel.revalidate()
         contentPanel.repaint()
     }

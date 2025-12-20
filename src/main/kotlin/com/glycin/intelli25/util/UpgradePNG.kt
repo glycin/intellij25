@@ -18,7 +18,7 @@ object UpgradePNG {
     }
 
     val duck : BufferedImage? by lazy {
-        getPng("$BASE_PATH/rubberDuck.png",UpgradePNG::class.java)
+        getPng("$BASE_PATH/rubber_duck.png",UpgradePNG::class.java)
     }
 
     val leaf : BufferedImage? by lazy {
@@ -75,5 +75,89 @@ object UpgradePNG {
 
     val push : BufferedImage? by lazy {
         getPng("$BASE_PATH/push.png",UpgradePNG::class.java)
+    }
+
+    val aiChat: BufferedImage? by lazy {
+        getPng("$BASE_PATH/ai_chat.png", UpgradePNG::class.java)
+    }
+
+    val commandCompletion: BufferedImage? by lazy {
+        getPng("$BASE_PATH/command_completion.png", UpgradePNG::class.java)
+    }
+
+    val communityEdition: BufferedImage? by lazy {
+        getPng("$BASE_PATH/community_edition.png", UpgradePNG::class.java)
+    }
+
+    val customThemes: BufferedImage? by lazy {
+        getPng("$BASE_PATH/custom_themes.png", UpgradePNG::class.java)
+    }
+
+    val cvs: BufferedImage? by lazy {
+        getPng("$BASE_PATH/cvs.png", UpgradePNG::class.java)
+    }
+
+    val darkTheme: BufferedImage? by lazy {
+        getPng("$BASE_PATH/dark_theme.png", UpgradePNG::class.java)
+    }
+
+    val docker: BufferedImage? by lazy {
+        getPng("$BASE_PATH/docker.png", UpgradePNG::class.java)
+    }
+
+    val gradle: BufferedImage? by lazy {
+        getPng("$BASE_PATH/gradle.png", UpgradePNG::class.java)
+    }
+
+    val htmlCss: BufferedImage? by lazy {
+        getPng("$BASE_PATH/html_css.png", UpgradePNG::class.java)
+    }
+
+    val junit: BufferedImage? by lazy {
+        getPng("$BASE_PATH/junit.png", UpgradePNG::class.java)
+    }
+
+    val k2: BufferedImage? by lazy {
+        getPng("$BASE_PATH/k2.png", UpgradePNG::class.java)
+    }
+
+    val kotlinNotebook: BufferedImage? by lazy {
+        getPng("$BASE_PATH/kotlin_notebook.png", UpgradePNG::class.java)
+    }
+
+    val kubernetes: BufferedImage? by lazy {
+        getPng("$BASE_PATH/kubernetes.png", UpgradePNG::class.java)
+    }
+
+    val maven3: BufferedImage? by lazy {
+        getPng("$BASE_PATH/maven_3.png", UpgradePNG::class.java)
+    }
+
+    val monotype: BufferedImage? by lazy {
+        getPng("$BASE_PATH/monotype.png", UpgradePNG::class.java)
+    }
+
+    val refactorings: BufferedImage? by lazy {
+        getPng("$BASE_PATH/refactorings.png", UpgradePNG::class.java)
+    }
+
+    val searchAnywhere: BufferedImage? by lazy {
+        getPng("$BASE_PATH/search_anywhere.png", UpgradePNG::class.java)
+    }
+
+    val sqlSupport: BufferedImage? by lazy {
+        getPng("$BASE_PATH/sql_support.png", UpgradePNG::class.java)
+    }
+
+    val subversion: BufferedImage? by lazy {
+        getPng("$BASE_PATH/subversion.png", UpgradePNG::class.java)
+    }
+
+    val terminal : BufferedImage? by lazy {
+        getPng("$BASE_PATH/terminal.png", UpgradePNG::class.java)
+    }
+
+    val springDebugger: BufferedImage? by lazy {
+        getPng("$BASE_PATH/spring_debugger.png", UpgradePNG::class.java)
     }
 }

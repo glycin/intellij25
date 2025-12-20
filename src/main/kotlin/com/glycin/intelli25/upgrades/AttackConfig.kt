@@ -8,7 +8,7 @@ object AttackConfig {
     val AI_FEATURE = AttackDef(
         title = "Artificial Intelligence",
         description = "Unlocks the power of AI, the latest transformative innovation in tech.",
-        effect = "New weapon that adds a drone that flies around and protects Runzo.",
+        effect = "Weapon that adds a drone that flies around and protects Runzo.",
         unlockedByDefault = false,
         image = UpgradePNG.junie,
         boosts = listOf(
@@ -16,7 +16,7 @@ object AttackConfig {
                 title = "AI Chat",
                 description = "",
                 effect = "Increase rotating speed of the AI assistant",
-                image = UpgradePNG.junie,
+                image = UpgradePNG.aiChat,
             ),
             AttackUpgradeDef(
                 title = "Junie",
@@ -25,10 +25,10 @@ object AttackConfig {
                 image = UpgradePNG.junie,
             ),
             AttackUpgradeDef(
-                title = "K2 Mode",
-                description = "IntelliJ added support for the K2 compiler",
+                title = "Full line autocomplete",
+                description = "IntelliJ added blazing fast full line autocomplete",
                 effect = "Add an additional AI assistant and increase rotation speed of the drones",
-                image = UpgradePNG.junie,
+                image = UpgradePNG.profiler,
             ),
         ),
     )
@@ -36,7 +36,7 @@ object AttackConfig {
     val STYLE_FEATURE = AttackDef(
         title = "Impeccable style",
         description = "Serving developers with style",
-        effect = "New weapon that fires a projectile to the closest enemy",
+        effect = "Weapon that fires a projectile to the closest enemy",
         unlockedByDefault = false,
         image = UpgradePNG.style,
         boosts = listOf(
@@ -44,25 +44,25 @@ object AttackConfig {
                 title = "Dark theme",
                 description = "IntelliJ added a dark theme",
                 effect = "Decreases weapon cooldown",
-                image = UpgradePNG.style,
+                image = UpgradePNG.darkTheme,
             ),
             AttackUpgradeDef(
                 title = "Jetbrains Monotype",
                 description = "IntelliJ added the jb monotype",
                 effect = "Adds an extra projectile",
-                image = UpgradePNG.style,
+                image = UpgradePNG.monotype,
             ),
             AttackUpgradeDef(
                 title = "New UI",
                 description = "IntelliJ got a redesign",
                 effect = "Further decreases cooldown",
-                image = UpgradePNG.style,
+                image = UpgradePNG.communityEdition,
             ),
             AttackUpgradeDef(
                 title = "Custom themes",
                 description = "Intellij added custom theme support!",
                 effect = "Further decreases cooldown and adds two additional projectiles",
-                image = UpgradePNG.style,
+                image = UpgradePNG.customThemes,
             ),
         ),
     )
@@ -70,7 +70,7 @@ object AttackConfig {
     val BUILD_TOOLS_FEATURE = AttackDef(
         title = "Build & Deployment tools",
         description = "Unlocks the power of build and deployment tools, which are essential to every developer nowadays",
-        effect = "New weapon that spawns toxic pools around Runzo that hurt enemies",
+        effect = "Weapon that spawns toxic pools around Runzo that hurt enemies",
         unlockedByDefault = false,
         image = UpgradePNG.buildTools,
         boosts = listOf(
@@ -78,25 +78,25 @@ object AttackConfig {
                 title = "Maven 3 Integration",
                 description = "Maven 3 Integration was added",
                 effect = "Increase spawn rate of the pools.",
-                image = UpgradePNG.buildTools,
+                image = UpgradePNG.maven3,
             ),
             AttackUpgradeDef(
                 title = "Gradle Support",
                 description = "IntelliJ added gradle support",
                 effect = "Increase size of the spawned pools",
-                image = UpgradePNG.buildTools,
+                image = UpgradePNG.gradle,
             ),
             AttackUpgradeDef(
                 title = "Docker Support",
                 description = "IntelliJ added docker support",
                 effect = "Further increase pool spawn rate",
-                image = UpgradePNG.buildTools,
+                image = UpgradePNG.docker,
             ),
             AttackUpgradeDef(
                 title = "Kubernetes support",
                 description = "Added k8s support!",
                 effect = "Further increase pool size",
-                image = UpgradePNG.buildTools,
+                image = UpgradePNG.kubernetes,
             ),
         ),
     )
@@ -104,7 +104,7 @@ object AttackConfig {
     val KOTLIN_FEATURE = AttackDef(
         title = "Kotlin",
         description = "Unlocks the power of Kotlin, the JVM language made by JetBrains.",
-        effect = "New weapon that randomly strikes enemies for heavy damage",
+        effect = "Weapon that randomly strikes enemies for heavy damage",
         unlockedByDefault = false,
         image = UpgradePNG.kotlin,
         boosts = listOf(
@@ -118,27 +118,27 @@ object AttackConfig {
                 title = "Kotlin multi-platform",
                 description = "IntelliJ added support for KMP",
                 effect = "Increases lighting strike impact radius",
-                image = UpgradePNG.kotlin,
+                image = UpgradePNG.buildTools,
             ),
             AttackUpgradeDef(
                 title = "K2 Mode",
                 description = "IntelliJ added support for the K2 compiler",
                 effect = "Decreases lightning strike cooldown even further",
-                image = UpgradePNG.kotlin,
+                image = UpgradePNG.k2,
             ),
             AttackUpgradeDef(
                 title = "Kotlin notebooks",
                 description = "IntelliJ can create and run kotlin notebooks",
                 effect = "Decreases cooldown even further and increases impact radius",
-                image = UpgradePNG.kotlin,
+                image = UpgradePNG.kotlinNotebook,
             ),
         ),
     )
 
     val VERSIONING_FEATURE = AttackDef(
         title = "Version control",
-        description = "New weapon that occasionally freezes all enemies in place",
-        effect = "New weapon that occasionally freezes all enemies in place",
+        description = "Weapon that occasionally freezes all enemies in place",
+        effect = "Weapon that occasionally freezes all enemies in place",
         unlockedByDefault = false,
         image = UpgradePNG.git,
         boosts = listOf(
@@ -146,13 +146,13 @@ object AttackConfig {
                 title = "CVS & VSS",
                 description = "IntelliJ added CVS and VSS support",
                 effect = "Increases the time enemies stay frozen",
-                image = UpgradePNG.git,
+                image = UpgradePNG.cvs,
             ),
             AttackUpgradeDef(
                 title = "Subversion",
                 description = "IntelliJ added Subversion support",
                 effect = "Increases how often this weapon activates",
-                image = UpgradePNG.git,
+                image = UpgradePNG.subversion,
             ),
             AttackUpgradeDef(
                 title = "Git",
@@ -165,8 +165,8 @@ object AttackConfig {
 
     val PRODUCTIVITY_FEATURE = AttackDef(
         title = "Productivity",
-        description = "This is already unlocked",
-        effect = "This is already unlocked",
+        description = "Your companion for maximum productivity",
+        effect = "Shoots two projectiles to the left and right of Runzo.",
         unlockedByDefault = true,
         image = UpgradePNG.laptop,
         boosts = listOf(
@@ -174,49 +174,49 @@ object AttackConfig {
                 title = "HTML & CSS Support",
                 description = "IntelliJ added html and css support",
                 effect = "Increase firing speed of projectiles",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.junit,
             ),
             AttackUpgradeDef(
                 title = "SQL Support",
                 description = "IntelliJ added SQL support",
                 effect = "Adds two additional projectile lines",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.sqlSupport,
             ),
             AttackUpgradeDef(
                 title = "Search Everywhere",
                 description = "IntelliJ added the search everywhere feature",
                 effect = "Further increases firing speed of projectiles",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.searchAnywhere,
             ),
             AttackUpgradeDef(
                 title = "Embedded terminal",
                 description = "Added an embedded terminal!",
                 effect = "Adds two additional projectile lines",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.terminal,
             ),
             AttackUpgradeDef(
                 title = "Debugger",
                 description = "Added an embedded debugger!",
                 effect = "Increase firing speed of projectiles",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.duck,
             ),
             AttackUpgradeDef(
                 title = "Decompiler",
                 description = "Added a decompiler for fast peeking!",
                 effect = "Fire additional projectile lines",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.buildTools,
             ),
             AttackUpgradeDef(
                 title = "JDK in the IDE",
                 description = "Now you can choose your JDK in the IDE!",
                 effect = "Increase firing speed to the max!",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.duke,
             ),
             AttackUpgradeDef(
                 title = "Command completion",
                 description = "Added the command completion feature!",
                 effect = "Maximum productivity! Projectiles no longer disappear after hitting an enemy",
-                image = UpgradePNG.laptop,
+                image = UpgradePNG.commandCompletion,
             ),
         ),
     )
@@ -224,7 +224,7 @@ object AttackConfig {
     val ENTERPRISE_READY_FEATURE = AttackDef(
         title = "Enterprise Ready",
         description = "Unlocks the power of integrations for Enterprise grade production environments",
-        effect = "New weapon that adds a damaging area around Runzo.",
+        effect = "Weapon that adds a damaging area around Runzo.",
         unlockedByDefault = false,
         image = UpgradePNG.leaf,
         boosts = listOf(
@@ -232,13 +232,13 @@ object AttackConfig {
                 title = "JUnit Integration",
                 description = "IntelliJ added JUnit integration in IntelliJ",
                 effect = "Increase size of protective area",
-                image = UpgradePNG.leaf,
+                image = UpgradePNG.junit,
             ),
             AttackUpgradeDef(
                 title = "J2EE Support",
                 description = "IntelliJ added J2EE support",
                 effect = "Increase size of protective area",
-                image = UpgradePNG.leaf,
+                image = UpgradePNG.laptop,
             ),
             AttackUpgradeDef(
                 title = "Spring Framework",
@@ -256,13 +256,13 @@ object AttackConfig {
                 title = "Profiler",
                 description = "Added a built in profiler",
                 effect = "Increase size of protective area",
-                image = UpgradePNG.leaf,
+                image = UpgradePNG.profiler,
             ),
             AttackUpgradeDef(
                 title = "Spring debugger",
                 description = "Added a spring debugger!",
                 effect = "Increase size of protective area",
-                image = UpgradePNG.leaf,
+                image = UpgradePNG.springDebugger,
             ),
         ),
     )

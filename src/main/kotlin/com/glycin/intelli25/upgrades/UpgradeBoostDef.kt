@@ -37,7 +37,7 @@ enum class UpgradeBoostDef(
         title = "Auto Refactoring",
         description = "For when you don't want to do things yourself",
         effect = "Increases your damage",
-        image = UpgradePNG.duck,
+        image = UpgradePNG.refactorings,
     ),
     INTENTION_ACTIONS(
         title = "Intention Actions",

@@ -65,4 +65,8 @@ object PNG {
     val STORY_SCREEN_5 : BufferedImage? by lazy {
         getPng("/screens/story_screen_5.png", PNG::class.java)
     }
+
+    val ARROW : BufferedImage? by lazy {
+        getPng("/sprites/arrow.png", PNG::class.java)
+    }
 }
