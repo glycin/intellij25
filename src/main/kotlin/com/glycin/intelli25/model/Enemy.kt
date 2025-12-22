@@ -52,6 +52,7 @@ class Enemy(
             width = 32,
             height = 32,
             player = player,
+            xp = points,
         )
     }
 
@@ -94,7 +95,7 @@ class Enemy(
                 EnemyType.PHANTOM -> Enemy(
                     id = id,
                     position = position,
-                    points = 50,
+                    points = 40,
                     player = player,
                     damage = 2,
                     maxHp = 40,
@@ -116,18 +117,18 @@ class Enemy(
                 EnemyType.BEES -> Enemy(
                     id = id,
                     position = position,
-                    points = 30,
+                    points = 60,
                     player = player,
-                    damage = 3,
+                    damage = 1,
                     maxHp = 10,
-                    speed = 3f,
+                    speed = 2f,
                     image = EnemyPNG.bees,
                     ggState = ggState
                 )
                 EnemyType.VAMPIRE -> Enemy(
                     id = id,
                     position = position,
-                    points = 30,
+                    points = 100,
                     player = player,
                     damage = 20,
                     maxHp = 100,
