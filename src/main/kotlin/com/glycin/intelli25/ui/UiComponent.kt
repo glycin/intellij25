@@ -1,8 +1,11 @@
 package com.glycin.intelli25.ui
 
+import com.glycin.intelli25.model.Animation
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
+import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
+import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.observable.util.addComponent
@@ -13,9 +16,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Image
 import java.awt.Rectangle
 import javax.swing.JComponent
 import javax.swing.JPanel
+import kotlin.math.roundToInt
 
 class UiComponent(
     private val player: Player,
@@ -24,7 +31,10 @@ class UiComponent(
     private val onQuit: () -> Unit
 ): JComponent(), Disposable {
 
+    private val confetti = SpriteSheetImageLoader.loadSprites("/sprites/effects/confetti.png", 512, 512, 64)
+
     private var gameUiComponent: InGameComponent? = null
+    private val upgradeAnimations: MutableList<Animation> = mutableListOf()
 
     init {
         scope.launch(Dispatchers.Default) {
@@ -70,6 +80,19 @@ class UiComponent(
             }
         }
 
+        val animCount = 4
+        val segmentWidth = ggState.maxX / animCount
+        (0 until animCount).forEach { i ->
+            val centerX = (segmentWidth * i) + (segmentWidth / 2) - 256f
+            val animation = Animation(
+                position = Vec2(centerX, ggState.maxY - 256f),
+                sprites = confetti,
+                loop = false,
+                frameDelay = 1,
+            )
+            upgradeAnimations.add(animation)
+        }
+
         scope.launch(Dispatchers.EDT) { popup.showInCenterOf(parent) }
     }
 
@@ -113,7 +136,20 @@ class UiComponent(
         }
     }
 
+    override fun paintComponent(g: Graphics?) {
+        if(g is Graphics2D) {
+            if(upgradeAnimations.any { it.done }) {
+                upgradeAnimations.clear()
+            }
+            upgradeAnimations.forEach { anim ->
+                val sprite = anim.getCurrentSprite()
+                g.drawImage(sprite.getScaledInstance(512, 512, Image.SCALE_SMOOTH), anim.position.x.roundToInt(), anim.position.y.roundToInt(), this)
+                anim.doAnimation()
+            }
+        }
 
+        super.paintComponent(g)
+    }
     override fun dispose() {
         remove(gameUiComponent)
         revalidate()
