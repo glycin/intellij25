@@ -1,26 +1,27 @@
 package com.glycin.intelli25.ui.screens
+
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.upgrades.AttackConfig
 import com.glycin.intelli25.upgrades.AttackDef
 import com.glycin.intelli25.upgrades.UpgradeBoostDef
 import com.glycin.intelli25.util.GameColors
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBScrollPane
 import java.awt.*
 import javax.swing.*
 
-sealed class UpgradeMenuItem {
-    data class FeatureItem(val feature: AttackDef) : UpgradeMenuItem()
-    data class BoostItem(val boost: UpgradeBoostDef) : UpgradeMenuItem()
-}
-
 class UpgradeAtlasPanel : JPanel(BorderLayout()) {
 
-    private val featureItems: List<UpgradeMenuItem.FeatureItem> =
-        AttackConfig.ALL_FEATURES.map { UpgradeMenuItem.FeatureItem(it) }
+    private val childhoodItems : List<AttackDef> =
+        AttackConfig.ALL_FEATURES.filter { it.availableAtLevel == 1 }
 
-    private val boostItems: List<UpgradeMenuItem.BoostItem> =
-        UpgradeBoostDef.entries.map { UpgradeMenuItem.BoostItem(it) }
+    private val teenageItems : List<AttackDef> =
+        AttackConfig.ALL_FEATURES.filter { it.availableAtLevel <= 2 }
+
+    private val adultItems: List<AttackDef> = AttackConfig.ALL_FEATURES
+
+    private val boostItems: List<UpgradeBoostDef> = UpgradeBoostDef.entries
 
     private val contentPanel = JPanel(BorderLayout()).apply {
         isOpaque = false
@@ -43,16 +44,10 @@ class UpgradeAtlasPanel : JPanel(BorderLayout()) {
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
         }
 
-        menuPanel.add(groupHeader("Features"))
-        featureItems.forEachIndexed { i, item ->
-            menuPanel.add(createMenuButton(item, i))
-        }
-        menuPanel.add(Box.createVerticalStrut(12))
-
-        menuPanel.add(groupHeader("Boosts"))
-        boostItems.forEachIndexed { i, item ->
-            menuPanel.add(createMenuButton(item, featureItems.size + i))
-        }
+        menuPanel.add(createAttackDefMenuItem("2001 - 2009", GameColors.jbRedLight, childhoodItems, 1))
+        menuPanel.add(createAttackDefMenuItem("2010 - 2017", GameColors.jbBlueLight, teenageItems, 2))
+        menuPanel.add(createAttackDefMenuItem("2018 - 2026", GameColors.jbOrangeLight, adultItems, 3))
+        menuPanel.add(createBoostMenuItem(boostItems))
 
         val menuScroll = JBScrollPane(menuPanel).apply {
             preferredSize = Dimension(200, 400)
@@ -74,50 +69,44 @@ class UpgradeAtlasPanel : JPanel(BorderLayout()) {
         add(split, BorderLayout.CENTER)
     }
 
-    private fun groupHeader(text: String): JComponent =
-        JLabel(text).apply {
-            font = Fonts.pixelFont.deriveFont(Font.BOLD, 14f)
-            alignmentX = CENTER_ALIGNMENT
-        }
-
-    private fun createMenuButton(item: UpgradeMenuItem, index: Int): JComponent {
-        val color = when (index % 3) {
-            0 -> GameColors.jbBlueLight
-            1 -> GameColors.jbOrangeLight
-            else -> GameColors.jbRedLight
-        }
-
-        val text = when (item) {
-            is UpgradeMenuItem.FeatureItem -> item.feature.title
-            is UpgradeMenuItem.BoostItem -> item.boost.title
-        }
-
+    private fun createAttackDefMenuItem(title: String, color: JBColor, items: List<AttackDef>, level: Int): JComponent {
         return StartButton(
             backgroundColor = color,
             hoverColor = GameColors.jbGreen,
             textColor = GameColors.white,
-            text = text,
+            text = title,
         ).apply {
             alignmentX = CENTER_ALIGNMENT
             isFocusPainted = false
             maximumSize = Dimension(Int.MAX_VALUE, 40)
-            addActionListener { showItemContent(item) }
+            addActionListener { showAttackDefContent(items, level) }
         }
     }
 
-    private fun showItemContent(item: UpgradeMenuItem) {
-        contentPanel.removeAll()
-
-        when (item) {
-            is UpgradeMenuItem.FeatureItem -> {
-                contentPanel.add(FeatureDetailPanel(item.feature), BorderLayout.CENTER)
-            }
-
-            is UpgradeMenuItem.BoostItem -> {
-                contentPanel.add(BoostDetailPanel(item.boost), BorderLayout.CENTER)
-            }
+    private fun createBoostMenuItem(items: List<UpgradeBoostDef>): JComponent {
+        return StartButton(
+            backgroundColor = GameColors.jbRedLight,
+            hoverColor = GameColors.jbGreen,
+            textColor = GameColors.white,
+            text = "Universal Boosts",
+        ).apply {
+            alignmentX = CENTER_ALIGNMENT
+            isFocusPainted = false
+            maximumSize = Dimension(Int.MAX_VALUE, 40)
+            addActionListener { showBoostItemContent(items) }
         }
+    }
 
+    private fun showAttackDefContent(items: List<AttackDef>, level: Int) {
+        contentPanel.removeAll()
+        contentPanel.add(FeatureDetailPanel(items, level), BorderLayout.CENTER)
+        contentPanel.revalidate()
+        contentPanel.repaint()
+    }
+
+    private fun showBoostItemContent(items: List<UpgradeBoostDef>) {
+        contentPanel.removeAll()
+        contentPanel.add(BoostDetailPanel(items), BorderLayout.CENTER)
         contentPanel.revalidate()
         contentPanel.repaint()
     }

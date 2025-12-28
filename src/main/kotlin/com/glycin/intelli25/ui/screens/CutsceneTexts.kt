@@ -55,4 +55,12 @@ object CutsceneTexts {
         "Your code tells your story and I’m still here, ready to run it.",
         "Want to go on with the celebration? Meet me here!",
     )
+
+    val outro = listOf(
+        "In all these years, here is what I've learned:",
+        "Every time someone hits that Run button, it’s not just code that starts. It’s a spark, a bit of curiosity, a bit of “let’s see what happens.”",
+        "I’ve been clicked billions of times by millions of developers, and each click has launched an idea, a fix, a dream, or a late-night experiment.",
+        "Your code tells your story and I’m still here, ready to run it.",
+        "Want to go on with the celebration? Meet me here!",
+    )
 }

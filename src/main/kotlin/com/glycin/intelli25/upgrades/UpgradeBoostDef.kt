@@ -34,13 +34,13 @@ enum class UpgradeBoostDef(
         image = UpgradePNG.firewall,
     ),
     AUTO_REFACTORING(
-        title = "Auto Refactoring",
+        title = "Refactorings",
         description = "For when you don't want to do things yourself",
         effect = "Increases your damage",
         image = UpgradePNG.refactorings,
     ),
     INTENTION_ACTIONS(
-        title = "Intention Actions",
+        title = "ALT + ENTER",
         description = "For when your intentions are clear",
         effect = "Decrease the amount of enemies spawned",
         image = UpgradePNG.intentions,

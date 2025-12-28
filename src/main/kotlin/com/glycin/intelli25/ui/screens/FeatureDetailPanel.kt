@@ -4,16 +4,14 @@ import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.upgrades.AttackDef
 import com.glycin.intelli25.upgrades.AttackUpgradeDef
 import com.glycin.intelli25.util.GameColors
-import com.glycin.intelli25.util.PNG
 import com.intellij.ui.components.JBScrollPane
 import java.awt.*
 import javax.swing.*
 
 class FeatureDetailPanel(
-    private val feature: AttackDef,
+    private val features: List<AttackDef>,
+    private val level: Int,
 ) : JPanel(BorderLayout()) {
-
-    private val scaledArrow = PNG.ARROW?.getScaledInstance(32, 32, Image.SCALE_SMOOTH)
 
     init {
         isOpaque = false
@@ -24,17 +22,25 @@ class FeatureDetailPanel(
             border = BorderFactory.createEmptyBorder(16, 16, 16, 16)
         }
 
-        inner.add(buildHeaderPanel())
-        inner.add(Box.createVerticalStrut(20))
-        inner.add(buildArrowPanel())
-        inner.add(Box.createVerticalStrut(12))
-        feature.boosts.forEachIndexed { index, boost ->
-            inner.add(buildBoostCard(boost))
-            if (index < feature.boosts.lastIndex) {
-                inner.add(Box.createVerticalStrut(12))
-                inner.add(buildArrowPanel())
-                inner.add(Box.createVerticalStrut(12))
+        features.forEachIndexed { fIndex, feature ->
+            //inner.add(buildFeatureInfo(feature))
+            //inner.add(Box.createVerticalStrut(12)) //TODO: Do we want the header here?
+
+            feature.boosts.filter { it.availableAtLevel == level}.forEachIndexed { bIndex, boost ->
+                inner.add(buildBoostCard(boost))
+                if (bIndex < feature.boosts.lastIndex) {
+                    inner.add(Box.createVerticalStrut(25))
+                }
             }
+
+            /*if (fIndex < features.lastIndex) {
+                inner.add(Box.createVerticalStrut(32))
+                inner.add(JSeparator(JSeparator.HORIZONTAL).apply {
+                    maximumSize = Dimension(Int.MAX_VALUE, 1)
+                    foreground = GameColors.white
+                })
+                inner.add(Box.createVerticalStrut(32))
+            }*/ //TODO: No separator needed if we dont group by headers
         }
 
         val scrollPane = JBScrollPane(inner).apply {
@@ -42,12 +48,13 @@ class FeatureDetailPanel(
             viewport.background = GameColors.black
             horizontalScrollBarPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
             verticalScrollBarPolicy = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+            viewport.isOpaque = true
         }
 
         add(scrollPane, BorderLayout.CENTER)
     }
 
-    private fun buildHeaderPanel(): JComponent {
+    private fun buildFeatureInfo(feature: AttackDef): JComponent {
         val panel = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
@@ -55,36 +62,31 @@ class FeatureDetailPanel(
         }
 
         feature.image?.let { img ->
-            val iconLabel = JLabel(ImageIcon(img.getScaledInstance(128, 128, Image.SCALE_SMOOTH))).apply {
+            val iconLabel = JLabel(ImageIcon(img.getScaledInstance(96, 96, Image.SCALE_SMOOTH))).apply {
                 alignmentX = CENTER_ALIGNMENT
-                border = BorderFactory.createEmptyBorder(0, 0, 12, 0)
+                border = BorderFactory.createEmptyBorder(0, 0, 8, 0)
             }
             panel.add(iconLabel)
         }
 
-        val titleLabel = JLabel(feature.title).apply {
+        panel.add(JLabel(feature.title).apply {
             alignmentX = CENTER_ALIGNMENT
             font = Fonts.pixelFont.deriveFont(Font.BOLD, 18f)
             foreground = GameColors.white
-            border = BorderFactory.createEmptyBorder(0, 0, 6, 0)
-        }
+        })
 
-        val descriptionLabel = JLabel(feature.description).apply {
+        panel.add(JLabel(feature.description).apply {
             alignmentX = CENTER_ALIGNMENT
             font = Fonts.pixelFont.deriveFont(Font.PLAIN, 14f)
             foreground = GameColors.white
-            border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
-        }
+            border = BorderFactory.createEmptyBorder(4, 0, 4, 0)
+        })
 
-        val effectLabel = JLabel(feature.effect).apply {
+        panel.add(JLabel(feature.effect).apply {
             alignmentX = CENTER_ALIGNMENT
             font = Fonts.pixelFont.deriveFont(Font.PLAIN, 14f)
             foreground = GameColors.jbGreen
-        }
-
-        panel.add(titleLabel)
-        panel.add(descriptionLabel)
-        panel.add(effectLabel)
+        })
 
         return panel
     }
@@ -98,54 +100,24 @@ class FeatureDetailPanel(
         }
 
         boost.image?.let { img ->
-            val iconLabel = JLabel(ImageIcon(img.getScaledInstance(64, 64, Image.SCALE_SMOOTH))).apply {
+            card.add(JLabel(ImageIcon(img.getScaledInstance(48, 48, Image.SCALE_SMOOTH))).apply {
                 alignmentX = CENTER_ALIGNMENT
                 border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
-            }
-            card.add(iconLabel)
+            })
         }
 
-        val titleLabel = JLabel(boost.title).apply {
+        card.add(JLabel(boost.title).apply {
             alignmentX = CENTER_ALIGNMENT
             font = Fonts.pixelFont.deriveFont(Font.BOLD, 14f)
             foreground = GameColors.white
-            border = BorderFactory.createEmptyBorder(0, 0, 2, 0)
-        }
+        })
 
-        val descriptionLabel = JLabel(boost.description).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.PLAIN, 12f)
-            foreground = GameColors.white
-            border = BorderFactory.createEmptyBorder(0, 0, 2, 0)
-        }
-
-        val effectLabel = JLabel(boost.effect).apply {
+        card.add(JLabel(boost.effect).apply {
             alignmentX = CENTER_ALIGNMENT
             font = Fonts.pixelFont.deriveFont(Font.PLAIN, 12f)
             foreground = GameColors.jbGreen
-        }
-
-        card.add(titleLabel)
-        card.add(descriptionLabel)
-        card.add(effectLabel)
+        })
 
         return card
-    }
-
-    private fun buildArrowPanel(): JComponent {
-        return JPanel().apply {
-            isOpaque = false
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            alignmentX = CENTER_ALIGNMENT
-            preferredSize = Dimension(0, 40)
-
-            val label = JLabel(ImageIcon(scaledArrow)).apply {
-                alignmentX = CENTER_ALIGNMENT
-            }
-
-            add(Box.createVerticalGlue())
-            add(label)
-            add(Box.createVerticalGlue())
-        }
     }
 }
