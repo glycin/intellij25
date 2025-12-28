@@ -4,6 +4,7 @@ import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.Pickup
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.TreasureChest
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.persistence.GameSaveState
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.random.Random
 
 class EnemyManager(
     private val ggState: GameGlobalState,
@@ -25,7 +27,9 @@ class EnemyManager(
 ) {
     private var enemyMap = concurrentMapOf<Int, Enemy>()
     private var pickupsMap = concurrentMapOf<Int, Pickup>()
+    private var treasureMap = concurrentMapOf<Int, TreasureChest>()
     private var idCounter = 0
+    private var chestCounter = 0
     private val elapsedTimeMs = AtomicLong(0L)
 
     init {
@@ -44,7 +48,7 @@ class EnemyManager(
                 if (!ggState.inUpgradeMenu){
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
-                        val p = randomPointOnCircle(1000.0f, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
+                        val p = randomPointOnCircle((ggState.maxX / 2f) + 50, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
                         val type = Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random()
 
                         if(!seenEnemies.contains(type)) {
@@ -75,7 +79,7 @@ class EnemyManager(
                         ggState.enemySpawnCooldown -= 100L
                     }
 
-                    if(elapsedSeconds > 0 && elapsedSeconds % 120 == 0L){
+                    if(elapsedSeconds > 0 && elapsedSeconds % 90 == 0L){
                         println("Increasing enemy tier!")
                         ggState.enemyTier++
                     }
@@ -88,7 +92,15 @@ class EnemyManager(
     fun damage(enemy: Enemy, damage: Int) {
         enemy.currentHp -= damage
         if(enemy.currentHp <= 0){
-            pickupsMap[enemy.id] = enemy.getPickup()
+            if(Random.nextInt(100) <= enemy.chestDropChance) {
+                chestCounter++
+                treasureMap[chestCounter] = TreasureChest(
+                    id = chestCounter,
+                    position = enemy.position,
+                )
+            } else {
+                pickupsMap[enemy.id] = enemy.getPickup()
+            }
             ggState.score += enemy.points
             enemyMap.remove(enemy.id)
         }
@@ -98,9 +110,15 @@ class EnemyManager(
         pickupsMap.remove(pickup.id)
     }
 
+    fun removeChest(chest: TreasureChest) {
+        treasureMap.remove(chest.id)
+    }
+
     fun getEnemies() = enemyMap.values.toList()
 
     fun getPickups() = pickupsMap.values.toList()
+
+    fun getChests() = treasureMap.values.toList()
 
     fun drawEnemies(g: Graphics2D) {
         enemyMap.values.forEach {e -> e.draw(g) }
@@ -108,6 +126,7 @@ class EnemyManager(
 
     fun drawPickups(g: Graphics2D) {
         pickupsMap.values.forEach {e -> e.draw(g) }
+        treasureMap.values.forEach {e -> e.draw(g) }
     }
 
     fun getClosestEnemies(count: Int, playerPosition: Vec2): List<Enemy> {

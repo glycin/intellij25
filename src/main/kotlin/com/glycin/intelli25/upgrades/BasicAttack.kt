@@ -158,7 +158,7 @@ class BasicAttack(
                             addBullet(player.midPoint(), Vec2.left)
                             addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
                         }
-                        7, 8 -> {
+                        7, 8, 9 -> {
                             addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
                             addBullet(player.midPoint(), Vec2.right)
                             addBullet(player.midPoint(), Vec2(1.0f, 1.0f))

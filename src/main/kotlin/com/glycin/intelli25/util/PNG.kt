@@ -69,4 +69,8 @@ object PNG {
     val ARROW : BufferedImage? by lazy {
         getPng("/sprites/arrow.png", PNG::class.java)
     }
+
+    val CHEST : BufferedImage? by lazy {
+        getPng("/sprites/treasure_chest.png", PNG::class.java)
+    }
 }

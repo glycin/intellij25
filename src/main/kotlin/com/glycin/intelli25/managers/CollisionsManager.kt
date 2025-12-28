@@ -53,6 +53,15 @@ class CollisionsManager(
                 enemyManager.removePickup(pickUp)
             }
         }
+
+        val chestsInRange = enemyManager.getChests().filter { c ->
+            Vec2.distance(c.midPoint(), player.midPoint()) <= player.pickUpRange
+        }
+
+        chestsInRange.forEach { chest ->
+            player.levelUp()
+            enemyManager.removeChest(chest)
+        }
     }
 
     fun checkAttackToEnemy() {

@@ -96,7 +96,7 @@ class Player(
         experience += xpCount
         if(experience >= experienceNeeded) {
             experience -= experienceNeeded
-            experienceNeeded *= 2 // TODO: Make the scaling better
+            experienceNeeded = (experienceNeeded * 1.7).roundToInt()
             ggState.inUpgradeMenu = true
             onLevelUp.invoke()
         }
@@ -114,6 +114,11 @@ class Player(
         if(state == PlayerState.HURT) {
             state = PlayerState.IDLE
         }
+    }
+
+    fun levelUp() {
+        ggState.inUpgradeMenu = true
+        onLevelUp()
     }
 
     fun maxHp() = baseMaxHp * ggState.healthMultiplier
