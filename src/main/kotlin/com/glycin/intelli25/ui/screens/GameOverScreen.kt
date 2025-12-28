@@ -1,5 +1,7 @@
 package com.glycin.intelli25.ui.screens
 
+import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
@@ -9,9 +11,11 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.GridBagLayout
+import java.awt.Image
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
+import javax.swing.ImageIcon
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.SwingConstants
@@ -19,6 +23,7 @@ import javax.swing.SwingConstants
 class GameOverScreen(
     val title: String,
     val survived: Boolean,
+    private val player: Player,
     private val ggState: GameGlobalState,
     private val subText: String,
 ): JPanel(){
@@ -40,26 +45,35 @@ class GameOverScreen(
         val centerPanel = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            border = BorderFactory.createEmptyBorder(120, 0, 0, 0)
         }
 
-        val scoreLabel = JLabel("Final Score: ${ggState.score}").apply {
+        val upgradesPanel = JPanel().apply {
+            isOpaque = false
+            layout = BoxLayout(this, BoxLayout.X_AXIS)
+            alignmentX = CENTER_ALIGNMENT
+        }
+        upgradesPanel.add(Box.createHorizontalGlue())
+        player.upgrades.forEach { (title, item) ->
+            upgradesPanel.add(createUpgradeSummaryLabel(title, item))
+        }
+        upgradesPanel.add(Box.createHorizontalGlue())
+        centerPanel.add(upgradesPanel)
+
+        centerPanel.add(Box.createVerticalStrut(20))
+        centerPanel.add(JLabel("Final Score: ${ggState.score}").apply {
             font = Fonts.pixelFont.deriveFont(20.0f)
-            background = GameColors.black
             foreground = GameColors.white
             alignmentX = CENTER_ALIGNMENT
-            border = BorderFactory.createEmptyBorder(10, 0, 10, 0)
-        }
-        centerPanel.add(scoreLabel)
+        })
 
         if (subText.isNotEmpty()) {
-            val wrapped = "<html><div style='text-align: center; width: 800px;'>$subText</div></html>"
+            centerPanel.add(Box.createVerticalStrut(15))
+            val wrapped = "<html><div style='text-align: center; width: 350px;'>$subText</div></html>"
             val subTextLabel = JLabel(wrapped).apply {
-                font = Fonts.pixelFont.deriveFont(18.0f)
+                font = Fonts.pixelFont.deriveFont(16.0f)
                 foreground = GameColors.red
                 alignmentX = CENTER_ALIGNMENT
-                border = BorderFactory.createEmptyBorder(10, 0, 10, 0)
-                preferredSize = Dimension(500, preferredSize.height)
+                preferredSize = Dimension(450, preferredSize.height)
             }
             centerPanel.add(subTextLabel)
         }
@@ -79,29 +93,35 @@ class GameOverScreen(
         if (g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
-            val image = if (survived) PNG.STORY_SCREEN_5 else PNG.STORY_SCREEN_2
-            image?.let { img ->
-                val imgWidth = img.width
-                val imgHeight = img.height
+        }
+    }
 
-                val x = (width - imgWidth) / 2
-                val y = height / 2 - imgHeight / 2
-                g.drawImage(image, x, y, imgWidth, imgWidth, null)
-            }
+    private fun createUpgradeSummaryLabel(title: String, item: UpgradeBackpackItem): JLabel {
+        return JLabel("x${item.count}").apply {
+            icon = item.image?.let { ImageIcon(it.getScaledInstance(40, 40, Image.SCALE_SMOOTH)) }
+            foreground = GameColors.white
+            font = Fonts.pixelFont.deriveFont(12f)
+            verticalTextPosition = SwingConstants.BOTTOM
+            horizontalTextPosition = SwingConstants.CENTER
+            iconTextGap = 2
+            border = BorderFactory.createEmptyBorder(0, 8, 0, 8)
+            toolTipText = title
         }
     }
 
     companion object {
-        fun getSurvivedScreen(ggState: GameGlobalState) = GameOverScreen(
+        fun getSurvivedScreen(ggState: GameGlobalState, player: Player) = GameOverScreen(
             title = "You Survived!",
             ggState = ggState,
+            player = player,
             subText = "",
             survived = true
         )
 
-        fun getGameOverScreen(ggState: GameGlobalState) = GameOverScreen(
+        fun getGameOverScreen(ggState: GameGlobalState, player: Player) = GameOverScreen(
             title = "Game Over",
             ggState = ggState,
+            player = player,
             subText = "Oh no, the bugs got you! Try again, and maybe some different upgrades fit your play style better?",
             survived = false
         )

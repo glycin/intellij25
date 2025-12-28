@@ -92,7 +92,7 @@ class EnemyManager(
     fun damage(enemy: Enemy, damage: Int) {
         enemy.currentHp -= damage
         if(enemy.currentHp <= 0){
-            if(Random.nextInt(100) <= enemy.chestDropChance) {
+            if(Random.nextDouble(100.0) <= enemy.chestDropChance) {
                 chestCounter++
                 treasureMap[chestCounter] = TreasureChest(
                     id = chestCounter,

@@ -3,6 +3,7 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.upgradeOption
 import com.glycin.intelli25.util.GameGlobalState
@@ -64,7 +65,7 @@ class UpgradeRepository(
         description = UpgradeBoostDef.COFFEE.description
         effect = UpgradeBoostDef.COFFEE.effect
         onSelect = {
-            ggState.speedMultiplier *= 1.5f
+            ggState.speedMultiplier = (ggState.speedMultiplier * 1.5f).coerceAtMost(20.0f)
             defaultLevelUp(title, upgradeIcon)
         }
     }
@@ -79,6 +80,7 @@ class UpgradeRepository(
         effect = UpgradeBoostDef.PERFORMANCE.effect
         onSelect = {
             ggState.healthMultiplier *= 2
+            player.currentHp = player.maxHp()
             defaultLevelUp(title, upgradeIcon)
         }
     }
@@ -223,7 +225,9 @@ class UpgradeRepository(
 
     private fun defaultLevelUp(title: String, inventoryIcon: BufferedImage?) {
         player.level++
-        player.upgrades.putIfAbsent(title, inventoryIcon)
+        player.upgrades.merge(title, UpgradeBackpackItem(inventoryIcon, 1)) { old, _ ->
+            old.copy(count = old.count + 1)
+        }
         ggState.inUpgradeMenu = false
     }
 }

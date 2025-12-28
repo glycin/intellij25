@@ -85,13 +85,16 @@ class InGameComponent(
         val itemWidth = 25
         val itemHeight = 25
 
-        player.upgrades.values.forEachIndexed { i, icon ->
+        player.upgrades.values.forEachIndexed { i, item ->
             val x = startX + (i * (itemWidth + 10))
             g.color = GameColors.black
             g.fillRect(x - 2, startY - 2, itemWidth + 5, itemHeight + 5)
             g.color = GameColors.jbOrange
             g.drawRect(x - 2, startY - 2, itemWidth + 5, itemHeight + 5)
-            g.drawImage(icon, x, startY, itemWidth, itemHeight, null)
+            g.drawImage(item.image, x, startY, itemWidth, itemHeight, null)
+            g.font = scoreFont
+            g.color = GameColors.white
+            g.drawString("x${item.count}", x, startY + itemHeight + 25)
         }
     }
 }

@@ -7,6 +7,7 @@ import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.GameStartupSettings
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.persistence.GameSaveState
@@ -52,6 +53,7 @@ class Game(
     private var dialogueScreenWrapper: DialogueScreenWrapper? = null
     private var mouseWheelBlocker: MouseWheelListener? = null //TODO: Workaround until I find a good way to pin the UI as the user scrolls around
 
+    private lateinit var player: Player
     private lateinit var ggState: GameGlobalState
     private lateinit var upgradeRepository: UpgradeRepository
     private lateinit var attackManager: AttackManager
@@ -78,7 +80,7 @@ class Game(
                 chosenGameLevel = gameStartupSettings.chosenGameLevel,
             )
 
-            val player = Player(
+            player = Player(
                 position = Vec2((ggState.maxX / 2f) - 25, (ggState.maxY / 2f) + 25),
                 ggState = ggState,
                 width = 64,
@@ -90,7 +92,7 @@ class Game(
                     scope.launch(Dispatchers.EDT) {
                         stopGame()
                         GameOverScreenWrapper(
-                            screen = GameOverScreen.getGameOverScreen(ggState),
+                            screen = GameOverScreen.getGameOverScreen(ggState, player),
                             toolWindow = toolWindow,
                             project = project,
                         ).show()
@@ -105,7 +107,7 @@ class Game(
             attackManager = AttackManager(ggState, scope).also {
                 val basicAttack = BasicAttack(ggState, player, scope).apply { activate() }
                 it.addAttack(basicAttack)
-                player.upgrades[basicAttack.title] = basicAttack.attackIcon
+                player.upgrades[basicAttack.title] = UpgradeBackpackItem(basicAttack.attackIcon, 1)
             }
 
             val saveState = service<GameSaveState>()
@@ -292,7 +294,7 @@ class Game(
 
     private fun showGameSurvivedScreen() {
         GameOverScreenWrapper(
-            screen = GameOverScreen.getSurvivedScreen(ggState),
+            screen = GameOverScreen.getSurvivedScreen(ggState, player),
             toolWindow = toolWindow,
             project = project,
         ).show()

@@ -4,7 +4,6 @@ import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.util.EnemyPNG
 import com.glycin.intelli25.util.GameGlobalState
 import java.awt.Graphics2D
-import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
 
@@ -16,7 +15,7 @@ class Enemy(
     val maxHp: Int = 20,
     var width: Int = 50,
     var height: Int = 50,
-    val chestDropChance: Int = 10,//%
+    val chestDropChance: Double = 0.0,//%
     private val speed: Float = 1f,
     private val image: BufferedImage?,
     private var player: Player,
@@ -69,7 +68,7 @@ class Enemy(
                     maxHp = 10,
                     speed = 0.7f,
                     image = EnemyPNG.bug,
-                    chestDropChance = 5,
+                    chestDropChance = 0.3,
                     ggState = ggState
                 )
                 EnemyType.BLOCKER -> Enemy(
@@ -81,7 +80,7 @@ class Enemy(
                     maxHp = 20,
                     speed = 0.8f,
                     image = EnemyPNG.blocker,
-                    chestDropChance = 10,
+                    chestDropChance = 0.5,
                     ggState = ggState
                 )
                 EnemyType.BURNING_CALENDAR -> Enemy(
@@ -93,7 +92,7 @@ class Enemy(
                     maxHp = 30,
                     speed = 1f,
                     image = EnemyPNG.calendar,
-                    chestDropChance = 15,
+                    chestDropChance = 1.5,
                     ggState = ggState
                 )
                 EnemyType.PHANTOM -> Enemy(
@@ -105,7 +104,7 @@ class Enemy(
                     maxHp = 40,
                     speed = 1.2f,
                     image = EnemyPNG.phantom,
-                    chestDropChance = 15,
+                    chestDropChance = 2.0,
                     ggState = ggState
                 )
                 EnemyType.DEMON -> Enemy(
@@ -117,7 +116,7 @@ class Enemy(
                     maxHp = 50,
                     speed = 0.3f,
                     image = EnemyPNG.demon,
-                    chestDropChance = 20,
+                    chestDropChance = 2.5,
                     ggState = ggState
                 )
                 EnemyType.BEES -> Enemy(
@@ -129,7 +128,7 @@ class Enemy(
                     maxHp = 10,
                     speed = 2f,
                     image = EnemyPNG.bees,
-                    chestDropChance = 10,
+                    chestDropChance = 3.0,
                     ggState = ggState
                 )
                 EnemyType.VAMPIRE -> Enemy(
@@ -141,7 +140,7 @@ class Enemy(
                     maxHp = 100,
                     speed = 1f,
                     image = EnemyPNG.vampire,
-                    chestDropChance = 25,
+                    chestDropChance = 5.0,
                     ggState = ggState
                 )
             }

@@ -1,6 +1,7 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
@@ -27,6 +28,9 @@ abstract class Attack(
 
     fun generalLevelUp() {
         player.level++
+        player.upgrades.merge(title, UpgradeBackpackItem(attackIcon, 1)) { old, _ ->
+            old.copy(count = old.count + 1)
+        }
         currentLevel++
         ggState.inUpgradeMenu = false
     }

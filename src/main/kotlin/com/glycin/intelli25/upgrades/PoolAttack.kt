@@ -21,7 +21,7 @@ class PoolAttack(
 
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()
-    private var size = 60
+    private var size = 100
     private var spawnCooldown = 10000L
     private val baseDamage = 1
 
@@ -46,7 +46,7 @@ class PoolAttack(
         description = boost.description
         effect = boost.effect
         onSelect = {
-            size = 80
+            size = 150
             generalLevelUp()
         }
     }
@@ -72,7 +72,7 @@ class PoolAttack(
         description = boost.description
         effect = boost.effect
         onSelect = {
-            size = 120
+            size = 200
             generalLevelUp()
         }
     }

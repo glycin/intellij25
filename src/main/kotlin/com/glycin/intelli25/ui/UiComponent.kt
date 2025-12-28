@@ -100,6 +100,8 @@ class UiComponent(
             .setTitle("GAME PAUSED")
             .setMovable(true)
             .setRequestFocus(true)
+            .setCancelOnWindowDeactivation(false)
+            .setCancelOnOtherWindowOpen(false)
             .setCancelOnClickOutside(false)
             .setCancelKeyEnabled(false)
             .createPopup()

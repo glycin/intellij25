@@ -26,7 +26,7 @@ class Player(
         "RIGHT" to false,
     )
 
-    val upgrades = mutableMapOf<String, BufferedImage?>()
+    val upgrades = mutableMapOf<String, UpgradeBackpackItem>()
 
     private val baseMaxHp = 300
     var currentHp = baseMaxHp

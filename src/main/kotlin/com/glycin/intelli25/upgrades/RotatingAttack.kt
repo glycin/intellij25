@@ -18,7 +18,7 @@ class RotatingAttack(
     private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
     private val radius = 250f
     private val basicAttackDamage: Int = 20
-    private var speed =  0.005f
+    private var speed =  0.001f
     private val widthHeight = 64
     private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
     private var pointValues = mutableListOf(0.0f)
@@ -31,7 +31,7 @@ class RotatingAttack(
         description = boost.description
         effect = boost.effect
         onSelect = {
-            speed =  0.015f
+            speed =  0.005f
             generalLevelUp()
         }
     }
@@ -59,7 +59,7 @@ class RotatingAttack(
         description = boost.description
         effect = boost.effect
         onSelect = {
-            speed =  0.025f
+            speed =  0.01f
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 0.66f
             pointValues[1] = 1.33f

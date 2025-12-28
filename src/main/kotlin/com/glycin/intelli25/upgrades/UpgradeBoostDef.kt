@@ -24,7 +24,7 @@ enum class UpgradeBoostDef(
     PERFORMANCE(
         title = "Performance fix",
         description = "Code running so well!",
-        effect = "Increases your total health",
+        effect = "Increases your total health and heals Runzo",
         image = UpgradePNG.performance,
     ),
     FIREWALL(
