@@ -6,6 +6,7 @@ import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.observable.util.addComponent
+import com.intellij.openapi.ui.popup.JBPopup
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.util.ui.JBDimension
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,7 @@ class UiComponent(
     private val player: Player,
     private val ggState: GameGlobalState,
     private val scope: CoroutineScope,
+    private val onQuit: () -> Unit
 ): JComponent(), Disposable {
 
     private var gameUiComponent: InGameComponent? = null
@@ -58,7 +60,6 @@ class UiComponent(
             .setTitle("LEVEL UP!")
             .createPopup()
 
-        // Pass popup reference to cards so they can close it
         panel.components.forEach { comp ->
             if (comp is JPanel) {
                 comp.components.forEach { innerComp ->
@@ -77,5 +78,44 @@ class UiComponent(
         gameUiComponent?.bounds = newBounds
     }
 
-    override fun dispose() {}
+    fun showEscMenu() {
+        if (ggState.inUpgradeMenu) {
+            return
+        }
+
+        ggState.inUpgradeMenu = true
+
+        val menuPanel = EscMenuPanel(
+            onResume = {
+                ggState.inUpgradeMenu = false
+            },
+            onQuit = {
+                ggState.inUpgradeMenu = false
+                onQuit()
+            }
+        )
+
+        val popup = JBPopupFactory.getInstance()
+            .createComponentPopupBuilder(menuPanel, menuPanel)
+            .setTitle("GAME PAUSED")
+            .setMovable(true)
+            .setRequestFocus(true)
+            .setCancelOnClickOutside(false)
+            .setCancelKeyEnabled(false)
+            .createPopup()
+
+        menuPanel.setPopup(popup)
+
+        scope.launch(Dispatchers.EDT) {
+            popup.showInCenterOf(this@UiComponent)
+        }
+    }
+
+
+    override fun dispose() {
+        remove(gameUiComponent)
+        revalidate()
+        repaint()
+        gameUiComponent = null
+    }
 }

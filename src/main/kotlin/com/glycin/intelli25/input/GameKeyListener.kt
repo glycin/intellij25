@@ -1,11 +1,13 @@
 package com.glycin.intelli25.input
 
 import com.glycin.intelli25.model.Player
+import com.glycin.intelli25.ui.UiComponent
 import java.awt.KeyEventDispatcher
 import java.awt.event.KeyEvent
 
 class GameKeyListener(
     private val player: Player,
+    private val ui: UiComponent?,
 ): KeyEventDispatcher {
 
 
@@ -16,6 +18,9 @@ class GameKeyListener(
                 KeyEvent.VK_A -> player.keyMap["LEFT"] = true
                 KeyEvent.VK_S -> player.keyMap["DOWN"] = true
                 KeyEvent.VK_D -> player.keyMap["RIGHT"] = true
+                KeyEvent.VK_ESCAPE -> {
+                    ui?.showEscMenu()
+                }
             }
         }
 

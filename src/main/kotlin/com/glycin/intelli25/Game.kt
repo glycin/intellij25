@@ -98,10 +98,6 @@ class Game(
                 }
             )
 
-            keyListener = GameKeyListener(player).also {
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
-            }
-
             mouseWheelBlocker = MouseWheelListener { e -> e.consume() }.also {
                 editor.contentComponent.addMouseWheelListener(it)
             }
@@ -133,7 +129,14 @@ class Game(
                 gc.requestFocusInWindow()
             }
 
-            uiComponent = UiComponent(player, ggState, scope).also { uic ->
+            uiComponent = UiComponent(
+                player = player,
+                ggState = ggState,
+                scope = scope,
+                onQuit = {
+                    stopGame()
+                },
+            ).also { uic ->
                 uic.bounds = editor.contentComponent.bounds
                 uic.isOpaque = false
             }
@@ -161,6 +164,10 @@ class Game(
                 c.revalidate()
             }
 
+            keyListener = GameKeyListener(player, uiComponent).also {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
+            }
+
             uiComponent?.showGameUi()
         }
     }
@@ -170,6 +177,7 @@ class Game(
     }
 
     private fun stopGame() {
+        uiComponent?.dispose()
         editor.contentComponent.remove(uiComponent)
         editor.contentComponent.remove(gameComponent)
         editor.contentComponent.revalidate()
