@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.2.0"
 }
 
-val v = "9.00.1"
+val v = "0.9.0"
 group = "com.glycin"
 version = v
 
@@ -21,8 +21,8 @@ repositories {
 
 intellijPlatform  {
     pluginConfiguration {
-        id = "intellij25"
-        name = "IntelliJIDEA25"
+        id = "runzo"
+        name = "IDE Survivors"
         version = v
 
         ideaVersion {
