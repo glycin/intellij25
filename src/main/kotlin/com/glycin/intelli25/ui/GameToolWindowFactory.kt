@@ -26,6 +26,6 @@ class GameToolWindowFactory : ToolWindowFactory {
             toolWindow.contentManager.addContent(currentContent!!)
         }
 
-        gameScreenContainer?.showScreen(gameState.levelsBeaten)
+        gameScreenContainer?.showScreen()
     }
 }

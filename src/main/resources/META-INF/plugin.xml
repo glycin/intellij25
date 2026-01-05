@@ -29,6 +29,7 @@
                     anchor="right"
                     factoryClass="com.glycin.intelli25.ui.GameToolWindowFactory"
                     icon="/icon/runzo.svg"
+                    secondary="false"
                     canCloseContents="true"/>
     </extensions>
 </idea-plugin>

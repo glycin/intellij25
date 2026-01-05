@@ -198,7 +198,7 @@ class Game(
         stopGame()
         val saveState = service<GameSaveState>()
         saveState.levelsBeaten = 1
-        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+        toolWindowBaseComponent.showScreen()
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 2) {
                 val dialogueScreen = DialogueScreen(
@@ -228,7 +228,7 @@ class Game(
         stopGame()
         val saveState = service<GameSaveState>()
         saveState.levelsBeaten = 2
-        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+        toolWindowBaseComponent.showScreen()
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 3) {
                 val dialogueScreen = DialogueScreen(
@@ -258,7 +258,7 @@ class Game(
         stopGame()
         val saveState = service<GameSaveState>()
         saveState.levelsBeaten = 3
-        toolWindowBaseComponent.showScreen(saveState.levelsBeaten)
+        toolWindowBaseComponent.showScreen()
 
         scope.launch(Dispatchers.EDT) {
             if (saveState.dialoguesSeen < 4) {

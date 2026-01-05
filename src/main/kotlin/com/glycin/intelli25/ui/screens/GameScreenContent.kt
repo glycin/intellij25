@@ -15,12 +15,14 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTabbedPane
 import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.FlowLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.awt.GridBagLayout
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
+import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -28,90 +30,118 @@ import javax.swing.SwingConstants
 
 class GameScreenContent(
     private val project: Project,
-    private val onStart: () -> Unit,
     private val toolWindow: ToolWindow,
-    startButtonText: String,
+    private val onStartOne: () -> Unit,
+    private val onStartTwo: () -> Unit,
+    private val onStartThree: () -> Unit,
+    private val saveState: GameSaveState,
 ): JPanel() {
+
+    private val level1Btn: StartButton
+    private val level2Btn: StartButton
+    private val level3Btn: StartButton
 
     init {
         isOpaque = false
         layout = BorderLayout()
 
         val titleLabel = JLabel("IDE Survivors").apply {
-            font = Fonts.pixelFont.deriveFont(24.0f)
+            font = Fonts.pixelFont.deriveFont(32.0f)
             foreground = GameColors.white
             horizontalAlignment = SwingConstants.CENTER
-            border = BorderFactory.createEmptyBorder(20, 0, 20, 0)
+            border = BorderFactory.createEmptyBorder(30, 0, 0, 0)
         }
         add(titleLabel, BorderLayout.NORTH)
 
-        val buttonColumn = JPanel().apply {
+        val mainContent = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
+
+            add(Box.createVerticalStrut(380))
+
+            val levelLabel = JLabel("SELECT LEVEL").apply {
+                font = Fonts.pixelFont.deriveFont(20.0f)
+                foreground = GameColors.jbOrange
+                alignmentX = CENTER_ALIGNMENT
+            }
+            add(levelLabel)
+
+            level1Btn = createSquareLevelButton("1", onStartOne)
+            level2Btn = createSquareLevelButton("2", onStartTwo)
+            level3Btn = createSquareLevelButton("3", onStartThree)
+
+            val levelRow = JPanel().apply {
+                isOpaque = false
+                layout = BoxLayout(this, BoxLayout.X_AXIS)
+
+                add(level1Btn)
+                add(Box.createHorizontalStrut(15))
+                add(level2Btn)
+                add(Box.createHorizontalStrut(15))
+                add(level3Btn)
+            }
+            levelRow.alignmentX = CENTER_ALIGNMENT
+            add(levelRow)
+
+            add(Box.createVerticalGlue())
         }
 
-        buttonColumn.add(Box.createVerticalStrut(200))
+        add(mainContent, BorderLayout.CENTER)
 
-        val startButton = StartButton(
-            backgroundColor = GameColors.jbRed,
-            hoverColor = GameColors.jbOrange,
-            text = startButtonText,
-        ).apply {
-            alignmentX = CENTER_ALIGNMENT
-            addActionListener { onStart() }
-        }
+        val footerPanel = JPanel().apply {
+            isOpaque = false
+            layout = FlowLayout(FlowLayout.CENTER, 15, 20)
 
-        val howToPlayButton = StartButton(
-            backgroundColor = GameColors.jbPurple,
-            hoverColor = GameColors.jbOrange,
-            text = "How to play",
-        ).apply {
-            alignmentX = CENTER_ALIGNMENT
-            addActionListener { showHowToPlayDialog() }
-        }
-
-        val openDiaryButton = StartButton(
-            backgroundColor = GameColors.jbPurple,
-            hoverColor = GameColors.jbOrange,
-            text = "Open Diary",
-        ).apply {
-            alignmentX = CENTER_ALIGNMENT
-            addActionListener {
+            add(createFooterButton("How to play") { showHowToPlayDialog() })
+            add(createFooterButton("Diary") {
                 toolWindow.hide()
                 showDiaryDialog()
-            }
+            })
+            add(createFooterButton("Credits") { showCredits() })
         }
 
-        val creditsButton = StartButton(
+        add(footerPanel, BorderLayout.SOUTH)
+
+        refreshState()
+    }
+
+    fun refreshState() {
+        level2Btn.isEnabled = saveState.levelsBeaten >= 1
+        level2Btn.filled = saveState.levelsBeaten >= 1
+        level3Btn.isEnabled = saveState.levelsBeaten >= 2
+        level3Btn.filled = saveState.levelsBeaten >= 2
+    }
+
+    private fun createSquareLevelButton(text: String, action: () -> Unit): StartButton {
+        return StartButton(
+            backgroundColor = GameColors.jbRed,
+            hoverColor = GameColors.jbOrange,
+            text = text,
+        ).apply {
+            preferredSize = Dimension(65, 65)
+            maximumSize = Dimension(65, 65)
+            font = Fonts.pixelFont.deriveFont(20.0f)
+            addActionListener { action() }
+        }
+    }
+
+    private fun createFooterButton(text: String, action: () -> Unit): JButton {
+        return StartButton(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
-            text = "Credits",
+            text = text,
         ).apply {
-            alignmentX = CENTER_ALIGNMENT
-            addActionListener {
-                showCredits()
-            }
+            preferredSize = Dimension(160, 45)
+            minimumSize = Dimension(120, 45)
+            font = Fonts.pixelFont.deriveFont(14.0f)
+            addActionListener { action() }
         }
-
-        buttonColumn.add(startButton)
-        buttonColumn.add(Box.createVerticalStrut(12))
-        buttonColumn.add(howToPlayButton)
-        buttonColumn.add(Box.createVerticalStrut(12))
-        buttonColumn.add(openDiaryButton)
-        buttonColumn.add(Box.createVerticalStrut(12))
-        buttonColumn.add(creditsButton)
-
-        val buttonWrapper = JPanel(GridBagLayout()).apply {
-            isOpaque = false
-            add(buttonColumn)
-        }
-        add(buttonWrapper, BorderLayout.CENTER)
     }
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
-        if(g is Graphics2D) {
+        if (g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
             g.drawImage(PNG.START_BACKGROUND, (width / 2) - 256, (height / 2) - 450, 512, 512, null)
@@ -182,7 +212,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                         },
-                        StoryReplay("Replay level 1: 2001-2009", unlocked = saveState.dialoguesSeen >= 2) {
+                        StoryReplay("Replay: 2001-2009", unlocked = saveState.dialoguesSeen >= 2) {
                             val dialogueScreen = DialogueScreen(
                                 title = "When I was born...",
                                 texts = CutsceneTexts.screenTwo,
@@ -195,7 +225,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                          },
-                        StoryReplay("Replay level 2: 2010-2017", unlocked = saveState.dialoguesSeen >= 3) {
+                        StoryReplay("Replay: 2010-2017", unlocked = saveState.dialoguesSeen >= 3) {
                             val dialogueScreen = DialogueScreen(
                                 title = "My teenage years",
                                 texts = CutsceneTexts.screenThree,
@@ -206,7 +236,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                         },
-                        StoryReplay("Replay level 3: 2018-2026", unlocked = saveState.dialoguesSeen >= 4) {
+                        StoryReplay("Replay: 2018-2026", unlocked = saveState.dialoguesSeen >= 4) {
                             val dialogueScreen = DialogueScreen(
                                 title = "Adulthood!",
                                 texts = CutsceneTexts.screenFour,
