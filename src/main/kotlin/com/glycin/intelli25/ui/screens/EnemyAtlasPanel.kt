@@ -55,7 +55,7 @@ class EnemyAtlasPanel(
         val panel = JPanel(BorderLayout()).apply {
             isOpaque = false
             border = BorderFactory.createEmptyBorder(8, 16, 8, 16)
-            maximumSize = Dimension(Int.MAX_VALUE, 80)
+            maximumSize = Dimension(Int.MAX_VALUE, 120)
         }
 
         val iconLabel = JLabel().apply {
@@ -79,7 +79,7 @@ class EnemyAtlasPanel(
             font = Fonts.pixelFont.deriveFont(Font.BOLD, 16f)
         }
 
-        val descLabel = JLabel("<html><body style='width: 320px;'>$descriptionText</body></html>").apply {
+        val descLabel = JLabel("<html><body style='width: 420px;'>$descriptionText</body></html>").apply {
             font = Fonts.pixelFont.deriveFont(14f)
         }
 

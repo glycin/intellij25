@@ -188,7 +188,9 @@ class GameScreenContent(
                                 texts = CutsceneTexts.screenTwo,
                                 scope = projectScope,
                                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
-                                onReadyToStart = { }
+                                onReadyToStart = {
+                                    wrapper?.enableOk()
+                                }
                             )
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
@@ -199,7 +201,7 @@ class GameScreenContent(
                                 texts = CutsceneTexts.screenThree,
                                 scope = projectScope,
                                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
-                                onReadyToStart = { }
+                                onReadyToStart = { wrapper?.enableOk() }
                             )
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
@@ -210,7 +212,7 @@ class GameScreenContent(
                                 texts = CutsceneTexts.screenFour,
                                 scope = projectScope,
                                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
-                                onReadyToStart = { }
+                                onReadyToStart = { wrapper?.enableOk() }
                             )
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
@@ -220,8 +222,8 @@ class GameScreenContent(
                                 title = "Party time!",
                                 texts = CutsceneTexts.outro,
                                 scope = projectScope,
-                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
-                                onReadyToStart = { }
+                                backGroundImages = mapOf(0 to PNG.STORY_SCREEN_5),
+                                onReadyToStart = { wrapper?.enableOk() }
                             )
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
