@@ -4,7 +4,7 @@ import com.glycin.intelli25.model.Bullet
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromAttackDef
 import com.glycin.intelli25.util.GameGlobalState
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
@@ -25,101 +25,77 @@ class BasicAttack(
     private val basicAttackDamage: Int = 10
     private var invincibleBullet = false
 
-    private val upgradeOne = upgradeOption {
-        val boost = attackDef.boosts[0]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeOne = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[0]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             attackDelay = 750L
             generalLevelUp()
         }
     }
 
-    private val upgradeTwo = upgradeOption {
-        val boost = attackDef.boosts[1]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeTwo = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[1]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             generalLevelUp()
         }
     }
 
-    private val upgradeThree = upgradeOption {
-        val boost = attackDef.boosts[2]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeThree = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[2]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             attackDelay = 500L
             generalLevelUp()
         }
     }
 
-    private val upgradeFour = upgradeOption {
-        val boost = attackDef.boosts[3]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeFour = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[3]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             generalLevelUp()
         }
     }
 
-    private val upgradeFive = upgradeOption {
-        val boost = attackDef.boosts[4]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeFive = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[4]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             attackDelay = 250L
             generalLevelUp()
         }
     }
 
-    private val upgradeSix = upgradeOption {
-        val boost = attackDef.boosts[5]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeSix = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[5]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             generalLevelUp()
         }
     }
 
-    private val upgradeSeven = upgradeOption {
-        val boost = attackDef.boosts[6]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeSeven = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[6]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             attackDelay = 100L
             generalLevelUp()
         }
     }
 
-    private val upgradeEight = upgradeOption {
-        val boost = attackDef.boosts[7]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeEight = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[7]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             invincibleBullet = true
             generalLevelUp()

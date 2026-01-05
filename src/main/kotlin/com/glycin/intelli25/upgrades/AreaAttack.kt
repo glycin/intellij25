@@ -3,7 +3,7 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromAttackDef
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.PNG
 import java.awt.Graphics2D
@@ -17,78 +17,60 @@ class AreaAttack(
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 30
 
-    private val upgradeOne = upgradeOption {
-        val boost = attackDef.boosts[0]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeOne = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[0]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 60
             generalLevelUp()
         }
     }
 
-    private val upgradeTwo = upgradeOption {
-        val boost = attackDef.boosts[1]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeTwo = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[1]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 90
             generalLevelUp()
         }
     }
 
-    private val upgradeThree = upgradeOption {
-        val boost = attackDef.boosts[2]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeThree = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[2]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 120
             generalLevelUp()
         }
     }
 
-    private val upgradeFour = upgradeOption {
-        val boost = attackDef.boosts[3]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeFour = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[3]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 160
             generalLevelUp()
         }
     }
 
-    private val upgradeFive = upgradeOption {
-        val boost = attackDef.boosts[4]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeFive = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[4]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 190
             generalLevelUp()
         }
     }
 
-    private val upgradeSix = upgradeOption {
-        val boost = attackDef.boosts[5]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeSix = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[5]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             diameter = player.width + 250
             generalLevelUp()

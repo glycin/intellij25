@@ -28,7 +28,7 @@ class UpgradeAtlasRepository(
             description = description,
             effect = effect,
             unlocked = saveState.weaponsSeen.containsKey(title),
-            upgrades = boosts.map { it.toUpgradeAtlasBoost(saveState, title) },
+            upgrades = upgrades.map { it.toUpgradeAtlasBoost(saveState, title) },
         )
 
     private fun AttackUpgradeDef.toUpgradeAtlasBoost(saveState: GameSaveState, key: String): UpgradeAtlasBoost =

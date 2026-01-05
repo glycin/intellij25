@@ -5,9 +5,8 @@ import com.glycin.intelli25.managers.EnemyManager
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromBoost
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.util.UpgradePNG
 import kotlinx.coroutines.CoroutineScope
 import java.awt.image.BufferedImage
 import kotlin.math.roundToInt
@@ -42,42 +41,33 @@ class UpgradeRepository(
         //"Cool stuff" to MassDestructionAttack(enemyManager, scope, ggState, player),
     }
 
-    private val pizzaUpgrade = upgradeOption {
+    private val pizzaUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.PIZZA.image
         val title = UpgradeBoostDef.PIZZA.title
 
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.PIZZA.description
-        effect = UpgradeBoostDef.PIZZA.effect
+        boost = UpgradeBoostDef.PIZZA
         onSelect = {
             ggState.regenRatePerSecondMultiplier *= 2
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val coffeeUpgrade = upgradeOption {
+    private val coffeeUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.COFFEE.image
         val title = UpgradeBoostDef.COFFEE.title
 
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.COFFEE.description
-        effect = UpgradeBoostDef.COFFEE.effect
+        boost = UpgradeBoostDef.COFFEE
         onSelect = {
             ggState.speedMultiplier = (ggState.speedMultiplier * 1.5f).coerceAtMost(20.0f)
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val performanceUpgrade = upgradeOption {
+    private val performanceUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.PERFORMANCE.image
         val title = UpgradeBoostDef.PERFORMANCE.title
 
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.PERFORMANCE.description
-        effect = UpgradeBoostDef.PERFORMANCE.effect
+        boost = UpgradeBoostDef.PERFORMANCE
         onSelect = {
             ggState.healthMultiplier *= 2
             player.currentHp = player.maxHp()
@@ -85,98 +75,72 @@ class UpgradeRepository(
         }
     }
 
-    private val firewallUpgrade = upgradeOption {
+    private val firewallUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.FIREWALL.image
         val title = UpgradeBoostDef.FIREWALL.title
-
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.FIREWALL.description
-        effect = UpgradeBoostDef.FIREWALL.effect
+        boost = UpgradeBoostDef.FIREWALL
         onSelect = {
             ggState.enemySpeedPenalty += 0.2f
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val autoRefactoringUpgrade = upgradeOption {
+    private val autoRefactoringUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.AUTO_REFACTORING.image
         val title = UpgradeBoostDef.AUTO_REFACTORING.title
-
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.AUTO_REFACTORING.description
-        effect = UpgradeBoostDef.AUTO_REFACTORING.effect
+        boost = UpgradeBoostDef.AUTO_REFACTORING
         onSelect = {
             ggState.damageMultiplier *= 2
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val intentionActionsUpgrade = upgradeOption {
+    private val intentionActionsUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.INTENTION_ACTIONS.image
         val title = UpgradeBoostDef.INTENTION_ACTIONS.title
-
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.INTENTION_ACTIONS.description
-        effect = UpgradeBoostDef.INTENTION_ACTIONS.effect
+        boost = UpgradeBoostDef.INTENTION_ACTIONS
         onSelect = {
             ggState.spawnCountPerCooldown = (ggState.spawnCountPerCooldown / 1.3f).roundToInt()
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val codeInspectionsUpgrade = upgradeOption {
+    private val codeInspectionsUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.CODE_INSPECTIONS.image
         val title = UpgradeBoostDef.CODE_INSPECTIONS.title
-
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.CODE_INSPECTIONS.description
-        effect = UpgradeBoostDef.CODE_INSPECTIONS.effect
+        boost = UpgradeBoostDef.CODE_INSPECTIONS
         onSelect = {
             ggState.xpPickUpRangeMultiplier *= 2
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val dukeUpgrade = upgradeOption {
+    private val dukeUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.DUKE.image
         val title = UpgradeBoostDef.DUKE.title
 
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.DUKE.description
-        effect = UpgradeBoostDef.DUKE.effect
+        boost = UpgradeBoostDef.DUKE
         onSelect = {
             ggState.xpMultiplier *= 2
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val codeFreezeUpgrade = upgradeOption {
+    private val codeFreezeUpgrade = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.CODE_FREEZE.image
         val title = UpgradeBoostDef.CODE_FREEZE.title
-
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.CODE_FREEZE.description
-        effect = UpgradeBoostDef.CODE_FREEZE.effect
+        boost = UpgradeBoostDef.CODE_FREEZE
         onSelect = {
             ggState.enemySpawnCooldown += 200L
             defaultLevelUp(title, upgradeIcon)
         }
     }
 
-    private val pushToProd = upgradeOption {
+    private val pushToProd = upgradeOptionFromBoost {
         val upgradeIcon = UpgradeBoostDef.PUSH_TO_PROD.image
         val title = UpgradeBoostDef.PUSH_TO_PROD.title
 
-        icon = upgradeIcon
-        upgradePathTitle = title
-        description = UpgradeBoostDef.PUSH_TO_PROD.description
-        effect = UpgradeBoostDef.PUSH_TO_PROD.effect
+        boost = UpgradeBoostDef.PUSH_TO_PROD
         onSelect = {
             ggState.enemySpawnCooldown -= 300L
             ggState.spawnCountPerCooldown = (ggState.spawnCountPerCooldown * 1.3f).roundToInt()
@@ -193,12 +157,14 @@ class UpgradeRepository(
     fun getRandomUpgrades(attackManager: AttackManager): List<UpgradeOption> {
         val weaponUnlocks = if(ggState.weaponsEquipped != ggState.maxWeapons) {
             attackUpgrades.map { (key, attack) ->
-                upgradeOption {
-                    icon = attack.attackIcon
-                    upgradePathTitle = attack.title
-                    description = attack.unlockDescription
-                    subTitle = ""
-                    effect = attack.unlockEffect
+                UpgradeOption(
+                    icon = attack.attackIcon!!,
+                    title = attack.title,
+                    subTitle = "",
+                    description = attack.unlockDescription,
+                    effect = attack.unlockEffect,
+                    color = attack.color,
+                    textColor = attack.textColor,
                     onSelect = {
                         attackManager.addAttack(attack)
                         ggState.weaponsEquipped++
@@ -206,7 +172,7 @@ class UpgradeRepository(
                         defaultLevelUp(attack.title, attack.attackIcon)
                         attack.activate()
                     }
-                }
+                )
             }
         } else emptyList()
 

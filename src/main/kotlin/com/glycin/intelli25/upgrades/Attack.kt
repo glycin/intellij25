@@ -5,6 +5,7 @@ import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
+import com.intellij.ui.JBColor
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 
@@ -19,6 +20,8 @@ abstract class Attack(
     val title: String = attackDef.title
     val unlockDescription: String = attackDef.description
     val unlockEffect: String = attackDef.effect
+    val color: JBColor = attackDef.color
+    val textColor: JBColor = attackDef.textColor
 
     abstract fun activate()
     abstract fun draw(g: Graphics2D)

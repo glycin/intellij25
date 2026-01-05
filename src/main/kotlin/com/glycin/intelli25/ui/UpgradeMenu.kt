@@ -54,39 +54,27 @@ class UpgradeMenu(
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             isOpaque = false
 
-            upgrades.forEachIndexed { index, up ->
-                add(createUpgradeCard(up, index))
+            upgrades.forEach { up ->
+                add(createUpgradeCard(up))
                 add(Box.createRigidArea(Dimension(0, 10)))
             }
         }
     }
 
-    private fun createUpgradeCard(option: UpgradeOption, index: Int): JPanel {
-        return UpgradeCard(option, index)
+    private fun createUpgradeCard(option: UpgradeOption): JPanel {
+        return UpgradeCard(option)
     }
 
-    inner class UpgradeCard(private val option: UpgradeOption, index: Int) : JPanel() {
+    inner class UpgradeCard(private val option: UpgradeOption) : JPanel() {
         private var popup: JBPopup? = null
-
-        private val cardBackground = when(index) {
-            0 -> GameColors.jbBlueLight
-            1 -> GameColors.jbRedLight
-            else -> GameColors.jbOrangeLight
-        }
-
-        private val textColor = when(index) {
-            0 -> JBColor(Color(2, 82, 163, 255), Color(2, 82, 163, 255))
-            1 -> JBColor(Color(196, 0, 43, 255), Color(196, 0, 43, 255))
-            else -> JBColor(Color(181, 92, 0, 255), Color(181, 92, 0, 255))
-        }
 
         init {
             layout = BoxLayout(this, BoxLayout.X_AXIS)
             preferredSize = Dimension(800, 120)
             maximumSize = Dimension(Int.MAX_VALUE, 120)
-            background = cardBackground
+            background = option.color
             border = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(cardBackground, 2),
+                BorderFactory.createLineBorder(option.color, 2),
                 JBUI.Borders.empty(10)
             )
             cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
@@ -118,12 +106,12 @@ class UpgradeMenu(
 
                 add(JLabel("${option.title}${if(option.subTitle.isNotEmpty()) " - ${option.subTitle}" else ""}").apply {
                     font = Fonts.pixelFont.deriveFont(Font.BOLD, 24.0f)
-                    foreground = textColor
+                    foreground = option.textColor
                 })
 
                 add(JLabel(option.effect).apply {
                     font = Fonts.pixelFont.deriveFont(Font.PLAIN, 16.0f)
-                    foreground = textColor
+                    foreground = option.textColor
                     border = JBUI.Borders.emptyTop(4)
                 })
             }
@@ -132,7 +120,7 @@ class UpgradeMenu(
         private fun setupMouseListeners() {
             addMouseListener(object : MouseAdapter() {
                 override fun mouseEntered(e: MouseEvent) {
-                    background = cardBackground
+                    background = option.color
                     border = BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(GameColors.jbGreen, 3),
                         JBUI.Borders.empty(10)
@@ -141,9 +129,9 @@ class UpgradeMenu(
                 }
 
                 override fun mouseExited(e: MouseEvent) {
-                    background = cardBackground
+                    background = option.color
                     border = BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(cardBackground, 2),
+                        BorderFactory.createLineBorder(option.color, 2),
                         JBUI.Borders.empty(10)
                     )
                     repaint()

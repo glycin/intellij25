@@ -1,5 +1,10 @@
 package com.glycin.intelli25.model
 
+import com.glycin.intelli25.upgrades.AttackDef
+import com.glycin.intelli25.upgrades.AttackUpgradeDef
+import com.glycin.intelli25.upgrades.UpgradeBoostDef
+import com.glycin.intelli25.util.GameColors
+import com.intellij.ui.JBColor
 import java.awt.image.BufferedImage
 
 data class UpgradeOption(
@@ -8,27 +13,57 @@ data class UpgradeOption(
     val subTitle: String,
     val description: String,
     val effect: String,
+    val color: JBColor,
+    val textColor: JBColor,
     val onSelect: (UpgradeOption) -> Unit,
 )
 
-class UpgradeOptionBuilder {
-    var icon: BufferedImage? = null
-    var upgradePathTitle: String? = null
-    var subTitle: String = ""
-    var description: String? = null
-    var effect: String? = null
+class UpgradeOptionFromAttackDefBuilder {
+    var attackDefinition: AttackDef? = null
+    var attackUpgradeDefinition: AttackUpgradeDef? = null
     var onSelect: ((UpgradeOption) -> Unit)? = null
 
     fun build(): UpgradeOption {
-        requireNotNull(icon) { "icon must be set" }
-        requireNotNull(upgradePathTitle) { "title must be set" }
-        requireNotNull(description) { "description must be set" }
-        requireNotNull(effect) { "effect must be set" }
+        requireNotNull(attackDefinition) { "attack def is needed" }
+        requireNotNull(attackUpgradeDefinition) { "attack upgrade def is needed" }
         requireNotNull(onSelect) { "onSelect must be set" }
-        return UpgradeOption(icon!!, upgradePathTitle!!, subTitle!!, description!!, effect!!, onSelect!!)
+        return UpgradeOption(
+            icon = attackUpgradeDefinition!!.image!!,
+            title = attackUpgradeDefinition!!.title,
+            subTitle = "",
+            description = attackUpgradeDefinition!!.description,
+            effect = attackUpgradeDefinition!!.effect,
+            color = attackDefinition!!.color,
+            textColor = attackDefinition!!.textColor,
+            onSelect = onSelect!!
+        )
     }
 }
 
-fun upgradeOption(init: UpgradeOptionBuilder.() -> Unit): UpgradeOption {
-    return UpgradeOptionBuilder().apply(init).build()
+class UpgradeOptionFromBoostBuilder {
+    var boost: UpgradeBoostDef? = null
+    var onSelect: ((UpgradeOption) -> Unit)? = null
+
+    fun build(): UpgradeOption {
+        requireNotNull(boost) { "Boost is needed" }
+        requireNotNull(onSelect) { "onSelect must be set" }
+        return UpgradeOption(
+            icon = boost!!.image!!,
+            title = boost!!.title,
+            subTitle = "",
+            description = boost!!.description,
+            effect = boost!!.effect,
+            color = GameColors.jbGrayLight,
+            textColor = GameColors.jbGrayText,
+            onSelect = onSelect!!
+        )
+    }
+}
+
+fun upgradeOptionFromBoost(init: UpgradeOptionFromBoostBuilder.() -> Unit): UpgradeOption {
+    return UpgradeOptionFromBoostBuilder().apply(init).build()
+}
+
+fun upgradeOptionFromAttackDef(init: UpgradeOptionFromAttackDefBuilder.() -> Unit): UpgradeOption {
+    return UpgradeOptionFromAttackDefBuilder().apply(init).build()
 }

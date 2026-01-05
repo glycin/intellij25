@@ -1,6 +1,8 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.UpgradePNG
+import com.intellij.ui.JBColor
 import java.awt.image.BufferedImage
 
 object AttackConfig {
@@ -12,7 +14,9 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.junie,
         availableAtLevel = 3,
-        boosts = listOf(
+        color = GameColors.jbGreenLight,
+        textColor = GameColors.jbGreenText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "AI Chat",
                 description = "",
@@ -44,7 +48,9 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.style,
         availableAtLevel = 2,
-        boosts = listOf(
+        color = GameColors.jbRedLight,
+        textColor = GameColors.jbRedText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "Dark theme",
                 description = "IntelliJ added a dark theme",
@@ -83,7 +89,9 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.buildTools,
         availableAtLevel = 2,
-        boosts = listOf(
+        color = GameColors.jbBlueLight,
+        textColor = GameColors.jbBlueText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "Maven 3 Integration",
                 description = "Maven 3 Integration was added",
@@ -122,7 +130,9 @@ object AttackConfig {
         unlockedByDefault = false,
         availableAtLevel = 2,
         image = UpgradePNG.kotlin,
-        boosts = listOf(
+        color = GameColors.jbPurpleLight,
+        textColor = GameColors.jbPurpleText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "Kotlin support",
                 description = "IntelliJ added kotlin support",
@@ -161,7 +171,9 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.git,
         availableAtLevel = 1,
-        boosts = listOf(
+        color = GameColors.jbOrangeLight,
+        textColor = GameColors.jbOrangeText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "CVS & VSS",
                 description = "IntelliJ added CVS and VSS support",
@@ -193,7 +205,9 @@ object AttackConfig {
         unlockedByDefault = true,
         image = UpgradePNG.laptop,
         availableAtLevel = 1,
-        boosts = listOf(
+        color = GameColors.jbPinkLight,
+        textColor = GameColors.jbPinkText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "HTML & CSS",
                 description = "IntelliJ added html and css support",
@@ -260,7 +274,9 @@ object AttackConfig {
         unlockedByDefault = false,
         availableAtLevel = 1,
         image = UpgradePNG.leaf,
-        boosts = listOf(
+        color = GameColors.jbCyanLight,
+        textColor = GameColors.jbCyanText,
+        upgrades = listOf(
             AttackUpgradeDef(
                 title = "JUnit Integration",
                 description = "IntelliJ added JUnit integration in IntelliJ",
@@ -324,7 +340,9 @@ data class AttackDef(
     val unlockedByDefault: Boolean,
     val image: BufferedImage?,
     val availableAtLevel: Int,
-    val boosts: List<AttackUpgradeDef>,
+    val upgrades: List<AttackUpgradeDef>,
+    val color: JBColor,
+    val textColor: JBColor,
 )
 
 data class AttackUpgradeDef(

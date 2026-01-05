@@ -3,7 +3,7 @@ package com.glycin.intelli25.upgrades
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromAttackDef
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.pointOnCircle
@@ -23,26 +23,20 @@ class RotatingAttack(
     private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
     private var pointValues = mutableListOf(0.0f)
 
-    private val upgradeOne = upgradeOption {
-        val boost = attackDef.boosts[0]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeOne = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[0]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             speed =  0.005f
             generalLevelUp()
         }
     }
 
-    private val upgradeTwo = upgradeOption {
-        val boost = attackDef.boosts[1]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeTwo = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[1]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
             pointValues[0] = 1.0f
@@ -51,13 +45,10 @@ class RotatingAttack(
         }
     }
 
-    private val upgradeThree = upgradeOption {
-        val boost = attackDef.boosts[2]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeThree = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[2]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             speed =  0.01f
             objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))

@@ -4,7 +4,7 @@ import com.glycin.intelli25.model.Animation
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromAttackDef
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import kotlinx.coroutines.CoroutineScope
@@ -29,26 +29,20 @@ class FreezingAttack(
     private var freezeTime = 5_000L
     private var nextActivationTime = 0L
 
-    private val upgradeOne = upgradeOption {
-        val boost = attackDef.boosts[0]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeOne = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[0]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             freezeTime = 10_000L
             generalLevelUp()
         }
     }
 
-    private val upgradeTwo = upgradeOption {
-        val boost = attackDef.boosts[1]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeTwo = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[1]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             minCooldown = 25_000L
             maxCooldown = 75_000L
@@ -56,13 +50,10 @@ class FreezingAttack(
         }
     }
 
-    private val upgradeThree = upgradeOption {
-        val boost = attackDef.boosts[2]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeThree = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[2]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             minCooldown = 15_000L
             maxCooldown = 50_000L

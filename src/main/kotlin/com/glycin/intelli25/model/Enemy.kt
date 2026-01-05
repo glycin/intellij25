@@ -66,7 +66,7 @@ class Enemy(
                     player = player,
                     damage = 1,
                     maxHp = 10,
-                    speed = 0.7f,
+                    speed = 0.8f,
                     image = EnemyPNG.bug,
                     chestDropChance = 0.3,
                     ggState = ggState
@@ -76,9 +76,9 @@ class Enemy(
                     position = position,
                     points = 20,
                     player = player,
-                    damage = 1,
+                    damage = 2,
                     maxHp = 20,
-                    speed = 0.8f,
+                    speed = 0.6f,
                     image = EnemyPNG.blocker,
                     chestDropChance = 0.5,
                     ggState = ggState
@@ -90,9 +90,9 @@ class Enemy(
                     player = player,
                     damage = 3,
                     maxHp = 30,
-                    speed = 1f,
+                    speed = 1.2f,
                     image = EnemyPNG.calendar,
-                    chestDropChance = 1.5,
+                    chestDropChance = 0.5,
                     ggState = ggState
                 )
                 EnemyType.PHANTOM -> Enemy(
@@ -100,11 +100,11 @@ class Enemy(
                     position = position,
                     points = 40,
                     player = player,
-                    damage = 2,
+                    damage = 5,
                     maxHp = 40,
-                    speed = 1.2f,
+                    speed = 1f,
                     image = EnemyPNG.phantom,
-                    chestDropChance = 2.0,
+                    chestDropChance = 0.6,
                     ggState = ggState
                 )
                 EnemyType.DEMON -> Enemy(
@@ -116,7 +116,7 @@ class Enemy(
                     maxHp = 50,
                     speed = 0.3f,
                     image = EnemyPNG.demon,
-                    chestDropChance = 2.5,
+                    chestDropChance = 0.6,
                     ggState = ggState
                 )
                 EnemyType.BEES -> Enemy(
@@ -124,11 +124,11 @@ class Enemy(
                     position = position,
                     points = 60,
                     player = player,
-                    damage = 1,
+                    damage = 2,
                     maxHp = 10,
-                    speed = 2f,
+                    speed = 3f,
                     image = EnemyPNG.bees,
-                    chestDropChance = 3.0,
+                    chestDropChance = 0.8,
                     ggState = ggState
                 )
                 EnemyType.VAMPIRE -> Enemy(
@@ -137,10 +137,10 @@ class Enemy(
                     points = 100,
                     player = player,
                     damage = 20,
-                    maxHp = 100,
-                    speed = 1f,
+                    maxHp = 200,
+                    speed = 2f,
                     image = EnemyPNG.vampire,
-                    chestDropChance = 5.0,
+                    chestDropChance = 1.0,
                     ggState = ggState
                 )
             }
@@ -161,43 +161,43 @@ class Enemy(
             return when(this){
                 EnemyType.BUG -> EnemyEntry(
                     name = "BUG",
-                    description = "You see them everyday!",
+                    description = "Slow and predictable, but can overwhelm you!",
                     image = EnemyPNG.bug,
                     seen = enemiesSeen.contains("BUG")
                 )
                 EnemyType.BLOCKER -> EnemyEntry(
                     name = "BLOCKER",
-                    description = "Sometimes you are all done, but you still have to wait on a thousand approvals...",
+                    description = "Harder to get rid off than bugs, but you see them coming from a mile away!",
                     image = EnemyPNG.blocker,
                     seen = enemiesSeen.contains("BLOCKER")
                 )
                 EnemyType.BURNING_CALENDAR -> EnemyEntry(
                     name = "DEADLINE",
-                    description = "When you are supposed to do scrum, but still have deadlines...",
+                    description = "They arrive before you notice it and hurt a lot!",
                     image = EnemyPNG.calendar,
                     seen = enemiesSeen.contains("BURNING_CALENDAR")
                 )
                 EnemyType.PHANTOM -> EnemyEntry(
                     name = "BURNOUT PHANTOM",
-                    description = "Listen to yourself, and take a break once in a while okay?",
+                    description = "Slowly creeps up to you, but if it reaches you, you are quickly done.",
                     image = EnemyPNG.phantom,
                     seen = enemiesSeen.contains("PHANTOM")
                 )
                 EnemyType.DEMON -> EnemyEntry(
                     name = "DOOMSCROLL DEMON",
-                    description = "That endless dopamine hit",
+                    description = "That endless dopamine hit keeps you occupied and will hurt you a lot when it reaches you.",
                     image = EnemyPNG.demon,
                     seen = enemiesSeen.contains("DEMON")
                 )
                 EnemyType.BEES -> EnemyEntry(
                     name = "Meeting Bees",
-                    description = "Buzz buzz, and your day is gone",
+                    description = "Buzz buzz, and your day is gone. Fast and deadly",
                     image = EnemyPNG.bees,
                     seen = enemiesSeen.contains("BEES")
                 )
                 EnemyType.VAMPIRE -> EnemyEntry(
                     name = "Legacy Vampire",
-                    description = "Nothing kills productivity as fast as legacy code and processes",
+                    description = "Nothing kills productivity as fast as legacy code and processes. Difficult to get rid of, and deals a lot of damage!",
                     image = EnemyPNG.vampire,
                     seen = enemiesSeen.contains("VAMPIRE")
                 )

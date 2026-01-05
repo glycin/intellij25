@@ -4,7 +4,7 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.Pool
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
-import com.glycin.intelli25.model.upgradeOption
+import com.glycin.intelli25.model.upgradeOptionFromAttackDef
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.randomPointInCircle
 import kotlinx.coroutines.CoroutineScope
@@ -25,52 +25,40 @@ class PoolAttack(
     private var spawnCooldown = 10000L
     private val baseDamage = 1
 
-    private val upgradeOne = upgradeOption {
-        val boost = attackDef.boosts[0]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeOne = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[0]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             spawnCooldown = 7000L
             generalLevelUp()
         }
     }
 
-    private val upgradeTwo = upgradeOption {
-        val boost = attackDef.boosts[1]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeTwo = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[1]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             size = 150
             generalLevelUp()
         }
     }
 
-    private val upgradeThree = upgradeOption {
-        val boost = attackDef.boosts[2]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeThree = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[2]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             spawnCooldown = 4500L
             generalLevelUp()
         }
     }
 
-    private val upgradeFour = upgradeOption {
-        val boost = attackDef.boosts[3]
-        icon = attackIcon
-        upgradePathTitle = title
-        subTitle = boost.title
-        description = boost.description
-        effect = boost.effect
+    private val upgradeFour = upgradeOptionFromAttackDef {
+        val boost = attackDef.upgrades[3]
+        attackDefinition = attackDef
+        attackUpgradeDefinition = boost
         onSelect = {
             size = 200
             generalLevelUp()

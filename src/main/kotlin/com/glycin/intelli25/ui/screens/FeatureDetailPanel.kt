@@ -26,9 +26,9 @@ class FeatureDetailPanel(
             //inner.add(buildFeatureInfo(feature))
             //inner.add(Box.createVerticalStrut(12)) //TODO: Do we want the header here?
 
-            feature.boosts.filter { it.availableAtLevel == level}.forEachIndexed { bIndex, boost ->
+            feature.upgrades.filter { it.availableAtLevel == level}.forEachIndexed { bIndex, boost ->
                 inner.add(buildBoostCard(boost))
-                if (bIndex < feature.boosts.lastIndex) {
+                if (bIndex < feature.upgrades.lastIndex) {
                     inner.add(Box.createVerticalStrut(25))
                 }
             }
