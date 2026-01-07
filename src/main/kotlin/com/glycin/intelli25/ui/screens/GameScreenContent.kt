@@ -14,12 +14,11 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTabbedPane
-import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
-import javax.swing.BorderFactory
+import java.awt.GridBagLayout
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -43,55 +42,89 @@ class GameScreenContent(
 
     init {
         isOpaque = false
-        layout = BorderLayout()
+        layout = GridBagLayout()
 
-        val titleLabel = JLabel("IDE Survivors").apply {
-            font = Fonts.pixelFont.deriveFont(32.0f)
-            foreground = GameColors.white
-            horizontalAlignment = SwingConstants.CENTER
-            border = BorderFactory.createEmptyBorder(30, 0, 0, 0)
-        }
-        add(titleLabel, BorderLayout.NORTH)
-
-        val mainContent = JPanel().apply {
+        val contentContainer = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
-
-            add(Box.createVerticalStrut(380))
-
-            val levelLabel = JLabel("SELECT LEVEL").apply {
-                font = Fonts.pixelFont.deriveFont(20.0f)
-                foreground = GameColors.jbOrange
-                alignmentX = CENTER_ALIGNMENT
-            }
-            add(levelLabel)
-
-            level1Btn = createSquareLevelButton("1", onStartOne)
-            level2Btn = createSquareLevelButton("2", onStartTwo)
-            level3Btn = createSquareLevelButton("3", onStartThree)
-
-            val levelRow = JPanel().apply {
-                isOpaque = false
-                layout = BoxLayout(this, BoxLayout.X_AXIS)
-
-                add(level1Btn)
-                add(Box.createHorizontalStrut(15))
-                add(level2Btn)
-                add(Box.createHorizontalStrut(15))
-                add(level3Btn)
-            }
-            levelRow.alignmentX = CENTER_ALIGNMENT
-            add(levelRow)
-
-            add(Box.createVerticalGlue())
         }
 
-        add(mainContent, BorderLayout.CENTER)
+        contentContainer.add(Box.createVerticalGlue())
+
+        val titleLabel = JLabel("IDE SURVIVORS").apply {
+            font = Fonts.pixelFont.deriveFont(42.0f)
+            foreground = GameColors.jbGreen
+            alignmentX = CENTER_ALIGNMENT
+            horizontalAlignment = SwingConstants.CENTER
+        }
+        contentContainer.add(titleLabel)
+        contentContainer.add(Box.createVerticalStrut(5))
+
+        val imagePanel = object : JPanel() {
+
+            private val targetW = 512
+            private val targetH = 351
+            private val aspectRatio = targetW.toDouble() / targetH
+
+            init {
+                isOpaque = false
+                preferredSize = Dimension(targetW, targetH)
+                maximumSize = Dimension(targetW, targetH)
+                minimumSize = Dimension(targetW, targetH)
+                alignmentX = CENTER_ALIGNMENT
+            }
+
+            override fun paintComponent(g: Graphics) {
+                super.paintComponent(g)
+                var drawW = width
+                var drawH = (width / aspectRatio).toInt()
+                if (drawH > height) {
+                    drawH = height
+                    drawW = (height * aspectRatio).toInt()
+                }
+
+                val x = (width - drawW) / 2
+                val y = (height - drawH) / 2
+
+                g.drawImage(PNG.START_BACKGROUND, x, y, drawW, drawH, null)
+            }
+        }
+        contentContainer.add(imagePanel)
+        contentContainer.add(Box.createVerticalStrut(5))
+
+        val levelLabel = JLabel("SELECT LEVEL").apply {
+            font = Fonts.jbMono.deriveFont(20.0f)
+            foreground = GameColors.jbPurple
+            alignmentX = CENTER_ALIGNMENT
+        }
+        contentContainer.add(levelLabel)
+
+        contentContainer.add(Box.createVerticalStrut(10))
+
+        level1Btn = createSquareLevelButton("1", onStartOne)
+        level2Btn = createSquareLevelButton("2", onStartTwo)
+        level3Btn = createSquareLevelButton("3", onStartThree)
+
+        val levelRow = JPanel().apply {
+            isOpaque = false
+            layout = BoxLayout(this, BoxLayout.X_AXIS)
+            add(level1Btn)
+            add(Box.createHorizontalStrut(15))
+            add(level2Btn)
+            add(Box.createHorizontalStrut(15))
+            add(level3Btn)
+        }
+        levelRow.alignmentX = CENTER_ALIGNMENT
+        contentContainer.add(levelRow)
+
+        contentContainer.add(Box.createVerticalStrut(40))
 
         val footerPanel = JPanel().apply {
             isOpaque = false
-            layout = FlowLayout(FlowLayout.CENTER, 15, 20)
+            layout = FlowLayout(FlowLayout.CENTER, 15, 0)
+            alignmentX = CENTER_ALIGNMENT
+            maximumSize = Dimension(600, 50)
 
             add(createFooterButton("How to play") { showHowToPlayDialog() })
             add(createFooterButton("Diary") {
@@ -100,8 +133,11 @@ class GameScreenContent(
             })
             add(createFooterButton("Credits") { showCredits() })
         }
+        contentContainer.add(footerPanel)
 
-        add(footerPanel, BorderLayout.SOUTH)
+        contentContainer.add(Box.createVerticalGlue())
+
+        add(contentContainer)
 
         refreshState()
     }
@@ -115,26 +151,26 @@ class GameScreenContent(
 
     private fun createSquareLevelButton(text: String, action: () -> Unit): StartButton {
         return StartButton(
-            backgroundColor = GameColors.jbRed,
+            backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             text = text,
         ).apply {
             preferredSize = Dimension(65, 65)
             maximumSize = Dimension(65, 65)
-            font = Fonts.pixelFont.deriveFont(20.0f)
+            font = Fonts.jbMono.deriveFont(20.0f)
             addActionListener { action() }
         }
     }
 
     private fun createFooterButton(text: String, action: () -> Unit): JButton {
         return StartButton(
-            backgroundColor = GameColors.jbPurple,
+            backgroundColor = GameColors.jbBlue,
             hoverColor = GameColors.jbOrange,
             text = text,
         ).apply {
             preferredSize = Dimension(160, 45)
             minimumSize = Dimension(120, 45)
-            font = Fonts.pixelFont.deriveFont(14.0f)
+            font = Fonts.jbMono.deriveFont(18.0f)
             addActionListener { action() }
         }
     }
@@ -144,7 +180,6 @@ class GameScreenContent(
         if (g is Graphics2D) {
             g.color = GameColors.black
             g.fillRect(0, 0, width, height)
-            g.drawImage(PNG.START_BACKGROUND, (width / 2) - 256, (height / 2) - 450, 512, 512, null)
         }
     }
 

@@ -47,16 +47,18 @@ class UpgradeOptionFromBoostBuilder {
     fun build(): UpgradeOption {
         requireNotNull(boost) { "Boost is needed" }
         requireNotNull(onSelect) { "onSelect must be set" }
-        return UpgradeOption(
-            icon = boost!!.image!!,
-            title = boost!!.title,
-            subTitle = "",
-            description = boost!!.description,
-            effect = boost!!.effect,
-            color = GameColors.jbGrayLight,
-            textColor = GameColors.jbGrayText,
-            onSelect = onSelect!!
-        )
+        return with(boost!!){
+            UpgradeOption(
+                icon = image!!,
+                title = title,
+                subTitle = "",
+                description = description,
+                effect = effect,
+                color = color,
+                textColor = GameColors.white,
+                onSelect = onSelect!!
+            )
+        }
     }
 }
 

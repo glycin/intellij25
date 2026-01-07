@@ -43,7 +43,7 @@ object PNG {
     }
 
     val START_BACKGROUND : BufferedImage? by lazy {
-        getPng("/screens/game-start-splash.png", PNG::class.java)
+        getPng("/screens/game-start-splash-gradient.png", PNG::class.java)
     }
 
     val STORY_SCREEN_1 : BufferedImage? by lazy {

@@ -13,4 +13,14 @@ object Fonts {
         println("Failed to load pixel font: ${e.message}")
         Font(Font.SANS_SERIF, Font.BOLD, 16)
     }
+
+    val jbMono: Font = try {
+        val fontUrl = javaClass.getResourceAsStream("/fonts/JetBrainsMono-Bold.ttf")
+        Font.createFont(Font.TRUETYPE_FONT, fontUrl).also {
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(it)
+        }
+    } catch (e: Exception) {
+        println("Failed to load pixel font: ${e.message}")
+        Font(Font.SANS_SERIF, Font.BOLD, 16)
+    }
 }

@@ -18,7 +18,7 @@ class StartButton(
     private var hover = false
 
     init {
-        font = Fonts.pixelFont.deriveFont(16.0f)
+        font = Fonts.jbMono.deriveFont(16.0f)
         preferredSize = JBUI.size(320, 100)
         minimumSize = preferredSize
         maximumSize = preferredSize
@@ -44,27 +44,24 @@ class StartButton(
 
     override fun paintComponent(g: Graphics) {
         val g2 = g.create() as Graphics2D
+        val fillColor = if(hover && isEnabled) hoverColor else backgroundColor
 
         g2.setRenderingHint(
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON
         )
 
-        g2.color = backgroundColor
+        g2.color = fillColor
         if(filled) {
             g2.fillRoundRect(0, 0, width - 1, height - 1, arc, arc)
         } else {
             g2.drawRoundRect(0, 0, width - 1, height - 1, arc, arc)
         }
 
+        g2.stroke = BasicStroke(4f)
+        g2.drawRoundRect(2, 2, width - 5, height - 5, arc, arc)
+
         super.paintComponent(g2)
-
-        if (hover && isEnabled) {
-            g2.color = hoverColor
-            g2.stroke = BasicStroke(4f)
-            g2.drawRoundRect(2, 2, width - 5, height - 5, arc, arc)
-        }
-
         g2.dispose()
     }
 }

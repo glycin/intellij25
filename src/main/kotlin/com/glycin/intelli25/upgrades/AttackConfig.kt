@@ -14,8 +14,8 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.junie,
         availableAtLevel = 3,
-        color = GameColors.jbGreenLight,
-        textColor = GameColors.jbGreenText,
+        color = GameColors.jbPink,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "AI Chat",
@@ -48,8 +48,8 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.style,
         availableAtLevel = 2,
-        color = GameColors.jbRedLight,
-        textColor = GameColors.jbRedText,
+        color = GameColors.jbPurpleLight,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "Dark theme",
@@ -90,7 +90,7 @@ object AttackConfig {
         image = UpgradePNG.buildTools,
         availableAtLevel = 2,
         color = GameColors.jbBlueLight,
-        textColor = GameColors.jbBlueText,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "Maven 3 Integration",
@@ -130,8 +130,8 @@ object AttackConfig {
         unlockedByDefault = false,
         availableAtLevel = 2,
         image = UpgradePNG.kotlin,
-        color = GameColors.jbPurpleLight,
-        textColor = GameColors.jbPurpleText,
+        color = GameColors.jbCyanLight,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "Kotlin support",
@@ -171,8 +171,8 @@ object AttackConfig {
         unlockedByDefault = false,
         image = UpgradePNG.git,
         availableAtLevel = 1,
-        color = GameColors.jbOrangeLight,
-        textColor = GameColors.jbOrangeText,
+        color = GameColors.jbYellow,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "CVS & VSS",
@@ -205,8 +205,8 @@ object AttackConfig {
         unlockedByDefault = true,
         image = UpgradePNG.laptop,
         availableAtLevel = 1,
-        color = GameColors.jbPinkLight,
-        textColor = GameColors.jbPinkText,
+        color = GameColors.jbRedLight,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "HTML & CSS",
@@ -274,8 +274,8 @@ object AttackConfig {
         unlockedByDefault = false,
         availableAtLevel = 1,
         image = UpgradePNG.leaf,
-        color = GameColors.jbCyanLight,
-        textColor = GameColors.jbCyanText,
+        color = GameColors.jbOrangeLight,
+        textColor = GameColors.white,
         upgrades = listOf(
             AttackUpgradeDef(
                 title = "JUnit Integration",
