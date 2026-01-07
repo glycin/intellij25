@@ -203,7 +203,7 @@ class GameOverScreen(
 
     companion object {
         fun getSurvivedScreen(ggState: GameGlobalState, player: Player) = GameOverScreen(
-            title = "You Survived!",
+            title = "You've Survived!",
             ggState = ggState,
             player = player,
             subText = "",
@@ -214,7 +214,7 @@ class GameOverScreen(
             title = "Game Over",
             ggState = ggState,
             player = player,
-            subText = "Oh no, the bugs got you! Try again, and maybe some different upgrades fit your play style better?",
+            subText = "Oh no, the bugs got you! Try again, and maybe see if different upgrades fit your play style better",
             survived = false
         )
     }

@@ -42,33 +42,12 @@ class FeatureDetailPanel(
         add(scrollPane, BorderLayout.CENTER)
     }
 
-    private fun buildBoostCard(boost: AttackUpgradeDef): JComponent {
-        val card = JPanel().apply {
-            isOpaque = true
-            background = GameColors.black
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            alignmentX = CENTER_ALIGNMENT
-        }
-
-        boost.image?.let { img ->
-            card.add(JLabel(ImageIcon(img.getScaledInstance(48, 48, Image.SCALE_SMOOTH))).apply {
-                alignmentX = CENTER_ALIGNMENT
-                border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
-            })
-        }
-
-        card.add(JLabel(boost.title).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.BOLD, 14f)
-            foreground = GameColors.white
-        })
-
-        card.add(JLabel(boost.effect).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.PLAIN, 12f)
-            foreground = GameColors.jbGreen
-        })
-
-        return card
+    private fun buildBoostCard(attackDef: AttackUpgradeDef): JComponent {
+        return AtlasCardItem(
+            title = attackDef.title,
+            description = attackDef.effect,
+            cardIcon = attackDef.image!!,
+            borderColor = GameColors.jbPurple
+        )
     }
 }

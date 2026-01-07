@@ -4,7 +4,6 @@ import com.glycin.intelli25.model.StoryReplay
 import com.glycin.intelli25.ui.StartButton
 import com.glycin.intelli25.util.GameColors
 import java.awt.BorderLayout
-import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.*
@@ -24,16 +23,16 @@ class StoryPanel(
 
         stories.forEachIndexed { index, story ->
             val button = StartButton(
-                backgroundColor = GameColors.jbOrangeLight,
+                backgroundColor = GameColors.jbPurple,
                 hoverColor = GameColors.jbOrange,
                 textColor = GameColors.white,
                 text = story.label,
-                filled = story.unlocked
+                filled = story.unlocked,
+                preferredWidth = 250,
+                preferredHeight = 64
             ).apply {
                 alignmentX = CENTER_ALIGNMENT
                 isEnabled = story.unlocked
-                preferredSize = Dimension(300, 64)
-                maximumSize = Dimension(300, 64)
 
                 addActionListener {
                     if (isEnabled) {

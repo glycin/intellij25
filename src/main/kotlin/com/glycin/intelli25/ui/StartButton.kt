@@ -12,14 +12,16 @@ class StartButton(
     private val hoverColor: Color,
     textColor: Color = GameColors.white,
     text: String,
-    private val arc: Int = 40,
+    private val arc: Int = 20,
     var filled: Boolean = true,
+    preferredWidth: Int = 320,
+    preferredHeight: Int = 100,
 ) : JButton(text) {
     private var hover = false
 
     init {
         font = Fonts.jbMono.deriveFont(16.0f)
-        preferredSize = JBUI.size(320, 100)
+        preferredSize = JBUI.size(preferredWidth, preferredHeight)
         minimumSize = preferredSize
         maximumSize = preferredSize
 

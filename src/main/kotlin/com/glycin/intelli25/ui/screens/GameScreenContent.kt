@@ -30,10 +30,10 @@ import javax.swing.SwingConstants
 class GameScreenContent(
     private val project: Project,
     private val toolWindow: ToolWindow,
-    private val onStartOne: () -> Unit,
-    private val onStartTwo: () -> Unit,
-    private val onStartThree: () -> Unit,
     private val saveState: GameSaveState,
+    onStartOne: () -> Unit,
+    onStartTwo: () -> Unit,
+    onStartThree: () -> Unit,
 ): JPanel() {
 
     private val level1Btn: StartButton
@@ -154,9 +154,9 @@ class GameScreenContent(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             text = text,
+            preferredWidth = 65,
+            preferredHeight = 65,
         ).apply {
-            preferredSize = Dimension(65, 65)
-            maximumSize = Dimension(65, 65)
             font = Fonts.jbMono.deriveFont(20.0f)
             addActionListener { action() }
         }
@@ -167,9 +167,9 @@ class GameScreenContent(
             backgroundColor = GameColors.jbBlue,
             hoverColor = GameColors.jbOrange,
             text = text,
+            preferredWidth = 160,
+            preferredHeight = 60,
         ).apply {
-            preferredSize = Dimension(160, 45)
-            minimumSize = Dimension(120, 45)
             font = Fonts.jbMono.deriveFont(18.0f)
             addActionListener { action() }
         }
@@ -187,14 +187,15 @@ class GameScreenContent(
         Messages.showInfoMessage(
             project,
             """
-            How to play:
-            - Move with W A S D.
-            - Defeat enemies and collect the coins they drop.
-            - After the top bar is filled choose your upgrade!
-            - Mix and match upgrades to become strong enough to survive!
-            - Survive as long as you can!
+                How to play:
+                - Move with W A S D.
+                - Defeat enemies and collect the coins they drop.
+                - After the experience bar is filled, choose an upgrade.
+                - Mix and match upgrades to become strong enough to survive.
+                - If you see a chest, pick it up!
+                - Survive as long as you can!
         """.trimIndent(),
-            "How To Play IDE Survivors"
+            "How To Play IDE SURVIVORS"
         )
     }
 
@@ -203,7 +204,13 @@ class GameScreenContent(
             project,
             """
                 This game was created by Alexander Chatzizacharias (https://github.com/glycin).
-                Sponsored by JetBrains for the 25th anniversary of IntelliJ.
+                
+                In collaboration with:
+                Irina Mariasova – IntelliJ IDEA Marketing 
+                Andrey Kogun – Developer Consultant 
+                Arina Kovrizhkina, FOREAL® studio – Design 
+                
+                Sponsored by JetBrains for IntelliJ IDEA’s 25th birthday.
             """.trimIndent(),
             "Credits"
         )
@@ -234,7 +241,7 @@ class GameScreenContent(
 
                 val storyPanel = StoryPanel(
                     listOf(
-                        StoryReplay("Replay intro", unlocked = saveState.dialoguesSeen >= 1) {
+                        StoryReplay("Intro", unlocked = saveState.dialoguesSeen >= 1) {
                             val dialogueScreen = DialogueScreen(
                                 title = "Introduction...",
                                 texts = CutsceneTexts.screenOne,
@@ -247,7 +254,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                         },
-                        StoryReplay("Replay: 2001-2009", unlocked = saveState.dialoguesSeen >= 2) {
+                        StoryReplay("2001-2009", unlocked = saveState.dialoguesSeen >= 2) {
                             val dialogueScreen = DialogueScreen(
                                 title = "2001-2009",
                                 texts = CutsceneTexts.screenTwo,
@@ -260,7 +267,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                          },
-                        StoryReplay("Replay: 2010-2017", unlocked = saveState.dialoguesSeen >= 3) {
+                        StoryReplay("2010-2017", unlocked = saveState.dialoguesSeen >= 3) {
                             val dialogueScreen = DialogueScreen(
                                 title = "2010-2017",
                                 texts = CutsceneTexts.screenThree,
@@ -271,7 +278,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                         },
-                        StoryReplay("Replay: 2018-2026", unlocked = saveState.dialoguesSeen >= 4) {
+                        StoryReplay("2018-2026", unlocked = saveState.dialoguesSeen >= 4) {
                             val dialogueScreen = DialogueScreen(
                                 title = "2018-2026",
                                 texts = CutsceneTexts.screenFour,
@@ -282,7 +289,7 @@ class GameScreenContent(
                             wrapper = DialogueScreenWrapper(project, "Done!", dialogueScreen)
                             wrapper?.show()
                         },
-                        StoryReplay("Replay outro", unlocked = saveState.dialoguesSeen >= 4) {
+                        StoryReplay("Outro", unlocked = saveState.dialoguesSeen >= 4) {
                             val dialogueScreen = DialogueScreen(
                                 title = "Outro...",
                                 texts = CutsceneTexts.outro,

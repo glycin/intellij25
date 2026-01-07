@@ -1,11 +1,8 @@
 package com.glycin.intelli25.ui.screens
 
-import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.upgrades.UpgradeBoostDef
 import com.glycin.intelli25.util.GameColors
 import com.intellij.ui.components.JBScrollPane
-import java.awt.Font
-import java.awt.Image
 import javax.swing.*
 
 class BoostDetailPanel(
@@ -39,32 +36,12 @@ class BoostDetailPanel(
         add(Box.createVerticalGlue())
     }
 
-    private fun createBoostItem(boost: UpgradeBoostDef): JPanel {
-        return JPanel().apply {
-            isOpaque = false
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            alignmentX = CENTER_ALIGNMENT
-
-            val imageLabel = JLabel(ImageIcon(boost.image?.getScaledInstance(48, 48, Image.SCALE_SMOOTH))).apply {
-                alignmentX = CENTER_ALIGNMENT
-                border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
-            }
-
-            val titleLabel = JLabel(boost.title).apply {
-                alignmentX = CENTER_ALIGNMENT
-                font = Fonts.pixelFont.deriveFont(Font.BOLD, 14f)
-                border = BorderFactory.createEmptyBorder(8, 0, 4, 0)
-            }
-
-            val effectLabel = JLabel(boost.effect).apply {
-                alignmentX = CENTER_ALIGNMENT
-                foreground = GameColors.jbGreen
-                font = Fonts.pixelFont.deriveFont(Font.PLAIN, 12f)
-            }
-
-            add(imageLabel)
-            add(titleLabel)
-            add(effectLabel)
-        }
+    private fun createBoostItem(boost: UpgradeBoostDef): JComponent {
+        return AtlasCardItem(
+            title = boost.title,
+            description = boost.description,
+            cardIcon = boost.image!!,
+            borderColor = GameColors.jbPurple
+        )
     }
 }

@@ -161,43 +161,43 @@ class Enemy(
             return when(this){
                 EnemyType.BUG -> EnemyEntry(
                     name = "BUG",
-                    description = "Slow and predictable, but can overwhelm you!",
+                    description = "Slow and predictable, but able to overwhelm you!",
                     image = EnemyPNG.bug,
                     seen = enemiesSeen.contains("BUG")
                 )
                 EnemyType.BLOCKER -> EnemyEntry(
                     name = "BLOCKER",
-                    description = "Harder to get rid off than bugs, but you see them coming from a mile away!",
+                    description = "Harder to remove than bugs, but seen from miles away!",
                     image = EnemyPNG.blocker,
                     seen = enemiesSeen.contains("BLOCKER")
                 )
                 EnemyType.BURNING_CALENDAR -> EnemyEntry(
                     name = "DEADLINE",
-                    description = "They arrive before you notice it and hurt a lot!",
+                    description = "It shows up before you notice it, and always hit hard.",
                     image = EnemyPNG.calendar,
                     seen = enemiesSeen.contains("BURNING_CALENDAR")
                 )
                 EnemyType.PHANTOM -> EnemyEntry(
                     name = "BURNOUT PHANTOM",
-                    description = "Slowly creeps up to you, but if it reaches you, you are quickly done.",
+                    description = "It creeps up slowly. Once it hits, it’s quickly game over.",
                     image = EnemyPNG.phantom,
                     seen = enemiesSeen.contains("PHANTOM")
                 )
                 EnemyType.DEMON -> EnemyEntry(
                     name = "DOOMSCROLL DEMON",
-                    description = "That endless dopamine hit keeps you occupied and will hurt you a lot when it reaches you.",
+                    description = "It feels harmless, but it keeps you scrolling and hits hard in the end.",
                     image = EnemyPNG.demon,
                     seen = enemiesSeen.contains("DEMON")
                 )
                 EnemyType.BEES -> EnemyEntry(
                     name = "Meeting Bees",
-                    description = "Buzz buzz, and your day is gone. Fast and deadly",
+                    description = "Buzz buzz, and your day is gone. Fast and deadly.",
                     image = EnemyPNG.bees,
                     seen = enemiesSeen.contains("BEES")
                 )
                 EnemyType.VAMPIRE -> EnemyEntry(
                     name = "Legacy Vampire",
-                    description = "Nothing kills productivity as fast as legacy code and processes. Difficult to get rid of, and deals a lot of damage!",
+                    description = "Nothing drains productivity faster than legacy code. Hard to remove, deals heavy damage.",
                     image = EnemyPNG.vampire,
                     seen = enemiesSeen.contains("VAMPIRE")
                 )
