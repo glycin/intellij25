@@ -202,7 +202,7 @@ class Game(
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 2) {
                 val dialogueScreen = DialogueScreen(
-                    title = "When I was born...",
+                    title = "2001-2009",
                     texts = CutsceneTexts.screenTwo,
                     scope = scope,
                     backGroundImages = mapOf(0 to PNG.STORY_SCREEN_2),
@@ -232,7 +232,7 @@ class Game(
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 3) {
                 val dialogueScreen = DialogueScreen(
-                    title = "My teenage years",
+                    title = "2010-2017",
                     texts = CutsceneTexts.screenThree,
                     scope = scope,
                     backGroundImages = mapOf(0 to PNG.STORY_SCREEN_3),
@@ -263,7 +263,7 @@ class Game(
         scope.launch(Dispatchers.EDT) {
             if (saveState.dialoguesSeen < 4) {
                 val dialogueScreen = DialogueScreen(
-                    title = "Party time!",
+                    title = "2018-2026",
                     texts = CutsceneTexts.screenFour,
                     scope = scope,
                     backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),

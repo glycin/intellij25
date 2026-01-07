@@ -46,7 +46,7 @@ class MainMenuScreen(
         if(saveState.dialoguesSeen == 0) {
             val projectScope = project.service<GameService>().getProjectScope()
             val dialogueScreen = DialogueScreen(
-                title = "Origins...",
+                title = "Introduction...",
                 texts = CutsceneTexts.screenOne,
                 scope = projectScope,
                 backGroundImages = mapOf(0 to PNG.STORY_SCREEN_1),

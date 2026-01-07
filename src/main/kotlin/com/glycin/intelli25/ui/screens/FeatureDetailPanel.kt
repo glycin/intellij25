@@ -22,25 +22,13 @@ class FeatureDetailPanel(
             border = BorderFactory.createEmptyBorder(16, 16, 16, 16)
         }
 
-        features.forEachIndexed { fIndex, feature ->
-            //inner.add(buildFeatureInfo(feature))
-            //inner.add(Box.createVerticalStrut(12)) //TODO: Do we want the header here?
-
+        features.forEach { feature ->
             feature.upgrades.filter { it.availableAtLevel == level}.forEachIndexed { bIndex, boost ->
                 inner.add(buildBoostCard(boost))
                 if (bIndex < feature.upgrades.lastIndex) {
                     inner.add(Box.createVerticalStrut(25))
                 }
             }
-
-            /*if (fIndex < features.lastIndex) {
-                inner.add(Box.createVerticalStrut(32))
-                inner.add(JSeparator(JSeparator.HORIZONTAL).apply {
-                    maximumSize = Dimension(Int.MAX_VALUE, 1)
-                    foreground = GameColors.white
-                })
-                inner.add(Box.createVerticalStrut(32))
-            }*/ //TODO: No separator needed if we dont group by headers
         }
 
         val scrollPane = JBScrollPane(inner).apply {
@@ -52,43 +40,6 @@ class FeatureDetailPanel(
         }
 
         add(scrollPane, BorderLayout.CENTER)
-    }
-
-    private fun buildFeatureInfo(feature: AttackDef): JComponent {
-        val panel = JPanel().apply {
-            isOpaque = false
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            alignmentX = CENTER_ALIGNMENT
-        }
-
-        feature.image?.let { img ->
-            val iconLabel = JLabel(ImageIcon(img.getScaledInstance(96, 96, Image.SCALE_SMOOTH))).apply {
-                alignmentX = CENTER_ALIGNMENT
-                border = BorderFactory.createEmptyBorder(0, 0, 8, 0)
-            }
-            panel.add(iconLabel)
-        }
-
-        panel.add(JLabel(feature.title).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.BOLD, 18f)
-            foreground = GameColors.white
-        })
-
-        panel.add(JLabel(feature.description).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.PLAIN, 14f)
-            foreground = GameColors.white
-            border = BorderFactory.createEmptyBorder(4, 0, 4, 0)
-        })
-
-        panel.add(JLabel(feature.effect).apply {
-            alignmentX = CENTER_ALIGNMENT
-            font = Fonts.pixelFont.deriveFont(Font.PLAIN, 14f)
-            foreground = GameColors.jbGreen
-        })
-
-        return panel
     }
 
     private fun buildBoostCard(boost: AttackUpgradeDef): JComponent {

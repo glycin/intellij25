@@ -2,6 +2,7 @@ package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.upgrades.UpgradeBoostDef
+import com.glycin.intelli25.util.GameColors
 import com.intellij.ui.components.JBScrollPane
 import java.awt.Font
 import java.awt.Image
@@ -44,19 +45,21 @@ class BoostDetailPanel(
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
 
-            val imageLabel = JLabel(ImageIcon(boost.image?.getScaledInstance(32, 32, Image.SCALE_SMOOTH))).apply {
+            val imageLabel = JLabel(ImageIcon(boost.image?.getScaledInstance(48, 48, Image.SCALE_SMOOTH))).apply {
                 alignmentX = CENTER_ALIGNMENT
+                border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
             }
 
             val titleLabel = JLabel(boost.title).apply {
                 alignmentX = CENTER_ALIGNMENT
-                font = Fonts.pixelFont.deriveFont(Font.BOLD, 18f)
+                font = Fonts.pixelFont.deriveFont(Font.BOLD, 14f)
                 border = BorderFactory.createEmptyBorder(8, 0, 4, 0)
             }
 
             val effectLabel = JLabel(boost.effect).apply {
                 alignmentX = CENTER_ALIGNMENT
-                font = Fonts.pixelFont.deriveFont(Font.PLAIN, 14f)
+                foreground = GameColors.jbGreen
+                font = Fonts.pixelFont.deriveFont(Font.PLAIN, 12f)
             }
 
             add(imageLabel)

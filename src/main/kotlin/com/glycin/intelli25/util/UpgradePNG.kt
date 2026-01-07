@@ -160,4 +160,8 @@ object UpgradePNG {
     val springDebugger: BufferedImage? by lazy {
         getPng("$BASE_PATH/spring_debugger.png", UpgradePNG::class.java)
     }
+
+    val tab: BufferedImage? by lazy {
+        getPng("$BASE_PATH/tab.png", UpgradePNG::class.java)
+    }
 }

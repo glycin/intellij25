@@ -36,7 +36,7 @@ object AttackConfig {
                 description = "IntelliJ added blazing fast full line autocomplete",
                 effect = "Add an additional AI assistant and increase rotation speed of the drones",
                 availableAtLevel = 3,
-                image = UpgradePNG.profiler,
+                image = UpgradePNG.tab,
             ),
         ),
     )
