@@ -266,7 +266,7 @@ class Game(
                     title = "2018-2026",
                     texts = CutsceneTexts.screenFour,
                     scope = scope,
-                    backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 8 to PNG.STORY_SCREEN_5),
+                    backGroundImages = mapOf(0 to PNG.STORY_SCREEN_4, 4 to PNG.STORY_SCREEN_5),
                     onReadyToStart = {
                         saveState.dialoguesSeen++
                         dialogueScreenWrapper?.enableOk()

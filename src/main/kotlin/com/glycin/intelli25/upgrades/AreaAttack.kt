@@ -16,7 +16,6 @@ class AreaAttack(
 
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 30
-    private val hitDistanceSq = (diameter / 2) * (diameter / 2)
 
     private val upgradeOne = upgradeOptionFromAttackDef {
         val boost = attackDef.upgrades[0]
@@ -107,6 +106,7 @@ class AreaAttack(
     override fun activate() { }
 
     override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
+        val hitDistanceSq = (diameter / 2) * (diameter / 2)
         return if(Vec2.distanceNoSqr(enemyMidPos, playerMidPos) <= hitDistanceSq) {
             basicAttackDamage * ggState.damageMultiplier
         } else

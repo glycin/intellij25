@@ -1,5 +1,6 @@
 package com.glycin.intelli25.managers
 
+import com.glycin.intelli25.model.DamageNumber
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.EnemyType
 import com.glycin.intelli25.model.Pickup
@@ -8,6 +9,8 @@ import com.glycin.intelli25.model.TreasureChest
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.persistence.GameSaveState
+import com.glycin.intelli25.ui.Fonts
+import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.randomPointOnCircle
 import com.intellij.openapi.components.service
 import com.jetbrains.rd.util.concurrentMapOf
@@ -15,7 +18,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.awt.Font
 import java.awt.Graphics2D
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
@@ -28,7 +33,7 @@ class EnemyManager(
     private var enemyMap = concurrentMapOf<Int, Enemy>()
     private var pickupsMap = concurrentMapOf<Int, Pickup>()
     private var treasureMap = concurrentMapOf<Int, TreasureChest>()
-    private var damageNumbers = concurrentMapOf<Int, Int>()
+    private val damageNumbers = CopyOnWriteArrayList<DamageNumber>()
     private var idCounter = 0
     private var chestCounter = 0
     private val elapsedTimeMs = AtomicLong(0L)
@@ -39,6 +44,7 @@ class EnemyManager(
                 if(!ggState.inUpgradeMenu){
                     enemyMap.takeIf { !ggState.frozen }?.forEach { e -> e.value.move() }
                     pickupsMap.filter { p -> p.value.picked }.forEach { it.value.move() }
+                    //updateDamageNumbers() //TODO: Not sure about showing damage numbers :(
                 }
                 delay(ggState.deltaTime)
             }
@@ -90,6 +96,13 @@ class EnemyManager(
 
     fun damage(enemy: Enemy, damage: Int) {
         enemy.currentHp -= damage
+
+        damageNumbers.add(DamageNumber(
+            x = enemy.position.x,
+            y = enemy.position.y,
+            dmg = damage
+        ))
+
         if(enemy.currentHp <= 0){
             if(Random.nextDouble(100.0) <= enemy.chestDropChance) {
                 chestCounter++
@@ -129,7 +142,12 @@ class EnemyManager(
     }
 
     fun drawDamageNumbers(g: Graphics2D) {
+        g.font = Fonts.pixelFont.deriveFont(Font.BOLD, 12f)
 
+        for (dn in damageNumbers) {
+            g.color = GameColors.jbRedLight
+            g.drawString(dn.dmg.toString(), dn.x, dn.y)
+        }
     }
 
     fun getClosestEnemies(count: Int, playerPosition: Vec2): List<Enemy> {
@@ -163,5 +181,16 @@ class EnemyManager(
     private fun registerNewEnemy(newType: EnemyType) {
         seenEnemies.add(newType)
         service<GameSaveState>().enemiesSeen = seenEnemies.joinToString(",") { it.name }
+    }
+
+    private fun updateDamageNumbers() {
+        val dtSeconds = ggState.deltaTime / 1000f
+
+        for(dn in damageNumbers){
+            dn.lifeTime -= dtSeconds
+            dn.y -= (40f * dtSeconds)
+        }
+
+        damageNumbers.removeIf { it.lifeTime <= 0 }
     }
 }

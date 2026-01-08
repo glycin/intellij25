@@ -55,7 +55,7 @@ class GameComponent(
             attackManager.drawAttacks(g)
             enemyManager.drawEnemies(g)
             enemyManager.drawPickups(g)
-            enemyManager.drawDamageNumbers(g)
+            //enemyManager.drawDamageNumbers(g) //TODO: Not sure about showing damage numbers :(
         }
     }
 
