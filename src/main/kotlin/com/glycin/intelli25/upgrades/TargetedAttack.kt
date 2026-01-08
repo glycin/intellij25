@@ -120,10 +120,10 @@ class TargetedAttack(
         projectiles.values.forEach { it.move() }
     }
 
-    override fun getDamage(enemyMidPos: Vec2): Int {
+    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
         val attacksToRemove = ArrayList<TargetedProjectile>()
         val damage = projectiles.values.sumOf { tp ->
-            if(Vec2.distance(enemyMidPos, tp.midPoint()) <= tp.radius) {
+            if(Vec2.distanceNoSqr(enemyMidPos, tp.midPoint()) <= tp.hitBoxSq) {
                 attacksToRemove.add(tp)
                 animations.add(Animation(
                     position = enemyMidPos,

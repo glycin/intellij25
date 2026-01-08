@@ -80,9 +80,10 @@ class CollisionsManager(
 
     fun checkAttackToEnemy() {
         val enemies = enemyManager.getEnemies()
+        val playerMid = player.midPoint()
         for(i in enemies.indices) {
             val enemy = enemies[i]
-            val damage = attackManager.getDamage(enemy)
+            val damage = attackManager.getDamage(enemy, playerMid)
             if(damage > 0) {
                 enemyManager.damage(enemy, damage)
             }

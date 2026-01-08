@@ -42,7 +42,7 @@ class MassDestructionAttack(
 
     override fun move() { }
 
-    override fun getDamage(enemyMidPos: Vec2): Int = 0
+    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int = 0
 
     override fun getNextUpgrade(): UpgradeOption? {
         TODO("Not yet implemented")

@@ -15,6 +15,7 @@ class TargetedProjectile(
     val target: Enemy,
     val speed: Float = 5.0f,
 ) {
+    val hitBoxSq = radius * radius
     var angle = 0.0
     fun midPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2))
 

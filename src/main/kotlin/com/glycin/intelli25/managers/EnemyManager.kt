@@ -75,13 +75,11 @@ class EnemyManager(
                 if(!ggState.inUpgradeMenu){
                     val elapsedSeconds = elapsedTimeMs.addAndGet(1000L) / 1000L
                     if(elapsedSeconds > 0 && elapsedSeconds % 60 == 0L){
-                        println("Now at seconds: $elapsedSeconds")
                         ggState.spawnCountPerCooldown *= 2
                         ggState.enemySpawnCooldown -= 100L
                     }
 
                     if(elapsedSeconds > 0 && elapsedSeconds % 90 == 0L){
-                        println("Increasing enemy tier!")
                         ggState.enemyTier++
                     }
                 }

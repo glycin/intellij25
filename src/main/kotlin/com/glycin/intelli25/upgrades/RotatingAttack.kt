@@ -20,6 +20,7 @@ class RotatingAttack(
     private val basicAttackDamage: Int = 20
     private var speed =  0.001f
     private val widthHeight = 64
+    private val droneHitBoxSq = widthHeight * widthHeight
     private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
     private var pointValues = mutableListOf(0.0f)
 
@@ -90,10 +91,10 @@ class RotatingAttack(
 
     override fun activate() {}
 
-    override fun getDamage(enemyMidPos: Vec2): Int {
+    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
         val inRange = objectPositions.any {
             val objetMidPoint = Vec2(it.x + (widthHeight / 2), it.y + (widthHeight / 2))
-            Vec2.distance(enemyMidPos, objetMidPoint) <= widthHeight
+            Vec2.distanceNoSqr(enemyMidPos, objetMidPoint) <= droneHitBoxSq
         }
 
         return if (inRange) basicAttackDamage * ggState.damageMultiplier else 0

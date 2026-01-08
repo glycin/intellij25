@@ -168,27 +168,32 @@ class BasicAttack(
         }
     }
 
-    override fun getDamage(enemyMidPos: Vec2): Int {
-        val bulletsToRemove = ArrayList<Bullet>()
+    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
+        if (bullets.isEmpty()) return 0
 
-        val damage = bullets.values.sumOf { b ->
-            if(Vec2.distance(enemyMidPos, b.midPoint()) <= (b.radius * 2)) {
-                bulletsToRemove.add(b)
-                b.damage * ggState.damageMultiplier
-            } else {
-                0
+        var totalDamage = 0
+        val damageMultiplier = ggState.damageMultiplier
+
+        val iterator = bullets.values.iterator()
+
+        while (iterator.hasNext()) {
+            val b = iterator.next()
+
+
+            val range = b.radius * 2
+            val rangeSq = range * range
+
+            if (Vec2.distanceNoSqr(enemyMidPos, b.midPoint()) <= rangeSq) {
+                totalDamage += (b.damage * damageMultiplier)
+
+                if (!invincibleBullet) {
+                    iterator.remove()
+                }
             }
         }
 
-        if(!invincibleBullet) {
-            bulletsToRemove.forEach {
-                bullets.remove(it.id)
-            }
-        }
-
-        return damage
+        return totalDamage
     }
-
     override fun getNextUpgrade(): UpgradeOption? {
         if(currentLevel >= maxLevel) { return null}
         return upgrades[currentLevel - 1]

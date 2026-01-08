@@ -107,9 +107,10 @@ class PoolAttack(
         poolMap.values.forEach { it.move() }
     }
 
-    override fun getDamage(enemyMidPos: Vec2): Int {
+    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
         return poolMap.values.sumOf {
-            if(Vec2.distance(enemyMidPos, it.midPoint()) <= it.width) {
+            val poolHitBox = it.width * it.width
+            if(Vec2.distanceNoSqr(enemyMidPos, it.midPoint()) <= poolHitBox) {
                 it.damage * ggState.damageMultiplier
             } else 0
         }
