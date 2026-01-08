@@ -17,7 +17,7 @@ class BasicAttack(
     ggState: GameGlobalState,
     player: Player,
     private val scope: CoroutineScope,
-) : Attack(ggState, player, AttackConfig.PRODUCTIVITY_FEATURE) {
+) : Attack(ggState, player, AttackConfig.SIDE_SHOT_WEAPON) {
 
     private var nextId = 0L
     private val bullets = concurrentMapOf<Long, Bullet>()

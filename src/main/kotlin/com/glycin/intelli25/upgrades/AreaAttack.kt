@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 class AreaAttack(
     ggState: GameGlobalState,
     player: Player,
-) : Attack(ggState, player, AttackConfig.ENTERPRISE_READY_FEATURE) {
+) : Attack(ggState, player, AttackConfig.FORCE_FIELD_WEAPON) {
 
     private val basicAttackDamage: Int = 1
     private var diameter = player.width + 30

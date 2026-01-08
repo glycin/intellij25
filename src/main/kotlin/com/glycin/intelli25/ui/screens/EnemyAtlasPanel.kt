@@ -51,7 +51,7 @@ class EnemyAtlasPanel(
 
     private fun createEnemyRow(enemy: EnemyEntry): JComponent {
         return AtlasCardItem(
-            title = enemy.name,
+            title = enemy.name.uppercase(),
             description = enemy.description,
             cardIcon = if (enemy.seen) enemy.image!! else EnemyPNG.unknown!!,
             borderColor = GameColors.jbPurple

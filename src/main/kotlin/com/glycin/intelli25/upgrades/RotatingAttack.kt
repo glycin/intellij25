@@ -13,7 +13,7 @@ import kotlin.math.roundToInt
 class RotatingAttack(
     ggState: GameGlobalState,
     player: Player
-): Attack(ggState, player, AttackConfig.AI_FEATURE) {
+): Attack(ggState, player, AttackConfig.DRONE_WEAPON) {
 
     private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
     private val radius = 250f

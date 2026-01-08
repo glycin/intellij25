@@ -17,7 +17,7 @@ class PoolAttack(
     ggState: GameGlobalState,
     player: Player,
     private val scope: CoroutineScope,
-): Attack(ggState, player, AttackConfig.BUILD_TOOLS_FEATURE) {
+): Attack(ggState, player, AttackConfig.TOXIC_POOL_WEAPON) {
 
     private var nextId = 0
     private val poolMap = mutableMapOf<Int, Pool>()

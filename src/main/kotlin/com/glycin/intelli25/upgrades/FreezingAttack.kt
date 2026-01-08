@@ -20,7 +20,7 @@ class FreezingAttack(
     private val scope: CoroutineScope,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player, AttackConfig.VERSIONING_FEATURE) {
+): Attack(ggState, player, AttackConfig.FREEZING_WEAPON) {
 
     private val effectSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/snow.png", 64, 64, 16)
     private var effectAnimation: Animation? = null

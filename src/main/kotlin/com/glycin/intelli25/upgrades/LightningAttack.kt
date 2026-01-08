@@ -21,7 +21,7 @@ class LightningAttack(
     player: Player,
     private val enemyManager: EnemyManager,
     private val scope: CoroutineScope,
-): Attack(ggState, player, AttackConfig.KOTLIN_FEATURE) {
+): Attack(ggState, player, AttackConfig.LIGHTNING_STRIKE_WEAPON) {
     private val animationBaseWidth = 128
     private val animationBaseHeight = 256
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)

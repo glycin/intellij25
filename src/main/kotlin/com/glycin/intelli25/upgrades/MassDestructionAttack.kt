@@ -18,7 +18,7 @@ class MassDestructionAttack(
     private val scope: CoroutineScope,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player, AttackConfig.PRODUCTIVITY_FEATURE) { //TODO: Fix when this is made
+): Attack(ggState, player, AttackConfig.SIDE_SHOT_WEAPON) { //TODO: Fix when this is made
 
     private var triggerChance = 1//%
     override val maxLevel: Int = 1

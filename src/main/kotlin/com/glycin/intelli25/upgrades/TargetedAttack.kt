@@ -23,7 +23,7 @@ class TargetedAttack(
     private val enemyManager: EnemyManager,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player, AttackConfig.STYLE_FEATURE) {
+): Attack(ggState, player, AttackConfig.FIREWORK_WEAPON) {
 
     private val boomEffects = SpriteSheetImageLoader.loadSprites(
         "/sprites/effects/firework_boom.png",

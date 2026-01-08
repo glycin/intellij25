@@ -39,7 +39,7 @@ class BoostDetailPanel(
     private fun createBoostItem(boost: UpgradeBoostDef): JComponent {
         return AtlasCardItem(
             title = boost.title,
-            description = boost.description,
+            description = boost.effect,
             cardIcon = boost.image!!,
             borderColor = GameColors.jbPurple
         )
