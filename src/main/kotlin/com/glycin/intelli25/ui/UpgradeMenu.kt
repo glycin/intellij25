@@ -3,29 +3,11 @@ package com.glycin.intelli25.ui
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.util.GameColors
 import com.intellij.openapi.ui.popup.JBPopup
-import com.intellij.ui.JBColor
-import com.intellij.util.IconUtil
 import com.intellij.util.ui.JBUI
-import java.awt.BorderLayout
-import java.awt.Color
-import java.awt.Cursor
-import java.awt.Dimension
-import java.awt.FlowLayout
-import java.awt.Font
-import java.awt.GridLayout
-import java.awt.Image
-import java.awt.Rectangle
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import javax.swing.BorderFactory
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.ImageIcon
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JTextArea
-import javax.swing.SwingConstants
+import javax.swing.*
 
 class UpgradeMenu(
     private val upgrades: List<UpgradeOption>,
@@ -56,7 +38,7 @@ class UpgradeMenu(
 
             upgrades.forEach { up ->
                 add(createUpgradeCard(up))
-                add(Box.createRigidArea(Dimension(0, 10)))
+                add(Box.createVerticalStrut(15))
             }
         }
     }
@@ -65,75 +47,107 @@ class UpgradeMenu(
         return UpgradeCard(option)
     }
 
-    inner class UpgradeCard(private val option: UpgradeOption) : JPanel() {
+    inner class UpgradeCard(private val option: UpgradeOption) : JPanel(GridBagLayout()) {
         private var popup: JBPopup? = null
+        private var isHovered = false
 
         init {
-            layout = BoxLayout(this, BoxLayout.X_AXIS)
+            isOpaque = false
+
             preferredSize = Dimension(800, 120)
             maximumSize = Dimension(Int.MAX_VALUE, 120)
-            background = option.color
-            border = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(option.color, 2),
-                JBUI.Borders.empty(10)
-            )
             cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-            isOpaque = true
 
-            add(createIconSection())
-            add(Box.createRigidArea(Dimension(10, 0)))
-            add(createTextSection())
+            border = JBUI.Borders.empty(15)
 
+            setupComponents()
             setupMouseListeners()
         }
 
-        private fun createIconSection(): JComponent {
-            val targetSize = 64
-            val scaledIcon = option.icon.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH)
-            return JLabel(ImageIcon(scaledIcon)).apply {
-                preferredSize = Dimension(targetSize, targetSize)
-                minimumSize = Dimension(targetSize, targetSize)
-                maximumSize = Dimension(targetSize, targetSize)
-                alignmentY = 0.5f
-            }
-        }
+        private fun setupComponents() {
+            val c = GridBagConstraints()
 
-        private fun createTextSection(): JPanel {
-            return JPanel().apply {
+            val iconSize = 64
+            val backgroundSize = 100
+            val scaledIcon = option.icon.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH)
+            val iconBackground = object : JPanel(GridBagLayout()) {
+                override fun paintComponent(g: Graphics) {
+                    val g2 = g as Graphics2D
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+                    g2.color = GameColors.black
+                    g2.fillRoundRect(0, 0, width, height, 20, 20)
+                }
+            }.apply {
+                isOpaque = false
+                preferredSize = Dimension(backgroundSize, backgroundSize)
+                minimumSize = Dimension(backgroundSize, backgroundSize)
+                maximumSize = Dimension(backgroundSize, backgroundSize)
+
+                add(JLabel(ImageIcon(scaledIcon)))
+            }
+
+            c.gridx = 0
+            c.gridy = 0
+            c.weightx = 0.0
+            c.anchor = GridBagConstraints.CENTER
+            c.insets = JBUI.insetsRight(20)
+            add(iconBackground, c)
+
+            val textPanel = JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 isOpaque = false
-                alignmentY = 0.5f
 
-                add(JLabel("${option.title}${if(option.subTitle.isNotEmpty()) " - ${option.subTitle}" else ""}").apply {
-                    font = Fonts.pixelFont.deriveFont(Font.BOLD, 24.0f)
+                add(JLabel(option.title).apply {
+                    font = Fonts.jbMono.deriveFont(Font.BOLD, 24.0f)
                     foreground = option.textColor
+                    alignmentX = LEFT_ALIGNMENT
                 })
 
-                add(JLabel(option.effect).apply {
-                    font = Fonts.pixelFont.deriveFont(Font.PLAIN, 16.0f)
+                add(Box.createVerticalStrut(4))
+
+                add(JLabel("<html>${option.effect}</html>").apply {
+                    font = Fonts.jbMono.deriveFont(Font.BOLD, 16.0f)
                     foreground = option.textColor
-                    border = JBUI.Borders.emptyTop(4)
+                    alignmentX = LEFT_ALIGNMENT
                 })
             }
+
+            c.gridx = 1
+            c.gridy = 0
+            c.weightx = 1.0
+            c.fill = GridBagConstraints.HORIZONTAL
+            c.anchor = GridBagConstraints.CENTER
+            c.insets = JBUI.emptyInsets()
+            add(textPanel, c)
+        }
+
+        override fun paintComponent(g: Graphics) {
+            val g2 = g as Graphics2D
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+            g2.color = if(isHovered) GameColors.jbOrange else option.color
+            if(isHovered) {
+                g2.fillRoundRect(0, 0, width, height, 40, 40)
+            } else {
+                g2.drawRoundRect(0, 0, width, height, 40, 40)
+            }
+
+            g2.stroke = BasicStroke(10f)
+            g2.drawRoundRect(1, 1, width - 3, height - 3, 40, 40)
+
+            super.paintChildren(g)
         }
 
         private fun setupMouseListeners() {
             addMouseListener(object : MouseAdapter() {
                 override fun mouseEntered(e: MouseEvent) {
-                    background = option.color
-                    border = BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(GameColors.jbGreen, 3),
-                        JBUI.Borders.empty(10)
-                    )
+                    isHovered = true
                     repaint()
                 }
 
                 override fun mouseExited(e: MouseEvent) {
-                    background = option.color
-                    border = BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(option.color, 2),
-                        JBUI.Borders.empty(10)
-                    )
+                    isHovered = false
                     repaint()
                 }
 
