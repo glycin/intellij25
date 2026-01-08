@@ -28,6 +28,7 @@ class EnemyManager(
     private var enemyMap = concurrentMapOf<Int, Enemy>()
     private var pickupsMap = concurrentMapOf<Int, Pickup>()
     private var treasureMap = concurrentMapOf<Int, TreasureChest>()
+    private var damageNumbers = concurrentMapOf<Int, Int>()
     private var idCounter = 0
     private var chestCounter = 0
     private val elapsedTimeMs = AtomicLong(0L)
@@ -114,11 +115,11 @@ class EnemyManager(
         treasureMap.remove(chest.id)
     }
 
-    fun getEnemies() = enemyMap.values.toList()
+    fun getEnemies() = enemyMap.values.toTypedArray()
 
-    fun getPickups() = pickupsMap.values.toList()
+    fun getPickups() = pickupsMap.values.toTypedArray()
 
-    fun getChests() = treasureMap.values.toList()
+    fun getChests() = treasureMap.values.toTypedArray()
 
     fun drawEnemies(g: Graphics2D) {
         enemyMap.values.forEach {e -> e.draw(g) }
@@ -127,6 +128,10 @@ class EnemyManager(
     fun drawPickups(g: Graphics2D) {
         pickupsMap.values.forEach {e -> e.draw(g) }
         treasureMap.values.forEach {e -> e.draw(g) }
+    }
+
+    fun drawDamageNumbers(g: Graphics2D) {
+
     }
 
     fun getClosestEnemies(count: Int, playerPosition: Vec2): List<Enemy> {

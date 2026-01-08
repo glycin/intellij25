@@ -7,9 +7,6 @@ object GameColors {
     val transparent = JBColor(Color(0,0,0,0), Color(0,0,0,0))
     val black = Color.black.toJbColor()
     val white = Color.white.toJbColor()
-    val yellow = Color.yellow.toJbColor()
-    val red = Color.red.toJbColor()
-    val green = Color.green.toJbColor()
 
     val jbRed = JBColor(Color(254, 41, 88, 255), Color(254, 41, 88, 255))
     val jbBlue = JBColor(Color(1, 127, 255, 255), Color(1, 127, 255, 255))

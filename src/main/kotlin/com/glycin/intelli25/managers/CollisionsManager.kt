@@ -3,7 +3,6 @@ package com.glycin.intelli25.managers
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
-import com.glycin.intelli25.util.toPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -16,13 +15,15 @@ class CollisionsManager(
     private val ggState: GameGlobalState,
     scope: CoroutineScope,
 ) {
+    private val pickUpRangeSq = 25 * 25
+
     init {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 checkPlayerToEnemy()
                 checkAttackToEnemy()
                 checkPlayerToPickup()
-                delay(ggState.deltaTime)
+                delay(ggState.deltaTime * 2) //TODO: For now, do collisions check twice as slow as other updates
             }
         }
     }
@@ -30,45 +31,60 @@ class CollisionsManager(
     fun checkPlayerToEnemy() {
         if(ggState.inUpgradeMenu) return
 
-        val enemiesInRange = enemyManager.getEnemies().filter { e ->
-            Vec2.distance(e.midPoint(), player.midPoint()) <= player.width
+        val enemies = enemyManager.getEnemies()
+        val playerMid = player.midPoint()
+        var totalDamage = 0
+
+        for(i in enemies.indices) {
+            val enemy = enemies[i]
+
+            if(Vec2.distanceNoSqr(enemy.midPoint(), playerMid) <= player.playHitDistSq) {
+                totalDamage += enemy.damage
+            }
         }
 
-        if (enemiesInRange.isNotEmpty()){
-            player.hurt(enemiesInRange.sumOf { it.damage })
+        if (totalDamage > 0){
+            player.hurt(totalDamage)
         } else {
             player.unhurt()
         }
     }
 
     fun checkPlayerToPickup() {
-        val pickUpsInRange = enemyManager.getPickups().filter { p ->
-            Vec2.distance(p.midPoint(), player.midPoint()) <= (player.pickUpRange * ggState.xpPickUpRangeMultiplier)
-        }
+        val pickups = enemyManager.getPickups()
+        val playerMid = player.midPoint()
+        val magnetRange = player.pickUpRange * ggState.xpPickUpRangeMultiplier
+        val magnetRangeSq = magnetRange * magnetRange
 
-        pickUpsInRange.forEach { pickUp ->
-            pickUp.picked = true
-            if(Vec2.distance(pickUp.position, player.midPoint()) <= 25f) {
-                player.addExp(pickUp.xp * ggState.xpMultiplier)
-                enemyManager.removePickup(pickUp)
+        for(i in pickups.indices) {
+            val pickup = pickups[i]
+            val distance = Vec2.distanceNoSqr(pickup.midPoint(), playerMid)
+            if(distance <= magnetRangeSq) {
+                pickup.picked = true
+                if(distance <= pickUpRangeSq) {
+                    player.addExp(pickup.xp * ggState.xpMultiplier)
+                    enemyManager.removePickup(pickup)
+                }
             }
         }
 
-        val chestsInRange = enemyManager.getChests().filter { c ->
-            Vec2.distance(c.midPoint(), player.midPoint()) <= player.pickUpRange
-        }
-
-        chestsInRange.forEach { chest ->
-            player.levelUp()
-            enemyManager.removeChest(chest)
+        val chests = enemyManager.getChests()
+        for(i in chests.indices) {
+            val chest = chests[i]
+            if(Vec2.distanceNoSqr(chest.midPoint(), playerMid) <= player.chestPickupRangeSq) {
+                player.levelUp()
+                enemyManager.removeChest(chest)
+            }
         }
     }
 
     fun checkAttackToEnemy() {
-        enemyManager.getEnemies().forEach { e ->
-            val dmg = attackManager.getDamage(e)
-            if(dmg > 0){
-                enemyManager.damage(e, dmg)
+        val enemies = enemyManager.getEnemies()
+        for(i in enemies.indices) {
+            val enemy = enemies[i]
+            val damage = attackManager.getDamage(enemy)
+            if(damage > 0) {
+                enemyManager.damage(enemy, damage)
             }
         }
     }

@@ -14,9 +14,12 @@ class Player(
     private val onLevelUp: () -> Unit,
     private val onDeath: () -> Unit,
 ) {
+    val playHitDistSq = (width * width)
+    val chestPickupRangeSq = (50 * 50)
+    val pickUpRange: Float = 50.0f
+
     var experience = 0.0f
     var experienceNeeded = 10
-    var pickUpRange: Float = 50.0f
     var level = 1
 
     val keyMap = mutableMapOf(

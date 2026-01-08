@@ -47,7 +47,7 @@ class GameOverScreen(
 
         val titleLabel = JLabel(title).apply {
             font = Fonts.pixelFont.deriveFont(24.0f)
-            foreground = GameColors.green
+            foreground = GameColors.jbGreen
             horizontalAlignment = SwingConstants.CENTER
             border = BorderFactory.createEmptyBorder(20, 20, 20, 0)
         }
@@ -82,7 +82,7 @@ class GameOverScreen(
             val wrapped = "<html><div style='text-align: center; width: 350px;'>$subText</div></html>"
             val subTextLabel = JLabel(wrapped).apply {
                 font = Fonts.pixelFont.deriveFont(16.0f)
-                foreground = GameColors.red
+                foreground = GameColors.jbRed
                 alignmentX = CENTER_ALIGNMENT
                 preferredSize = Dimension(450, preferredSize.height)
             }

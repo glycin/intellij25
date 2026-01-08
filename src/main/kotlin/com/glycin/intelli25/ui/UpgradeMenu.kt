@@ -24,7 +24,7 @@ class UpgradeMenu(
 
     private fun createTitleLabel(): JLabel {
         return JLabel("CHOOSE YOUR UPGRADE!").apply {
-            font = Fonts.pixelFont.deriveFont(1, 26.0f)
+            font = Fonts.pixelFont.deriveFont(1, 32.0f)
             foreground = GameColors.white
             horizontalAlignment = SwingConstants.CENTER
             border = JBUI.Borders.emptyBottom(20)

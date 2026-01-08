@@ -36,7 +36,7 @@ class MassDestructionAttack(
     }
 
     override fun draw(g: Graphics2D) {
-        g.color = GameColors.red
+        g.color = GameColors.jbRed
         g.fillRect(0, 0, ggState.maxX, ggState.maxY)
     }
 

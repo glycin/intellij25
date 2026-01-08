@@ -164,4 +164,28 @@ object UpgradePNG {
     val tab: BufferedImage? by lazy {
         getPng("$BASE_PATH/tab.png", UpgradePNG::class.java)
     }
+
+    val droneUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/drone_unlock.png", UpgradePNG::class.java)
+    }
+
+    val fireworkUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/firework_unlock.png", UpgradePNG::class.java)
+    }
+
+    val forceFieldUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/force_field_unlock.png", UpgradePNG::class.java)
+    }
+
+    val freezeUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/freeze_unlock.png", UpgradePNG::class.java)
+    }
+
+    val lightningUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/lightning_unlock.png", UpgradePNG::class.java)
+    }
+
+    val poolUnlock: BufferedImage? by lazy {
+        getPng("$BASE_PATH/pool_unlock.png", UpgradePNG::class.java)
+    }
 }

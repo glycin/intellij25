@@ -21,6 +21,12 @@ class Vec2(
             return sqrt(dx * dx + dy * dy)
         }
 
+        fun distanceNoSqr(a: Vec2, b: Vec2): Float {
+            val dx = (b.x - a.x)
+            val dy = (b.y - a.y)
+            return (dx * dx) + (dy * dy)
+        }
+
         fun opposite(vec2: Vec2): Vec2 {
             return Vec2(-vec2.x, -vec2.y)
         }

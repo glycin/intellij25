@@ -55,6 +55,7 @@ class GameComponent(
             attackManager.drawAttacks(g)
             enemyManager.drawEnemies(g)
             enemyManager.drawPickups(g)
+            enemyManager.drawDamageNumbers(g)
         }
     }
 

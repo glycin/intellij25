@@ -25,7 +25,7 @@ class EscMenuPanel(
             onResume()
         }
 
-        val quitBtn = createMenuButton("QUIT GAME", GameColors.red) {
+        val quitBtn = createMenuButton("QUIT GAME", GameColors.jbRed) {
             popup?.cancel()
             onQuit()
         }
