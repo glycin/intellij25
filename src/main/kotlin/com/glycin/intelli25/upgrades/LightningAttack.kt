@@ -27,7 +27,7 @@ class LightningAttack(
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
     private var attackAnimation: Animation? = null
     private val basicAttackDamage: Int = 50
-    private var lightningRadius = 40
+    private var lightningRadius = 80
     private var attackCooldown =  5000L
 
     private val upgradeOne = upgradeOptionFromAttackDef {
@@ -45,7 +45,7 @@ class LightningAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            lightningRadius = 80
+            lightningRadius = 120
             generalLevelUp()
         }
     }
@@ -65,7 +65,7 @@ class LightningAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            lightningRadius = 120
+            lightningRadius = 200
             attackCooldown = 900L
             generalLevelUp()
         }
