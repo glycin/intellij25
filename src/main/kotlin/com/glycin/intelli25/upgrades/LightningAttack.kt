@@ -27,15 +27,15 @@ class LightningAttack(
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
     private var attackAnimation: Animation? = null
     private val basicAttackDamage: Int = 50
-    private var lightningRadius = 80
-    private var attackCooldown =  5000L
+    private var lightningRadius = 120
+    private var attackCooldown =  3000L
 
     private val upgradeOne = upgradeOptionFromAttackDef {
         val boost = attackDef.upgrades[0]
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            attackCooldown = 3000L
+            attackCooldown = 1500L
             generalLevelUp()
         }
     }
@@ -45,7 +45,7 @@ class LightningAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            lightningRadius = 120
+            lightningRadius = 200
             generalLevelUp()
         }
     }
@@ -55,7 +55,7 @@ class LightningAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            attackCooldown = 1500L
+            attackCooldown = 900L
             generalLevelUp()
         }
     }
@@ -65,8 +65,8 @@ class LightningAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            lightningRadius = 200
-            attackCooldown = 900L
+            lightningRadius = 300
+            attackCooldown = 350L
             generalLevelUp()
         }
     }
@@ -84,10 +84,11 @@ class LightningAttack(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu) {
-                    randomPointInCircle(ggState.maxX - 300f, Vec2(ggState.maxX / 2.0f, ggState.maxY / 2.0f)).let { pos ->
-                        attackAnimation = Animation(position = pos, sprites = attackSprites, frameDelay = 8) {
+                    randomPointInCircle(ggState.maxX - 600f, Vec2(ggState.maxX / 2.0f, ggState.maxY / 2.0f)).let { pos ->
+                        attackAnimation = Animation(position = pos, sprites = attackSprites, frameDelay = 4) {
                             attackAnimation = null
                         }
+
                         enemyManager.getEnemiesInCircle(pos, lightningRadius).forEach { e ->
                             enemyManager.damage(e,basicAttackDamage * ggState.damageMultiplier)
                         }
@@ -103,6 +104,7 @@ class LightningAttack(
             it.doAnimation()
             val animationWidth = animationBaseWidth + lightningRadius
             val animationHeight = animationBaseHeight + lightningRadius
+            //g.drawOval(it.position.x.roundToInt(), it.position.y.roundToInt(), lightningRadius, lightningRadius)
             g.drawImage(
                 it.getCurrentSprite(),
                 it.position.x.roundToInt() - (animationWidth / 2) + (lightningRadius / 2),
