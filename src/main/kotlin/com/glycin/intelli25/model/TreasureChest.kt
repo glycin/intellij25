@@ -10,7 +10,7 @@ class TreasureChest(
     private val width: Int = 32,
     private val height: Int = 32,
 ) {
-    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    val midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun draw(g: Graphics2D) {
         g.drawImage(PNG.CHEST, position.x.roundToInt(), position.y.roundToInt(), width, height, null)

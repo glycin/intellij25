@@ -14,10 +14,11 @@ class Bullet(
     val speed: Float = 10.0f,
 ) {
     private val angle = atan2(direction.y, direction.x).toDouble()
-    fun midPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2))
+    var midPoint = Vec2(position.x + (radius / 2), position.y + (radius / 2))
 
     fun move() {
         position += direction * speed
+        midPoint = Vec2(position.x + (radius / 2), position.y + (radius / 2))
     }
 
     fun draw(g: Graphics2D) {

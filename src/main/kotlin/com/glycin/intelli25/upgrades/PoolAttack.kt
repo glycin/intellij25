@@ -1,10 +1,12 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.Pool
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOptionFromAttackDef
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.randomPointInCircle
 import kotlinx.coroutines.CoroutineScope
@@ -77,7 +79,7 @@ class PoolAttack(
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive){
                 if(!ggState.inUpgradeMenu) {
-                    val playerMid = player.midPoint()
+                    val playerMid = player.midPoint
                     val spawnPos = randomPointInCircle(500f, playerMid)
                     val newPool = Pool(
                         id = nextId,
@@ -107,12 +109,15 @@ class PoolAttack(
         poolMap.values.forEach { it.move() }
     }
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
-        return poolMap.values.sumOf {
-            val poolHitBox = it.width * it.width
-            if(Vec2.distanceNoSqr(enemyMidPos, it.midPoint()) <= poolHitBox) {
-                it.damage * ggState.damageMultiplier
-            } else 0
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
+        poolMap.values.forEach {
+            val poolHitBoxSq = it.width * it.width
+            val enemies = enemyGrid.retrieve(it.position)
+            for(enemy in enemies) {
+                if(Vec2.distanceNoSqr(enemy.midPoint, it.midPoint) <= poolHitBoxSq) {
+                    onHit(enemy, it.damage * ggState.damageMultiplier)
+                }
+            }
         }
     }
 

@@ -27,10 +27,11 @@ class Pool(
         }
     }
 
-    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    var midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun move() {
         position += direction * speed
+        midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
     }
 
     fun draw(g: Graphics2D) {

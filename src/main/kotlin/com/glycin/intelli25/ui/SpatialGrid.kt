@@ -27,15 +27,27 @@ class SpatialGrid<T>(
     }
 
     fun retrieve(pos: Vec2): List<T> {
+        return retrieve(pos, cellSize)
+    }
+
+    fun retrieve(pos: Vec2, range: Int): List<T> {
         queryBuffer.clear()
 
-        val col = (pos.x.toInt() / cellSize)
-        val row = (pos.y.toInt() / cellSize)
+        val minX = (pos.x.toInt() - range)
+        val maxX = (pos.x.toInt() + range)
+        val minY = (pos.y.toInt() - range)
+        val maxY = (pos.y.toInt() + range)
 
-        for (y in (row - 1)..(row + 1)) {
-            for (x in (col - 1)..(col + 1)) {
-                if (x in 0 until cols && y in 0 until rows) {
-                    queryBuffer.addAll(buckets[y * cols + x])
+        val minCol = (minX / cellSize).coerceIn(0, cols - 1)
+        val maxCol = (maxX / cellSize).coerceIn(0, cols - 1)
+        val minRow = (minY / cellSize).coerceIn(0, rows - 1)
+        val maxRow = (maxY / cellSize).coerceIn(0, rows - 1)
+
+        for (y in minRow..maxRow) {
+            for (x in minCol..maxCol) {
+                val index = y * cols + x
+                if (index < buckets.size) {
+                    queryBuffer.addAll(buckets[index])
                 }
             }
         }

@@ -1,10 +1,12 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.model.Animation
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOptionFromAttackDef
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import kotlinx.coroutines.CoroutineScope
@@ -117,7 +119,7 @@ class FreezingAttack(
         }
     }
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int = 0
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) { }
 
     override fun getNextUpgrade(): UpgradeOption? {
         if(currentLevel >= maxLevel) { return null}

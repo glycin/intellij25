@@ -1,10 +1,12 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.model.Bullet
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOptionFromAttackDef
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.jetbrains.rd.util.concurrentMapOf
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +26,8 @@ class BasicAttack(
     private var attackDelay: Long = 1000L //ms
     private val basicAttackDamage: Int = 10
     private var invincibleBullet = false
+    private val bulletRange = 15 * 2
+    private val bulletRangeSq = bulletRange * bulletRange
 
     private val upgradeOne = upgradeOptionFromAttackDef {
         val boost = attackDef.upgrades[0]
@@ -116,34 +120,34 @@ class BasicAttack(
                 if(!ggState.inUpgradeMenu) {
                     when(currentLevel) {
                         1, 2 -> {
-                            addBullet(player.midPoint(), Vec2.left)
-                            addBullet(player.midPoint(), Vec2.right)
+                            addBullet(player.midPoint, Vec2.left)
+                            addBullet(player.midPoint, Vec2.right)
                         }
                         3, 4 -> {
-                            addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
-                            addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
-                            addBullet(player.midPoint(), Vec2.right)
-                            addBullet(player.midPoint(), Vec2.left)
+                            addBullet(player.midPoint, Vec2(1.0f, -1.0f))
+                            addBullet(player.midPoint, Vec2(-1.0f, 1.0f))
+                            addBullet(player.midPoint, Vec2.right)
+                            addBullet(player.midPoint, Vec2.left)
                         }
                         5, 6 -> {
-                            addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
-                            addBullet(player.midPoint(), Vec2.right)
-                            addBullet(player.midPoint(), Vec2(1.0f, 1.0f))
+                            addBullet(player.midPoint, Vec2(1.0f, -1.0f))
+                            addBullet(player.midPoint, Vec2.right)
+                            addBullet(player.midPoint, Vec2(1.0f, 1.0f))
 
-                            addBullet(player.midPoint(), Vec2(-1.0f, -1.0f))
-                            addBullet(player.midPoint(), Vec2.left)
-                            addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
+                            addBullet(player.midPoint, Vec2(-1.0f, -1.0f))
+                            addBullet(player.midPoint, Vec2.left)
+                            addBullet(player.midPoint, Vec2(-1.0f, 1.0f))
                         }
                         7, 8, 9 -> {
-                            addBullet(player.midPoint(), Vec2(1.0f, -1.0f))
-                            addBullet(player.midPoint(), Vec2.right)
-                            addBullet(player.midPoint(), Vec2(1.0f, 1.0f))
-                            addBullet(player.midPoint(), Vec2.up)
+                            addBullet(player.midPoint, Vec2(1.0f, -1.0f))
+                            addBullet(player.midPoint, Vec2.right)
+                            addBullet(player.midPoint, Vec2(1.0f, 1.0f))
+                            addBullet(player.midPoint, Vec2.up)
 
-                            addBullet(player.midPoint(), Vec2(-1.0f, -1.0f))
-                            addBullet(player.midPoint(), Vec2.left)
-                            addBullet(player.midPoint(), Vec2(-1.0f, 1.0f))
-                            addBullet(player.midPoint(), Vec2.down)
+                            addBullet(player.midPoint, Vec2(-1.0f, -1.0f))
+                            addBullet(player.midPoint, Vec2.left)
+                            addBullet(player.midPoint, Vec2(-1.0f, 1.0f))
+                            addBullet(player.midPoint, Vec2.down)
                         }
                     }
                 }
@@ -168,32 +172,29 @@ class BasicAttack(
         }
     }
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
-        if (bullets.isEmpty()) return 0
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
+        if (bullets.isEmpty()) return
 
-        var totalDamage = 0
         val damageMultiplier = ggState.damageMultiplier
-
         val iterator = bullets.values.iterator()
 
         while (iterator.hasNext()) {
             val b = iterator.next()
 
+            val nearbyEnemies = enemyGrid.retrieve(b.midPoint)
 
-            val range = b.radius * 2
-            val rangeSq = range * range
-
-            if (Vec2.distanceNoSqr(enemyMidPos, b.midPoint()) <= rangeSq) {
-                totalDamage += (b.damage * damageMultiplier)
-
-                if (!invincibleBullet) {
-                    iterator.remove()
+            for(enemy in nearbyEnemies) {
+                if (Vec2.distanceNoSqr(enemy.midPoint, b.midPoint) <= bulletRangeSq) {
+                    onHit(enemy, b.damage * damageMultiplier)
+                    if (!invincibleBullet) {
+                        iterator.remove()
+                        break
+                    }
                 }
             }
         }
-
-        return totalDamage
     }
+
     override fun getNextUpgrade(): UpgradeOption? {
         if(currentLevel >= maxLevel) { return null}
         return upgrades[currentLevel - 1]

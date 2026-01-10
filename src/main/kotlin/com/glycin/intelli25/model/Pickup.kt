@@ -13,13 +13,14 @@ class Pickup(
     private val player: Player,
 ) {
     var picked: Boolean = false
-    private val speed = 4.0f
+    private val speed = 4.5f
 
-    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    var midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun move() {
         if(picked) {
-            position += (player.midPoint() - midPoint()).normalized() * speed
+            position += (player.midPoint - midPoint).normalized() * speed
+            midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
         }
     }
 

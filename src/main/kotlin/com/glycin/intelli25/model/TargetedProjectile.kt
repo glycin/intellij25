@@ -17,12 +17,13 @@ class TargetedProjectile(
 ) {
     val hitBoxSq = radius * radius
     var angle = 0.0
-    fun midPoint() = Vec2(position.x + (radius / 2), position.y + (radius / 2))
+    var midPoint = Vec2(position.x + (radius / 2), position.y + (radius / 2))
 
     fun move() {
-        val direction = (target.midPoint() - midPoint()).normalized()
-        angle = atan2(direction.y, direction.x).toDouble() + Math.PI / 2
+        val direction = (target.midPoint - midPoint).normalized()
+        angle = atan2(direction.y, direction.x) + Math.PI / 2
         position += direction * speed
+        midPoint = Vec2(position.x + (radius / 2), position.y + (radius / 2))
     }
 
     fun draw(g: Graphics2D) {

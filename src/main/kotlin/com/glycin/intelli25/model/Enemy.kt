@@ -24,12 +24,12 @@ class Enemy(
     var currentHp = maxHp
     private var facing = EnemyFacing.LEFT
 
-    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    var midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun move() {
-        val dir = (player.midPoint() - position).normalized()
+        val dir = (player.midPoint - position).normalized()
         position += dir * (speed - ggState.enemySpeedPenalty).coerceAtLeast(0.1f)
-
+        midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
         facing = if(dir.x < 0) {
             EnemyFacing.LEFT
         } else {
@@ -68,7 +68,7 @@ class Enemy(
                     maxHp = 10,
                     speed = 0.8f,
                     image = EnemyPNG.bug,
-                    chestDropChance = 0.3,
+                    chestDropChance = 0.2,
                     ggState = ggState
                 )
                 EnemyType.BLOCKER -> Enemy(
@@ -80,7 +80,7 @@ class Enemy(
                     maxHp = 20,
                     speed = 0.6f,
                     image = EnemyPNG.blocker,
-                    chestDropChance = 0.5,
+                    chestDropChance = 0.3,
                     ggState = ggState
                 )
                 EnemyType.BURNING_CALENDAR -> Enemy(
@@ -92,7 +92,7 @@ class Enemy(
                     maxHp = 30,
                     speed = 1.2f,
                     image = EnemyPNG.calendar,
-                    chestDropChance = 0.5,
+                    chestDropChance = 0.3,
                     ggState = ggState
                 )
                 EnemyType.PHANTOM -> Enemy(
@@ -104,7 +104,7 @@ class Enemy(
                     maxHp = 40,
                     speed = 1f,
                     image = EnemyPNG.phantom,
-                    chestDropChance = 0.6,
+                    chestDropChance = 0.4,
                     ggState = ggState
                 )
                 EnemyType.DEMON -> Enemy(
@@ -116,7 +116,7 @@ class Enemy(
                     maxHp = 50,
                     speed = 0.3f,
                     image = EnemyPNG.demon,
-                    chestDropChance = 0.6,
+                    chestDropChance = 0.4,
                     ggState = ggState
                 )
                 EnemyType.BEES -> Enemy(
@@ -128,7 +128,7 @@ class Enemy(
                     maxHp = 10,
                     speed = 3f,
                     image = EnemyPNG.bees,
-                    chestDropChance = 0.8,
+                    chestDropChance = 0.5,
                     ggState = ggState
                 )
                 EnemyType.VAMPIRE -> Enemy(
@@ -140,7 +140,7 @@ class Enemy(
                     maxHp = 200,
                     speed = 2f,
                     image = EnemyPNG.vampire,
-                    chestDropChance = 1.0,
+                    chestDropChance = 0.6,
                     ggState = ggState
                 )
             }

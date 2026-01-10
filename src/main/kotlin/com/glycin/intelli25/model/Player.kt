@@ -39,7 +39,7 @@ class Player(
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT
 
-    fun midPoint() = Vec2(position.x + (width / 2), position.y + (height / 2))
+    var midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
 
     fun update() {
         if(ggState.inUpgradeMenu) return
@@ -78,6 +78,7 @@ class Player(
 
         animator.animate(state)
         position += dir * (speed * ggState.speedMultiplier)
+        midPoint = Vec2(position.x + (width / 2), position.y + (height / 2))
     }
 
     fun regenerate() {

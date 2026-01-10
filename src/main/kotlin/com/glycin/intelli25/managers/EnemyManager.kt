@@ -151,7 +151,7 @@ class EnemyManager(
         if(enemyMap.size <= count) { return emptyList() }
 
         val enemies = enemyMap.values.toList().sortedBy {
-            Vec2.distance(playerPosition, it.midPoint())
+            Vec2.distance(playerPosition, it.midPoint)
         }
         return enemies.take(count)
     }
@@ -160,7 +160,7 @@ class EnemyManager(
         if(enemyMap.isEmpty()) return emptyList()
 
         return enemyMap.values.toList().filter {
-            Vec2.distance(it.midPoint(), pos) <= radius
+            Vec2.distance(it.midPoint, pos) <= radius
         }
     }
 

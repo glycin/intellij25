@@ -14,8 +14,8 @@ class CollisionsManager(
     private val ggState: GameGlobalState,
 ) {
     private val pickUpRangeSq = 25 * 25
-    private val enemyGrid = SpatialGrid<Enemy>(ggState.maxX, ggState.maxY, cellSize = 200)
-    private val pickupGrid = SpatialGrid<Pickup>(ggState.maxX, ggState.maxY, cellSize = 200)
+    private val enemyGrid = SpatialGrid<Enemy>(ggState.maxX, ggState.maxY, cellSize = 100)
+    private val pickupGrid = SpatialGrid<Pickup>(ggState.maxX, ggState.maxY, cellSize = 100)
 
     fun update() {
         enemyGrid.clear()
@@ -23,20 +23,20 @@ class CollisionsManager(
 
         val enemies = enemyManager.getEnemies()
         val pickups = enemyManager.getPickups()
-        val playerMid = player.midPoint()
+        val playerMid = player.midPoint
 
         enemies.forEach { enemy ->
             if (enemy.currentHp > 0) {
-                enemyGrid.insert(enemy, enemy.midPoint())
+                enemyGrid.insert(enemy, enemy.midPoint)
             }
         }
 
         pickups.forEach { pickup ->
-            pickupGrid.insert(pickup, pickup.midPoint())
+            pickupGrid.insert(pickup, pickup.midPoint)
         }
 
         checkPlayerToEnemy(playerMid)
-        checkAttackToEnemy()
+        checkAttackToEnemy(playerMid)
         checkPlayerToPickup(playerMid)
     }
 
@@ -52,7 +52,7 @@ class CollisionsManager(
         var totalDamage = 0
 
         for(enemy in enemies) {
-            if(Vec2.distanceNoSqr(enemy.midPoint(), playerMid) <= player.playHitDistSq) {
+            if(Vec2.distanceNoSqr(enemy.midPoint, playerMid) <= player.playHitDistSq) {
                 totalDamage += enemy.damage
             }
         }
@@ -65,12 +65,17 @@ class CollisionsManager(
     }
 
     fun checkPlayerToPickup(playerMid: Vec2) {
-        val pickups = pickupGrid.retrieve(playerMid)
         val magnetRange = player.pickUpRange * ggState.xpPickUpRangeMultiplier
+
+        if(magnetRange > ggState.maxX + 500) {
+            enemyManager.getPickups().forEach { it.picked = true }
+        }
+
+        val pickups = pickupGrid.retrieve(playerMid, 100 * ggState.xpPickUpRangeMultiplier)
         val magnetRangeSq = magnetRange * magnetRange
 
         for(pickup in pickups) {
-            val distance = Vec2.distanceNoSqr(pickup.midPoint(), playerMid)
+            val distance = Vec2.distanceNoSqr(pickup.midPoint, playerMid)
             if(distance <= magnetRangeSq) {
                 pickup.picked = true
                 if(distance <= pickUpRangeSq) {
@@ -83,19 +88,15 @@ class CollisionsManager(
         val chests = enemyManager.getChests()
         for(i in chests.indices) {
             val chest = chests[i]
-            if(Vec2.distanceNoSqr(chest.midPoint(), playerMid) <= player.chestPickupRangeSq) {
+            if(Vec2.distanceNoSqr(chest.midPoint, playerMid) <= player.chestPickupRangeSq) {
                 player.levelUp()
                 enemyManager.removeChest(chest)
             }
         }
     }
 
-    fun checkAttackToEnemy() {
-        val enemies = enemyManager.getEnemies()
-        val playerMid = player.midPoint()
-        for(i in enemies.indices) {
-            val enemy = enemies[i]
-            val damage = attackManager.getDamage(enemy, playerMid)
+    fun checkAttackToEnemy(playerMid: Vec2) {
+        attackManager.resolveCollisions(enemyGrid, playerMid) { enemy, damage  ->
             if(damage > 0) {
                 enemyManager.damage(enemy, damage)
             }

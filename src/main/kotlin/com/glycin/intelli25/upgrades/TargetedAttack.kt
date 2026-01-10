@@ -8,6 +8,7 @@ import com.glycin.intelli25.model.TargetedProjectile
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOptionFromAttackDef
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.jetbrains.rd.util.concurrentMapOf
@@ -91,7 +92,7 @@ class TargetedAttack(
         scope.launch(Dispatchers.Default) {
             while(ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
-                    enemyManager.getClosestEnemies(projectileCount, player.midPoint()).forEach {
+                    enemyManager.getClosestEnemies(projectileCount, player.midPoint).forEach {
                         addProjectile(it)
                     }
                 }
@@ -120,19 +121,22 @@ class TargetedAttack(
         projectiles.values.forEach { it.move() }
     }
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
         val attacksToRemove = ArrayList<TargetedProjectile>()
-        val damage = projectiles.values.sumOf { tp ->
-            if(Vec2.distanceNoSqr(enemyMidPos, tp.midPoint()) <= tp.hitBoxSq) {
-                attacksToRemove.add(tp)
-                animations.add(Animation(
-                    position = enemyMidPos,
-                    sprites = boomEffects,
-                    frameDelay = 6
-                ))
-                tp.damage * ggState.damageMultiplier
-            } else {
-                0
+
+        projectiles.values.forEach { tp ->
+            val projectileMidPoint = tp.midPoint
+            val enemies = enemyGrid.retrieve(projectileMidPoint)
+            for(enemy in enemies) {
+                if(Vec2.distanceNoSqr(enemy.midPoint, projectileMidPoint) <= tp.hitBoxSq) {
+                    attacksToRemove.add(tp)
+                    animations.add(Animation(
+                        position = enemy.midPoint,
+                        sprites = boomEffects,
+                        frameDelay = 4
+                    ))
+                    onHit(enemy, tp.damage * ggState.damageMultiplier)
+                }
             }
         }
 
@@ -141,8 +145,6 @@ class TargetedAttack(
         attacksToRemove.forEach {
             projectiles.remove(it.id)
         }
-
-        return damage
     }
 
     override fun getNextUpgrade(): UpgradeOption? {
@@ -153,7 +155,7 @@ class TargetedAttack(
     private fun addProjectile(target: Enemy) {
         val new = TargetedProjectile(
             id = nextId,
-            position = player.midPoint(),
+            position = player.midPoint,
             damage = damage,
             target = target,
         )

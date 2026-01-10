@@ -19,13 +19,8 @@ class AttackManager(
         }
     }
 
-    fun getDamage(enemy: Enemy, playerMidPos: Vec2): Int {
-        val midPos = enemy.midPoint()
-        return attacks.sumOf { it.getDamage(midPos, playerMidPos) }
-    }
-
-    fun damageEnemies(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2): Map<Enemy, Int> {
-        attacks.forEach { it.getDamage() }
+    fun resolveCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
+        attacks.forEach { it.checkCollisions(enemyGrid, playerMidPos, onHit) }
     }
 
     fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }

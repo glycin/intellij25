@@ -1,9 +1,11 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.model.upgradeOptionFromAttackDef
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.glycin.intelli25.util.pointOnCircle
@@ -21,7 +23,7 @@ class RotatingAttack(
     private var speed =  0.001f
     private val widthHeight = 64
     private val droneHitBoxSq = widthHeight * widthHeight
-    private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint(), 0.0f))
+    private val objectPositions = mutableListOf(pointOnCircle(radius, player.midPoint, 0.0f))
     private var pointValues = mutableListOf(0.0f)
 
     private val upgradeOne = upgradeOptionFromAttackDef {
@@ -39,7 +41,7 @@ class RotatingAttack(
         attackDefinition = attackDef
         attackUpgradeDefinition = boost
         onSelect = {
-            objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
+            objectPositions.add(pointOnCircle(radius, player.midPoint, 0.0f))
             pointValues[0] = 1.0f
             pointValues.add(0.0f)
             generalLevelUp()
@@ -52,7 +54,7 @@ class RotatingAttack(
         attackUpgradeDefinition = boost
         onSelect = {
             speed =  0.01f
-            objectPositions.add(pointOnCircle(radius, player.midPoint(), 0.0f))
+            objectPositions.add(pointOnCircle(radius, player.midPoint, 0.0f))
             pointValues[0] = 0.66f
             pointValues[1] = 1.33f
             pointValues.add(0.0f)
@@ -84,20 +86,23 @@ class RotatingAttack(
     override fun move() {
         for(i in 0..<pointValues.size) {
             val newPoint = pointValues[i] + speed
-            objectPositions[i] = pointOnCircle(radius, player.midPoint(), newPoint)
+            objectPositions[i] = pointOnCircle(radius, player.midPoint, newPoint)
             pointValues[i] = newPoint
         }
     }
 
     override fun activate() {}
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int {
-        val inRange = objectPositions.any {
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
+        objectPositions.forEach {
             val objetMidPoint = Vec2(it.x + (widthHeight / 2), it.y + (widthHeight / 2))
-            Vec2.distanceNoSqr(enemyMidPos, objetMidPoint) <= droneHitBoxSq
+            val enemies = enemyGrid.retrieve(objetMidPoint)
+            for(enemy in enemies) {
+                if(Vec2.distanceNoSqr(enemy.midPoint, objetMidPoint) <= droneHitBoxSq) {
+                    onHit(enemy, basicAttackDamage * ggState.damageMultiplier)
+                }
+            }
         }
-
-        return if (inRange) basicAttackDamage * ggState.damageMultiplier else 0
     }
 
     override fun getNextUpgrade(): UpgradeOption? {

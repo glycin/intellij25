@@ -1,9 +1,11 @@
 package com.glycin.intelli25.upgrades
 
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeBackpackItem
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.ui.JBColor
 import java.awt.Graphics2D
@@ -26,7 +28,7 @@ abstract class Attack(
     abstract fun activate()
     abstract fun draw(g: Graphics2D)
     abstract fun move()
-    abstract fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int
+    abstract fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit)
     abstract fun getNextUpgrade(): UpgradeOption?
 
     fun generalLevelUp() {

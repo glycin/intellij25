@@ -1,9 +1,11 @@
 package com.glycin.intelli25.upgrades
 
 import com.glycin.intelli25.managers.EnemyManager
+import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.GameGlobalState
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +44,7 @@ class MassDestructionAttack(
 
     override fun move() { }
 
-    override fun getDamage(enemyMidPos: Vec2, playerMidPos: Vec2): Int = 0
+    override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) { }
 
     override fun getNextUpgrade(): UpgradeOption? {
         TODO("Not yet implemented")
