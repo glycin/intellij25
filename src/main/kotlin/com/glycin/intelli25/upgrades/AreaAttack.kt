@@ -108,7 +108,7 @@ class AreaAttack(
     override fun activate() { }
 
     override fun checkCollisions(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2, onHit: (Enemy, Int) -> Unit) {
-        val colRadius = (diameter / 2) + 50
+        val colRadius = (diameter / 2) + 25
         val hitDistanceSq = colRadius * colRadius
         val enemies = enemyGrid.retrieve(playerMidPos)
         for(enemy in enemies) {
