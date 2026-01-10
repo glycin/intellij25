@@ -2,7 +2,6 @@ package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
 import com.intellij.openapi.ui.popup.JBPopup
-import com.intellij.ui.JBColor
 import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
@@ -20,12 +19,12 @@ class EscMenuPanel(
         background = GameColors.black
         border = BorderFactory.createEmptyBorder(20, 40, 20, 40)
 
-        val resumeBtn = createMenuButton("RESUME", GameColors.jbGreen) {
+        val resumeBtn = createMenuButton("RESUME") {
             popup?.cancel()
             onResume()
         }
 
-        val quitBtn = createMenuButton("QUIT GAME", GameColors.jbRed) {
+        val quitBtn = createMenuButton("QUIT GAME") {
             popup?.cancel()
             onQuit()
         }
@@ -41,14 +40,13 @@ class EscMenuPanel(
         this.popup = jbPopup
     }
 
-    private fun createMenuButton(text: String, buttonColor: JBColor, action: () -> Unit): JButton {
+    private fun createMenuButton(text: String, action: () -> Unit): JButton {
         return StartButton(
-            backgroundColor = buttonColor,
+            backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             textColor = GameColors.white,
             text = text,
-            arc = 24,
-            filled = false
+            arc = 20,
         ).apply {
             addActionListener { action() }
         }

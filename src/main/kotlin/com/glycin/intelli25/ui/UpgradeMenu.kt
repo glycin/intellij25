@@ -98,7 +98,7 @@ class UpgradeMenu(
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                 isOpaque = false
 
-                add(JLabel(option.title).apply {
+                add(JLabel(option.title.uppercase()).apply {
                     font = Fonts.jbMono.deriveFont(Font.BOLD, 24.0f)
                     foreground = option.textColor
                     alignmentX = LEFT_ALIGNMENT

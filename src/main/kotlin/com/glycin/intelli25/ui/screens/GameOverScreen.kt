@@ -105,7 +105,7 @@ class GameOverScreen(
                 border = BorderFactory.createEmptyBorder(0, 0, 30, 0)
             }
 
-            val rawText = "I survived in IDE survivors! My final score was ${ggState.score}."
+            val rawText = "I’ve just survived in IDE Survivors by IntelliJ IDEA! My final score was ${ggState.score}. It is your turn to survive. Try now!"
             val encodedText = URLEncoder.encode(rawText, StandardCharsets.UTF_8)
 
             // 1. Twitter - Supports text

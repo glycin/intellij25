@@ -13,19 +13,13 @@ class CollisionsManager(
     private val enemyManager: EnemyManager,
     private val attackManager: AttackManager,
     private val ggState: GameGlobalState,
-    scope: CoroutineScope,
 ) {
     private val pickUpRangeSq = 25 * 25
 
-    init {
-        scope.launch(Dispatchers.Default) {
-            while (ggState.gameActive) {
-                checkPlayerToEnemy()
-                checkAttackToEnemy()
-                checkPlayerToPickup()
-                delay(ggState.deltaTime * 2) //TODO: For now, do collisions check twice as slow as other updates
-            }
-        }
+    fun update() {
+        checkPlayerToEnemy()
+        checkAttackToEnemy()
+        checkPlayerToPickup()
     }
 
     fun checkPlayerToEnemy() {

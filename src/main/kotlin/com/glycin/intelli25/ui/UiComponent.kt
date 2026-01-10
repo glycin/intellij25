@@ -36,15 +36,6 @@ class UiComponent(
     private var gameUiComponent: InGameComponent? = null
     private val upgradeAnimations: MutableList<Animation> = mutableListOf()
 
-    init {
-        scope.launch(Dispatchers.Default) {
-            while (ggState.gameActive) {
-                repaint()
-                delay(ggState.deltaTime)
-            }
-        }
-    }
-
     fun showGameUi() {
         if(gameUiComponent != null) { return }
         gameUiComponent = InGameComponent(player, ggState)

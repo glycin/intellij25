@@ -58,6 +58,7 @@ class Game(
     private lateinit var upgradeRepository: UpgradeRepository
     private lateinit var attackManager: AttackManager
     private lateinit var collisionsManager: CollisionsManager
+    private lateinit var enemyManager: EnemyManager
 
     init {
         scope.launch(Dispatchers.EDT) {
@@ -104,7 +105,7 @@ class Game(
                 editor.contentComponent.addMouseWheelListener(it)
             }
 
-            attackManager = AttackManager(ggState, scope).also {
+            attackManager = AttackManager(ggState).also {
                 val basicAttack = BasicAttack(ggState, player, scope).apply { activate() }
                 it.addAttack(basicAttack)
                 player.upgrades[basicAttack.title] = UpgradeBackpackItem(basicAttack.attackIcon, 1)
@@ -112,9 +113,9 @@ class Game(
 
             val saveState = service<GameSaveState>()
             val seenEnemies = if(saveState.enemiesSeen.isNotEmpty()) saveState.enemiesSeen.split(",").map { EnemyType.valueOf(it) }.toMutableSet() else mutableSetOf()
-            val enemyManager = EnemyManager(ggState, seenEnemies, player, scope)
+            enemyManager = EnemyManager(ggState, seenEnemies, player, scope)
 
-            collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState, scope) //TODO: Create one update manager that handles all updating in the game
+            collisionsManager = CollisionsManager(player, enemyManager, attackManager, ggState)
             upgradeRepository = UpgradeRepository(ggState, player, enemyManager, scope)
 
             gameComponent = GameComponent(ggState, player, attackManager, enemyManager, scope) {
@@ -171,6 +172,34 @@ class Game(
             }
 
             uiComponent?.showGameUi()
+
+            postInit()
+        }
+    }
+
+    private fun postInit() {
+        // Rendering loop
+        scope.launch (Dispatchers.Default) {
+            while(ggState.gameActive) {
+                editor.contentComponent.repaint()
+                delay(ggState.deltaTime)
+            }
+        }
+
+        var doPhysics = true
+        // Gameplay loop
+        scope.launch (Dispatchers.Default) {
+            while(ggState.gameActive) {
+                player.update()
+                attackManager.update()
+                enemyManager.update()
+                if(doPhysics) {
+                    // Check for collisions at half the rate we update the rest of the game
+                    collisionsManager.update()
+                    doPhysics = !doPhysics
+                }
+                delay(ggState.deltaTime)
+            }
         }
     }
 

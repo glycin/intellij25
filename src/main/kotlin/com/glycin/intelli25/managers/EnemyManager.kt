@@ -41,21 +41,10 @@ class EnemyManager(
     init {
         scope.launch(Dispatchers.Default) {
             while (ggState.gameActive) {
-                if(!ggState.inUpgradeMenu){
-                    enemyMap.takeIf { !ggState.frozen }?.forEach { e -> e.value.move() }
-                    pickupsMap.filter { p -> p.value.picked }.forEach { it.value.move() }
-                    //updateDamageNumbers() //TODO: Not sure about showing damage numbers :(
-                }
-                delay(ggState.deltaTime)
-            }
-        }
-
-        scope.launch(Dispatchers.Default) {
-            while (ggState.gameActive) {
                 if (!ggState.inUpgradeMenu){
                     repeat(ggState.spawnCountPerCooldown) {
                         idCounter++
-                        val p = randomPointOnCircle((ggState.maxX / 2f) + 50, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
+                        val p = randomPointOnCircle((ggState.maxX / 2f) + 100, Vec2(ggState.maxX / 2f, ggState.maxY / 2f))
                         val type = Enemy.getAllowedTypes(ggState.chosenGameLevel, ggState.enemyTier).random()
 
                         if(!seenEnemies.contains(type)) {
@@ -91,6 +80,14 @@ class EnemyManager(
                 }
                 delay(1000L)
             }
+        }
+    }
+
+    fun update() {
+        if(!ggState.inUpgradeMenu){
+            enemyMap.takeIf { !ggState.frozen }?.forEach { e -> e.value.move() }
+            pickupsMap.filter { p -> p.value.picked }.forEach { it.value.move() }
+            //updateDamageNumbers() //TODO: Not sure about showing damage numbers :(
         }
     }
 

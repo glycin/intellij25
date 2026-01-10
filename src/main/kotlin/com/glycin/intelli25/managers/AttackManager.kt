@@ -5,27 +5,16 @@ import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.upgrades.Attack
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 
 class AttackManager(
     private val ggState: GameGlobalState,
-    scope: CoroutineScope,
 ) {
     private var attacks = mutableListOf<Attack>()
 
-    init {
-        scope.launch(Dispatchers.Default) {
-            while (ggState.gameActive) {
-                if(!ggState.inUpgradeMenu){
-                    attacks.forEach { it.move() }
-                }
-
-                delay(ggState.deltaTime)
-            }
+    fun update() {
+        if(!ggState.inUpgradeMenu){
+            attacks.forEach { it.move() }
         }
     }
 

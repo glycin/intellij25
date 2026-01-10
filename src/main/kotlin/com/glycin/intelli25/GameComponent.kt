@@ -6,7 +6,6 @@ import com.glycin.intelli25.model.Player
 import com.glycin.intelli25.util.GameGlobalState
 import com.intellij.openapi.Disposable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Graphics
@@ -23,14 +22,6 @@ class GameComponent(
 ): JComponent(), Disposable {
 
     init {
-        scope.launch(Dispatchers.Default) {
-            while (ggState.gameActive) {
-                player.update()
-                repaint()
-                delay(ggState.deltaTime)
-            }
-        }
-
         scope.launch {
             while (ggState.gameActive) {
                 if(!ggState.inUpgradeMenu){
