@@ -162,6 +162,7 @@ class Game(
                     uiComponent?.repaint()
                     gameComponent?.revalidate()
                     gameComponent?.repaint()
+                    collisionsManager.updateGridBounds()
                 }
                 c.repaint()
                 c.revalidate()

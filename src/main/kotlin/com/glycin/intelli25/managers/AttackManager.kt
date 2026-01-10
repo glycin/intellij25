@@ -3,6 +3,7 @@ package com.glycin.intelli25.managers
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.UpgradeOption
 import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.ui.SpatialGrid
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.upgrades.Attack
 import java.awt.Graphics2D
@@ -21,6 +22,10 @@ class AttackManager(
     fun getDamage(enemy: Enemy, playerMidPos: Vec2): Int {
         val midPos = enemy.midPoint()
         return attacks.sumOf { it.getDamage(midPos, playerMidPos) }
+    }
+
+    fun damageEnemies(enemyGrid: SpatialGrid<Enemy>, playerMidPos: Vec2): Map<Enemy, Int> {
+        attacks.forEach { it.getDamage() }
     }
 
     fun drawAttacks(g: Graphics2D) = attacks.forEach { it.draw(g) }
