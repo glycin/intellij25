@@ -193,11 +193,12 @@ class Game(
                 player.update()
                 attackManager.update()
                 enemyManager.update()
+
+                // Check for collisions at half the rate we update the rest of the game
                 if(doPhysics) {
-                    // Check for collisions at half the rate we update the rest of the game
                     collisionsManager.update()
-                    doPhysics = !doPhysics
                 }
+                doPhysics = !doPhysics
                 delay(ggState.deltaTime)
             }
         }
