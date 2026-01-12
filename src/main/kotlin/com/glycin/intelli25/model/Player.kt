@@ -31,10 +31,10 @@ class Player(
 
     val upgrades = mutableMapOf<String, UpgradeBackpackItem>()
 
-    private val baseMaxHp = 300
+    private val baseMaxHp = 30_000
     var currentHp = baseMaxHp
 
-    private val baseRegenRate = 5
+    private val baseRegenRate = 500
     private val animator = PlayerAnimator()
     private var state = PlayerState.IDLE
     private var facing = PlayerFacing.LEFT

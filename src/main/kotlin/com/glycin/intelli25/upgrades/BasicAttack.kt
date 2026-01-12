@@ -24,7 +24,7 @@ class BasicAttack(
     private var nextId = 0L
     private val bullets = concurrentMapOf<Long, Bullet>()
     private var attackDelay: Long = 1000L //ms
-    private val basicAttackDamage: Int = 10
+    private val basicAttackDamage: Int = 1000
     private var invincibleBullet = false
     private val bulletRange = 15 * 2
     private val bulletRangeSq = bulletRange * bulletRange

@@ -28,7 +28,7 @@ class LightningAttack(
     private val animationBaseHeight = 256
     private val attackSprites = SpriteSheetImageLoader.loadSprites("/sprites/effects/lightning.png", 64, 128, 10)
     private var attackAnimation: Animation? = null
-    private val basicAttackDamage: Int = 50
+    private val basicAttackDamage: Int = 5000
     private var lightningRadius = 120
     private var attackCooldown =  3000L
 

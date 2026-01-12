@@ -35,6 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.KeyboardFocusManager
 import java.awt.event.MouseWheelListener
+import kotlin.math.max
 
 private const val FPS = 120L
 
@@ -228,7 +229,7 @@ class Game(
     private fun levelOneBeaten() {
         stopGame()
         val saveState = service<GameSaveState>()
-        saveState.levelsBeaten = 1
+        saveState.levelsBeaten = max(1, saveState.levelsBeaten)
         toolWindowBaseComponent.showScreen()
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 2) {
@@ -258,7 +259,7 @@ class Game(
     private fun levelTwoBeaten() {
         stopGame()
         val saveState = service<GameSaveState>()
-        saveState.levelsBeaten = 2
+        saveState.levelsBeaten = max(2, saveState.levelsBeaten)
         toolWindowBaseComponent.showScreen()
         scope.launch(Dispatchers.EDT) {
             if(saveState.dialoguesSeen < 3) {
@@ -288,7 +289,7 @@ class Game(
     private fun levelThreeBeaten() {
         stopGame()
         val saveState = service<GameSaveState>()
-        saveState.levelsBeaten = 3
+        saveState.levelsBeaten = max(3, saveState.levelsBeaten)
         toolWindowBaseComponent.showScreen()
 
         scope.launch(Dispatchers.EDT) {

@@ -34,7 +34,7 @@ class TargetedAttack(
     )
     private val animations = mutableListOf<Animation>()
     private var cooldown = 5000L
-    private val damage = 10
+    private val damage = 1000
     private var projectileCount = 1
     private var nextId = 0L
     private val projectiles = concurrentMapOf<Long, TargetedProjectile>()

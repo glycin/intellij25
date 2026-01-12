@@ -16,7 +16,7 @@ class AreaAttack(
     player: Player,
 ) : Attack(ggState, player, AttackConfig.FORCE_FIELD_WEAPON) {
 
-    private val basicAttackDamage: Int = 1
+    private val basicAttackDamage: Int = 15
     private var diameter = player.width + 30
 
     private val upgradeOne = upgradeOptionFromAttackDef {

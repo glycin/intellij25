@@ -25,7 +25,7 @@ class PoolAttack(
     private val poolMap = mutableMapOf<Int, Pool>()
     private var size = 100
     private var spawnCooldown = 10000L
-    private val baseDamage = 1
+    private val baseDamage = 100
 
     private val upgradeOne = upgradeOptionFromAttackDef {
         val boost = attackDef.upgrades[0]

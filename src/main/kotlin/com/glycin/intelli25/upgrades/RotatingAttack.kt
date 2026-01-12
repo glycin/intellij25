@@ -19,7 +19,7 @@ class RotatingAttack(
 
     private val droneImage = SpriteSheetImageLoader.loadSprites("/sprites/effects/drone.png", 48, 48, 4).first()
     private val radius = 250f
-    private val basicAttackDamage: Int = 20
+    private val basicAttackDamage: Int = 2000
     private var speed =  0.001f
     private val widthHeight = 64
     private val droneHitBoxSq = widthHeight * widthHeight
