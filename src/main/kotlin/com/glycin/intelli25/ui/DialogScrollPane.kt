@@ -2,6 +2,7 @@ package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
 import com.intellij.ui.components.JBScrollPane
+import com.intellij.util.ui.JBInsets
 import com.intellij.util.ui.JBUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,25 +32,14 @@ class DialogScrollPane(
         preferredSize = Dimension(512, 100)
         isEditable = false
         foreground = color
-        margin = JBUI.insets(10, 15, 30, 15)
-        val doc = styledDocument
-        val font = Fonts.pixelFont
-        val style = SimpleAttributeSet().apply {
-            StyleConstants.setFontFamily(inputAttributes, font.family)
-            StyleConstants.setFontSize(inputAttributes, 16)
-            StyleConstants.setItalic(inputAttributes, (font.style and Font.ITALIC) != 0)
-            StyleConstants.setBold(inputAttributes, (font.style and Font.BOLD) != 0)
-            StyleConstants.setForeground(inputAttributes, color)
-        }
-
-        doc.setCharacterAttributes(0, doc.length, style, false)
+        margin = JBInsets(10, 15, 30, 15)
+        isOpaque = false
+        background = GameColors.transparent
     }
 
     init {
         isOpaque = false
         viewport.isOpaque = false
-        textPane.isOpaque = false
-        textPane.background = GameColors.transparent
         border = BorderFactory.createEmptyBorder()
         setViewportView(textPane)
         viewportBorder = JBUI.Borders.emptyBottom(15)
@@ -61,24 +51,56 @@ class DialogScrollPane(
 
     fun animateText() {
         if(currentTextIndex >= texts.size) { return }
-        val words = texts[currentTextIndex].split(" ")
-        animationJob = scope.launch (Dispatchers.Default) {
+
+        val fullText = texts[currentTextIndex]
+        val doc = textPane.styledDocument
+        val font = Fonts.pixelFont
+        textPane.text = fullText
+
+        val hiddenStyle = SimpleAttributeSet().apply {
+            StyleConstants.setFontFamily(this, font.family)
+            StyleConstants.setFontSize(this, 16)
+            StyleConstants.setItalic(this, (font.style and Font.ITALIC) != 0)
+            StyleConstants.setBold(this, (font.style and Font.BOLD) != 0)
+            StyleConstants.setForeground(this, GameColors.transparent)
+        }
+
+        val visibleStyle = SimpleAttributeSet().apply {
+            StyleConstants.setFontFamily(this, font.family)
+            StyleConstants.setFontSize(this, 16)
+            StyleConstants.setItalic(this, (font.style and Font.ITALIC) != 0)
+            StyleConstants.setBold(this, (font.style and Font.BOLD) != 0)
+            StyleConstants.setForeground(this, GameColors.black)
+        }
+
+        doc.setCharacterAttributes(0, fullText.length, hiddenStyle, true)
+
+        animationJob = scope.launch(Dispatchers.Default) {
             var curIndex = 0
-            while(curIndex <= words.size) {
-                textPane.text = words.take(curIndex).joinToString(" ")
-                textPane.caretPosition = textPane.text.length
+            while(curIndex < fullText.length) {
                 curIndex++
-                delay(deltaTime * 3)
+                doc.setCharacterAttributes(0, curIndex, visibleStyle, true)
+                textPane.caretPosition = curIndex
+                repaint()
+                delay(deltaTime)
             }
         }
-        repaint()
     }
 
     fun nextText() {
         currentTextIndex++
         if(animationJob?.isActive == true) {
             animationJob?.cancel()
-            textPane.text = texts[currentTextIndex]
+            val doc = textPane.styledDocument
+            val font = Fonts.pixelFont
+            val style = SimpleAttributeSet().apply {
+                StyleConstants.setFontFamily(this, font.family)
+                StyleConstants.setFontSize(this, 16)
+                StyleConstants.setItalic(this, (font.style and Font.ITALIC) != 0)
+                StyleConstants.setBold(this, (font.style and Font.BOLD) != 0)
+                StyleConstants.setForeground(this, GameColors.black)
+            }
+            doc.setCharacterAttributes(0, textPane.text.length, style, true)
         }
         animateText()
         if(currentTextIndex >= texts.size - 1) {
