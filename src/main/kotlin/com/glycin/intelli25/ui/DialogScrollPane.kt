@@ -1,7 +1,6 @@
 package com.glycin.intelli25.ui
 
 import com.glycin.intelli25.util.GameColors
-import com.intellij.openapi.application.EDT
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.util.ui.JBUI
 import kotlinx.coroutines.CoroutineScope
@@ -11,7 +10,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.Dimension
 import java.awt.Font
-import java.awt.Insets
 import javax.swing.BorderFactory
 import javax.swing.JTextPane
 import javax.swing.text.SimpleAttributeSet
@@ -33,7 +31,7 @@ class DialogScrollPane(
         preferredSize = Dimension(512, 100)
         isEditable = false
         foreground = color
-        margin = Insets(10, 15, 30, 15)
+        margin = JBUI.insets(10, 15, 30, 15)
         val doc = styledDocument
         val font = Fonts.pixelFont
         val style = SimpleAttributeSet().apply {
@@ -54,7 +52,7 @@ class DialogScrollPane(
         textPane.background = GameColors.transparent
         border = BorderFactory.createEmptyBorder()
         setViewportView(textPane)
-        viewportBorder = JBUI.Borders.empty(0, 0, 15, 0)
+        viewportBorder = JBUI.Borders.emptyBottom(15)
         verticalScrollBarPolicy = VERTICAL_SCROLLBAR_NEVER
         horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_NEVER
         mouseWheelListeners.forEach { removeMouseWheelListener(it) }
@@ -63,15 +61,17 @@ class DialogScrollPane(
 
     fun animateText() {
         if(currentTextIndex >= texts.size) { return }
+        val words = texts[currentTextIndex].split(" ")
         animationJob = scope.launch (Dispatchers.Default) {
             var curIndex = 0
-            while(curIndex < texts[currentTextIndex].length) {
-                textPane.text = texts[currentTextIndex].take(++curIndex)
+            while(curIndex <= words.size) {
+                textPane.text = words.take(curIndex).joinToString(" ")
                 textPane.caretPosition = textPane.text.length
-                repaint()
-                delay(deltaTime)
+                curIndex++
+                delay(deltaTime * 3)
             }
         }
+        repaint()
     }
 
     fun nextText() {

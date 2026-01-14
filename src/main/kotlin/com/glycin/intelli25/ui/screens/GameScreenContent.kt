@@ -191,7 +191,8 @@ class GameScreenContent(
                 - Defeat enemies and collect the coins they drop.
                 - After the experience bar is filled, choose an upgrade.
                 - Mix and match upgrades to become strong enough to survive.
-                - Survive as long as you can!
+                - Press escape during the game to pause.
+                - Survive!
         """.trimIndent(),
             "How To Play IDE SURVIVORS"
         )
