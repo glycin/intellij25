@@ -22,7 +22,7 @@ data class GameStartupSettings(
         fun createLevelThreeSettings(): GameStartupSettings {
             return GameStartupSettings(
                 chosenGameLevel = 3,
-                gameDuration = 10 * 60 * 1000L // 10 minutes
+                gameDuration = 9 * 60 * 1000L // 9 minutes
             )
         }
     }

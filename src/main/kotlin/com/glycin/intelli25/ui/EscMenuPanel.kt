@@ -41,7 +41,7 @@ class EscMenuPanel(
     }
 
     private fun createMenuButton(text: String, action: () -> Unit): JButton {
-        return StartButton(
+        return GameButton(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             textColor = GameColors.white,

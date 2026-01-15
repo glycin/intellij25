@@ -1,7 +1,7 @@
 package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.ui.Fonts
-import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.GameButton
 import com.glycin.intelli25.upgrades.AttackConfig
 import com.glycin.intelli25.upgrades.AttackDef
 import com.glycin.intelli25.upgrades.UpgradeBoostDef
@@ -61,7 +61,7 @@ class UpgradeAtlasPanel : JPanel(BorderLayout()) {
     }
 
     private fun createAttackDefMenuItem(title: String, items: List<AttackDef>, level: Int): JComponent {
-        return StartButton(
+        return GameButton(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             textColor = GameColors.white,
@@ -76,7 +76,7 @@ class UpgradeAtlasPanel : JPanel(BorderLayout()) {
     }
 
     private fun createBoostMenuItem(items: List<UpgradeBoostDef>): JComponent {
-        return StartButton(
+        return GameButton(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             textColor = GameColors.white,

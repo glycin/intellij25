@@ -25,7 +25,7 @@ object CutsceneTexts {
         "Inspired by Java, my first muse. And guess what? I ran it just fine. Then we got dark theme. FINALLY. Do you know how good I looked in dark mode? Incredible. My self-esteem skyrocketed.",
         "Search Everywhere dropped and suddenly everyone could find anything instantly. We added Terminal integration, so now I wasn't just running your code, I was running your entire workflow.",
         "Docker, Spring, and the Database tools arrived, and I wasn’t just an IDE anymore. I was the full-stack powerhouse. I was basically unstoppable.",
-        "But with that came new challenges... I survived, but can you survive for, lets say, 10 minutes now!?",
+        "But with that came new challenges... I survived, but can you survive for, lets say, 9 minutes now!?",
     )
 
     val screenFour = listOf(

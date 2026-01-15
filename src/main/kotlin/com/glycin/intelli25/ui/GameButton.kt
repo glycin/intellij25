@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JButton
 
-class StartButton(
+class GameButton(
     private val backgroundColor: Color,
     private val hoverColor: Color,
     textColor: Color = GameColors.white,

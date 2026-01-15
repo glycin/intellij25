@@ -1,7 +1,7 @@
 package com.glycin.intelli25.ui.screens
 
 import com.glycin.intelli25.model.StoryReplay
-import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.GameButton
 import com.glycin.intelli25.util.GameColors
 import java.awt.BorderLayout
 import java.awt.Graphics
@@ -22,7 +22,7 @@ class StoryPanel(
         }
 
         stories.forEachIndexed { index, story ->
-            val button = StartButton(
+            val button = GameButton(
                 backgroundColor = GameColors.jbPurple,
                 hoverColor = GameColors.jbOrange,
                 textColor = GameColors.white,

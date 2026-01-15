@@ -4,8 +4,9 @@ import com.glycin.intelli25.GameService
 import com.glycin.intelli25.model.Enemy
 import com.glycin.intelli25.model.StoryReplay
 import com.glycin.intelli25.persistence.GameSaveState
+import com.glycin.intelli25.ui.CreditsDialog
 import com.glycin.intelli25.ui.Fonts
-import com.glycin.intelli25.ui.StartButton
+import com.glycin.intelli25.ui.GameButton
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.PNG
 import com.intellij.openapi.components.service
@@ -36,9 +37,9 @@ class GameScreenContent(
     onStartThree: () -> Unit,
 ): JPanel() {
 
-    private val level1Btn: StartButton
-    private val level2Btn: StartButton
-    private val level3Btn: StartButton
+    private val level1Btn: GameButton
+    private val level2Btn: GameButton
+    private val level3Btn: GameButton
 
     init {
         isOpaque = false
@@ -149,8 +150,8 @@ class GameScreenContent(
         level3Btn.filled = saveState.levelsBeaten >= 2
     }
 
-    private fun createSquareLevelButton(text: String, action: () -> Unit): StartButton {
-        return StartButton(
+    private fun createSquareLevelButton(text: String, action: () -> Unit): GameButton {
+        return GameButton(
             backgroundColor = GameColors.jbPurple,
             hoverColor = GameColors.jbOrange,
             text = text,
@@ -163,7 +164,7 @@ class GameScreenContent(
     }
 
     private fun createFooterButton(text: String, action: () -> Unit): JButton {
-        return StartButton(
+        return GameButton(
             backgroundColor = GameColors.jbBlue,
             hoverColor = GameColors.jbOrange,
             text = text,
@@ -199,20 +200,7 @@ class GameScreenContent(
     }
 
     private fun showCredits() {
-        Messages.showInfoMessage(
-            project,
-            """
-                This game was created by Alexander Chatzizacharias (https://github.com/glycin).
-                
-                In collaboration with:
-                Irina Mariasova – IntelliJ IDEA Marketing 
-                Andrey Kogun – Developer Consultant 
-                Arina Kovrizhkina, FOREAL® studio – Design 
-                
-                Sponsored by JetBrains for IntelliJ IDEA’s 25th birthday.
-            """.trimIndent(),
-            "Credits"
-        )
+        CreditsDialog(project).show()
     }
 
     private fun showDiaryDialog() {
