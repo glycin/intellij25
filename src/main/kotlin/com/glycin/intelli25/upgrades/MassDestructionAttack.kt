@@ -15,12 +15,13 @@ import kotlinx.coroutines.launch
 import java.awt.Graphics2D
 import kotlin.random.Random
 
+// This weapons is unused for now, but who knows, maybe in the future :D
 class MassDestructionAttack(
     private val enemyManager: EnemyManager,
     private val scope: CoroutineScope,
     ggState: GameGlobalState,
     player: Player,
-): Attack(ggState, player, AttackConfig.SIDE_SHOT_WEAPON) { //TODO: Fix when this is made
+): Attack(ggState, player, AttackConfig.SIDE_SHOT_WEAPON) {
 
     private var triggerChance = 1//%
     override val maxLevel: Int = 1

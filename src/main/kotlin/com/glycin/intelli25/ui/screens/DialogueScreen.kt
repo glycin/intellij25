@@ -48,7 +48,7 @@ class DialogueScreen(
             isOpaque = false
         }
 
-        add(dialoguePanel, BorderLayout.SOUTH) // bottom of screen
+        add(dialoguePanel, BorderLayout.SOUTH)
     }
 
     fun advance() {
