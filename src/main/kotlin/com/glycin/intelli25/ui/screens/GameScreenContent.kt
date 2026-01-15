@@ -126,7 +126,7 @@ class GameScreenContent(
             layout = FlowLayout(FlowLayout.CENTER, 15, 0)
             alignmentX = CENTER_ALIGNMENT
             maximumSize = Dimension(600, 50)
-
+            minimumSize = Dimension(600, 50)
             add(createFooterButton("How to play") { showHowToPlayDialog() })
             add(createFooterButton("Diary") {
                 toolWindow.hide()
