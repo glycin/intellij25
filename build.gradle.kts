@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.2.0"
 }
 
-val v = "0.9.91"
+val v = "0.9.95"
 group = "com.glycin"
 version = v
 
@@ -34,15 +34,15 @@ intellijPlatform  {
             name = "Glycin"
             url = "https://github.com/glycin"
         }
-    }
 
-    description = """
+        description = """
             Hey there, human. I’m Runzo. Yes, your IDE’s Run button.<br>
             I’ve been living inside IntelliJ IDEA for 25 years, watching devs build incredible things and occasionally rage-clicking me when their code won't compile.<br>
             My mission? Make your ideas real, or to put it simply – run your code.<br>
             This game lets you follow my journey, all 25 years of it – the upgrades, the chaos, the bugs, the breakthroughs.<br><br>
             Stick around, help me survive it all… and maybe, just maybe, give me a chance to escape for a birthday party.<br>
         """.trimIndent()
+    }
 
     publishing {}
 
