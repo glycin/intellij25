@@ -22,6 +22,6 @@
                     factoryClass="com.glycin.intelli25.ui.GameToolWindowFactory"
                     icon="/icon/runzo.svg"
                     secondary="false"
-                    canCloseContents="true"/>
+                    canCloseContents="false"/>
     </extensions>
 </idea-plugin>
