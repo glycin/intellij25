@@ -8,7 +8,7 @@ import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 
-class EscMenuPanel(
+class GameQuitConfirmationPanel(
     private val onResume: () -> Unit,
     private val onQuit: () -> Unit
 ) : JPanel() {
