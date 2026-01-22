@@ -15,9 +15,14 @@ private const val BAR_HEIGHT = 20
 class InGameComponent(
     private val player: Player,
     private val ggState: GameGlobalState,
-): JComponent() {
+) : JComponent() {
 
     private val scoreFont = Fonts.pixelFont.deriveFont(Font.BOLD, 20f)
+
+    // Use smaller font size for the controls
+    private val controlsFont = Fonts.pixelFont.deriveFont(Font.BOLD, 15f)
+
+    private data class LabelValuePair(val label: String, val value: String)
 
     init {
         isOpaque = false
@@ -26,12 +31,12 @@ class InGameComponent(
 
     override fun paintComponent(g: Graphics?) {
         super.paintComponent(g)
-        if(g is Graphics2D) {
+        if (g is Graphics2D) {
             drawExpBar(g)
             drawPlayerHp(g)
-            drawTime(g)
-            drawScore(g)
             drawInventory(g)
+
+            drawTopRightCornerUI(g)
         }
     }
 
@@ -41,6 +46,53 @@ class InGameComponent(
         g.color = GameColors.jbOrange
         val filledWidth = (player.experience / player.experienceNeeded) * ggState.maxX
         g.fillRect(0, 0, filledWidth.roundToInt(), BAR_HEIGHT)
+    }
+
+    private fun drawLabelWithValue(
+        g: Graphics2D,
+        label: String,
+        value: String,
+        leftBorder: Int,
+        valueColumnStart: Int,
+        y: Int
+    ) {
+        g.drawString("$label:", leftBorder, y)
+        g.drawString(value, valueColumnStart, y)
+    }
+
+    private data class ColumnPositions(val leftBorder: Int, val valueColumnStart: Int)
+
+    private fun calculateColumnPositions(g: Graphics2D, pairs: List<LabelValuePair>): ColumnPositions {
+        val metrics = g.fontMetrics
+        val maxLabelWidth = pairs.maxOf { metrics.stringWidth("${it.label}:") }
+        val maxValueWidth = pairs.maxOf { metrics.stringWidth(it.value) }
+        val leftBorder = ggState.maxX - 20 - maxLabelWidth - metrics.stringWidth(" ") - maxValueWidth
+        val valueColumnStart = leftBorder + maxLabelWidth + metrics.stringWidth(" ")
+        return ColumnPositions(leftBorder, valueColumnStart)
+    }
+
+    private fun getTimeValue(): String {
+        val maxTimeMs = ggState.gameDuration
+        val elapsedMs = ggState.elapsedTime
+        val remainingMs = (maxTimeMs - elapsedMs).coerceAtLeast(0L)
+        val totalSeconds = remainingMs / 1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return "%02d:%02d".format(minutes, seconds)
+    }
+
+    private fun getScoreAndTimePairs(): List<LabelValuePair> {
+        return listOf(
+            LabelValuePair("Time", getTimeValue()),
+            LabelValuePair("Score", "${ggState.score}")
+        )
+    }
+
+    private fun getControlPairs(): List<LabelValuePair> {
+        return listOf(
+            LabelValuePair("Move", "W A S D"),
+            LabelValuePair("Pause", "ESC")
+        )
     }
 
     private fun drawPlayerHp(g: Graphics2D) {
@@ -53,30 +105,68 @@ class InGameComponent(
         g.fillRect(x, y, hpWidth, 5)
     }
 
-    private fun drawTime(g: Graphics2D) {
-        g.font = scoreFont
-        g.color = GameColors.jbOrange
-        val maxTimeMs = ggState.gameDuration
-        val elapsedMs = ggState.elapsedTime
-        val remainingMs = (maxTimeMs - elapsedMs).coerceAtLeast(0L)
-        val totalSeconds = remainingMs / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        val timeText = "%02d:%02d".format(minutes, seconds)
-        val metrics = g.getFontMetrics(scoreFont)
-        val x = ggState.maxX - metrics.stringWidth(timeText) - 20
-        val y = BAR_HEIGHT + metrics.height + 10
-        g.drawString(timeText, x, y)
+    private fun drawLabelValuePairs(
+        g: Graphics2D,
+        pairs: List<LabelValuePair>,
+        columns: ColumnPositions,
+        startY: Int
+    ): Int {
+        val metrics = g.fontMetrics
+        var y = startY
+
+        pairs.forEach { (label, value) ->
+            drawLabelWithValue(g, label, value, columns.leftBorder, columns.valueColumnStart, y)
+            y += metrics.height + 5
+        }
+
+        return y
     }
 
-    private fun drawScore(g: Graphics2D) {
+    private fun drawTimeAndScore(
+        g: Graphics2D,
+        timeAndScorePairs: List<LabelValuePair>,
+        columns: ColumnPositions
+    ): Int {
         g.font = scoreFont
         g.color = GameColors.jbOrange
-        val scoreText = "${ggState.score}"
-        val metrics = g.getFontMetrics(scoreFont)
-        val x = ggState.maxX - metrics.stringWidth(scoreText) - 20
-        val y = BAR_HEIGHT + (metrics.height * 2) + 15
-        g.drawString(scoreText, x, y)
+
+        val startY = BAR_HEIGHT + g.fontMetrics.height + 10
+
+        return drawLabelValuePairs(g, timeAndScorePairs, columns, startY)
+    }
+
+    private fun drawControls(g: Graphics2D, controlPairs: List<LabelValuePair>, columns: ColumnPositions, startY: Int) {
+        g.font = controlsFont
+        g.color = GameColors.jbOrange
+
+        drawLabelValuePairs(g, controlPairs, columns, startY)
+    }
+
+    private fun drawTopRightCornerUI(g: Graphics2D) {
+        val scoreAndTimePairs = getScoreAndTimePairs()
+        val controlPairs = getControlPairs()
+
+        // Calculate the leftmost position based on all content
+        g.font = scoreFont
+        val scoreFontMetrics = g.fontMetrics
+        val scoreMaxLabelWidth = scoreAndTimePairs.maxOf { scoreFontMetrics.stringWidth("${it.label}:") }
+        val scoreMaxValueWidth = scoreAndTimePairs.maxOf { scoreFontMetrics.stringWidth(it.value) }
+        
+        g.font = controlsFont
+        val controlsFontMetrics = g.fontMetrics
+        val controlsMaxLabelWidth = controlPairs.maxOf { controlsFontMetrics.stringWidth("${it.label}:") }
+        val controlsMaxValueWidth = controlPairs.maxOf { controlsFontMetrics.stringWidth(it.value) }
+        
+        val maxLabelWidth = maxOf(scoreMaxLabelWidth, controlsMaxLabelWidth)
+        val maxValueWidth = maxOf(scoreMaxValueWidth, controlsMaxValueWidth)
+        val spaceWidth = maxOf(scoreFontMetrics.stringWidth(" "), controlsFontMetrics.stringWidth(" "))
+        
+        val leftBorder = ggState.maxX - 20 - maxLabelWidth - spaceWidth - maxValueWidth
+        val valueColumnStart = leftBorder + maxLabelWidth + spaceWidth
+        val columns = ColumnPositions(leftBorder, valueColumnStart)
+
+        val yAfterScore = drawTimeAndScore(g, scoreAndTimePairs, columns)
+        drawControls(g, controlPairs, columns, yAfterScore)
     }
 
     private fun drawInventory(g: Graphics2D) {
