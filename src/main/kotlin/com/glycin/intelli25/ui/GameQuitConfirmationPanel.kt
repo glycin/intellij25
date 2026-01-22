@@ -10,7 +10,8 @@ import javax.swing.JPanel
 
 class GameQuitConfirmationPanel(
     private val onResume: () -> Unit,
-    private val onQuit: () -> Unit
+    private val onQuit: () -> Unit,
+    quitButtonLabel: String = "QUIT GAME"
 ) : JPanel() {
     private var popup: JBPopup? = null
 
@@ -24,7 +25,7 @@ class GameQuitConfirmationPanel(
             onResume()
         }
 
-        val quitBtn = createMenuButton("QUIT GAME") {
+        val quitBtn = createMenuButton(quitButtonLabel) {
             popup?.cancel()
             onQuit()
         }

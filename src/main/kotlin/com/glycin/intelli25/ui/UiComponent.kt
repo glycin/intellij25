@@ -9,6 +9,7 @@ import com.glycin.intelli25.util.SpriteSheetImageLoader
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.observable.util.addComponent
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,10 +23,10 @@ import javax.swing.JPanel
 import kotlin.math.roundToInt
 
 class UiComponent(
+    private val project: Project,
     private val player: Player,
     private val ggState: GameGlobalState,
     private val scope: CoroutineScope,
-    private val onQuit: () -> Unit
 ): JComponent(), Disposable {
 
     private val confetti = SpriteSheetImageLoader.loadSprites("/sprites/effects/confetti.png", 512, 512, 64)
@@ -89,14 +90,17 @@ class UiComponent(
         gameUiComponent?.bounds = newBounds
     }
 
-    fun showEscMenu() {
+    fun showGameQuitConfirmationDialog(
+        onQuit: () -> Unit
+    ) {
         if (ggState.inUpgradeMenu) {
             return
         }
 
         ggState.inUpgradeMenu = true
 
-        val menuPanel = CameQuitConfirmationPanel(
+        val dialog = GameQuitConfirmationDialog(
+            project = project,
             onResume = {
                 ggState.inUpgradeMenu = false
             },
@@ -106,22 +110,38 @@ class UiComponent(
             }
         )
 
-        val popup = JBPopupFactory.getInstance()
-            .createComponentPopupBuilder(menuPanel, menuPanel)
-            .setTitle("GAME PAUSED")
-            .setMovable(true)
-            .setRequestFocus(true)
-            .setCancelOnWindowDeactivation(false)
-            .setCancelOnOtherWindowOpen(false)
-            .setCancelOnClickOutside(false)
-            .setCancelKeyEnabled(false)
-            .createPopup()
+        dialog.show()
+    }
 
-        menuPanel.setPopup(popup)
-
-        scope.launch(Dispatchers.EDT) {
-            popup.showInCenterOf(this@UiComponent)
+    /**
+     * Shows a blocking game quit confirmation dialog for editor close confirmation.
+     * This method blocks execution until the user makes a choice.
+     *
+     * @return true if user wants to quit, false if user wants to resume
+     */
+    fun showGameQuitConfirmationDialogBlocking(): Boolean {
+        if (ggState.inUpgradeMenu) {
+            return false
         }
+
+        ggState.inUpgradeMenu = true
+
+        val dialog = GameQuitConfirmationDialog(
+            project = project,
+            title = "CLOSE EDITOR?",
+            quitButtonLabel = "CLOSE & QUIT GAME",
+            onResume = {
+                ggState.inUpgradeMenu = false
+            },
+            onQuit = {
+                ggState.inUpgradeMenu = false
+            }
+        )
+        val result = dialog.showAndGetResult()
+
+        ggState.inUpgradeMenu = false
+
+        return result
     }
 
     override fun paintComponent(g: Graphics?) {
