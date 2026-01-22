@@ -15,11 +15,14 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTabbedPane
+import com.intellij.ui.JBColor
+import java.awt.Color
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.GridBagLayout
+import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -44,11 +47,13 @@ class GameScreenContent(
     init {
         isOpaque = false
         layout = GridBagLayout()
+        addDebugBorder(JBColor.RED)
 
         val contentContainer = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
+            addDebugBorder(JBColor.GREEN)
         }
 
         contentContainer.add(Box.createVerticalGlue())
@@ -58,6 +63,7 @@ class GameScreenContent(
             foreground = GameColors.jbGreen
             alignmentX = CENTER_ALIGNMENT
             horizontalAlignment = SwingConstants.CENTER
+            addDebugBorder(JBColor.BLUE)
         }
         contentContainer.add(titleLabel)
         contentContainer.add(Box.createVerticalStrut(5))
@@ -74,6 +80,7 @@ class GameScreenContent(
                 maximumSize = Dimension(targetW, targetH)
                 minimumSize = Dimension(targetW, targetH)
                 alignmentX = CENTER_ALIGNMENT
+                addDebugBorder(JBColor.CYAN)
             }
 
             override fun paintComponent(g: Graphics) {
@@ -98,6 +105,7 @@ class GameScreenContent(
             font = Fonts.jbMono.deriveFont(20.0f)
             foreground = GameColors.jbPurple
             alignmentX = CENTER_ALIGNMENT
+            addDebugBorder(JBColor.MAGENTA)
         }
         contentContainer.add(levelLabel)
 
@@ -110,6 +118,7 @@ class GameScreenContent(
         val levelRow = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.X_AXIS)
+            addDebugBorder(JBColor.YELLOW)
             add(level1Btn)
             add(Box.createHorizontalStrut(15))
             add(level2Btn)
@@ -127,6 +136,7 @@ class GameScreenContent(
             alignmentX = CENTER_ALIGNMENT
             maximumSize = Dimension(600, 50)
             minimumSize = Dimension(600, 50)
+            addDebugBorder(JBColor.ORANGE)
             add(createFooterButton("How to play") { showHowToPlayDialog() })
             add(createFooterButton("Diary") {
                 toolWindow.hide()
@@ -160,6 +170,7 @@ class GameScreenContent(
         ).apply {
             font = Fonts.jbMono.deriveFont(20.0f)
             addActionListener { action() }
+            addDebugBorder(JBColor.PINK)
         }
     }
 
@@ -173,6 +184,15 @@ class GameScreenContent(
         ).apply {
             font = Fonts.jbMono.deriveFont(18.0f)
             addActionListener { action() }
+            addDebugBorder(JBColor.WHITE)
+        }
+    }
+
+    private fun JComponent.addDebugBorder(color: Color) {
+        val debugBorderWidth = 0
+        @Suppress("KotlinConstantConditions")
+        if (debugBorderWidth > 0) {
+            border = BorderFactory.createLineBorder(color, debugBorderWidth)
         }
     }
 
