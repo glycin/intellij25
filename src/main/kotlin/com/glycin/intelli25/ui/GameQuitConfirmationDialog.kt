@@ -51,6 +51,7 @@ class GameQuitConfirmationDialog(
             // Add a title panel at the top (similar to popup title)
             val titleLabel = JLabel(title).apply {
                 horizontalAlignment = SwingConstants.CENTER
+                font = Fonts.jbMono.deriveFont(16.0f)
 
                 val vPadding = 16
                 val hPadding = 24
