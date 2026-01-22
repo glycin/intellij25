@@ -37,10 +37,6 @@ class GameQuitConfirmationPanel(
         add(Box.createVerticalGlue())
     }
 
-    fun setPopup(jbPopup: JBPopup) {
-        this.popup = jbPopup
-    }
-
     private fun createMenuButton(text: String, action: () -> Unit): JButton {
         return GameButton(
             backgroundColor = GameColors.jbPurple,
