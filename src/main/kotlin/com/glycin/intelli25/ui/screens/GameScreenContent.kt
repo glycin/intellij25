@@ -44,6 +44,8 @@ class GameScreenContent(
     private val level2Btn: GameButton
     private val level3Btn: GameButton
 
+    private val FOOTER_BUTTON_PREFERRED_HEIGHT = 60
+
     init {
         isOpaque = false
         layout = GridBagLayout()
@@ -134,8 +136,12 @@ class GameScreenContent(
             isOpaque = false
             layout = FlowLayout(FlowLayout.CENTER, 15, 0)
             alignmentX = CENTER_ALIGNMENT
-            maximumSize = Dimension(600, 50)
-            minimumSize = Dimension(600, 50)
+
+            // Footer panel height should not be less than a footer button preferred heights,
+            // otherwise the buttons can be cropped at the bottom when the toolwindow width is small enough
+            maximumSize = Dimension(600, FOOTER_BUTTON_PREFERRED_HEIGHT)
+            minimumSize = Dimension(600, FOOTER_BUTTON_PREFERRED_HEIGHT)
+
             addDebugBorder(JBColor.ORANGE)
             add(createFooterButton("How to play") { showHowToPlayDialog() })
             add(createFooterButton("Diary") {
@@ -180,7 +186,7 @@ class GameScreenContent(
             hoverColor = GameColors.jbOrange,
             text = text,
             preferredWidth = 160,
-            preferredHeight = 60,
+            preferredHeight = FOOTER_BUTTON_PREFERRED_HEIGHT,
         ).apply {
             font = Fonts.jbMono.deriveFont(18.0f)
             addActionListener { action() }
