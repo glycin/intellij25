@@ -90,7 +90,7 @@ class InGameComponent(
 
     private fun getControlPairs(): List<LabelValuePair> {
         return listOf(
-            LabelValuePair("Move", "W A S D"),
+            LabelValuePair("Move", "WASD/Arrows"),
             LabelValuePair("Pause", "ESC")
         )
     }
@@ -146,27 +146,35 @@ class InGameComponent(
         val scoreAndTimePairs = getScoreAndTimePairs()
         val controlPairs = getControlPairs()
 
-        // Calculate the leftmost position based on all content
+        // Calculate max label width across both sections for left alignment
         g.font = scoreFont
         val scoreFontMetrics = g.fontMetrics
         val scoreMaxLabelWidth = scoreAndTimePairs.maxOf { scoreFontMetrics.stringWidth("${it.label}:") }
-        val scoreMaxValueWidth = scoreAndTimePairs.maxOf { scoreFontMetrics.stringWidth(it.value) }
-        
+
         g.font = controlsFont
         val controlsFontMetrics = g.fontMetrics
         val controlsMaxLabelWidth = controlPairs.maxOf { controlsFontMetrics.stringWidth("${it.label}:") }
-        val controlsMaxValueWidth = controlPairs.maxOf { controlsFontMetrics.stringWidth(it.value) }
-        
-        val maxLabelWidth = maxOf(scoreMaxLabelWidth, controlsMaxLabelWidth)
-        val maxValueWidth = maxOf(scoreMaxValueWidth, controlsMaxValueWidth)
-        val spaceWidth = maxOf(scoreFontMetrics.stringWidth(" "), controlsFontMetrics.stringWidth(" "))
-        
-        val leftBorder = ggState.maxX - 20 - maxLabelWidth - spaceWidth - maxValueWidth
-        val valueColumnStart = leftBorder + maxLabelWidth + spaceWidth
-        val columns = ColumnPositions(leftBorder, valueColumnStart)
 
-        val yAfterScore = drawTimeAndScore(g, scoreAndTimePairs, columns)
-        drawControls(g, controlPairs, columns, yAfterScore)
+        // Use the maximum label width for alignment
+        val maxLabelWidth = maxOf(scoreMaxLabelWidth, controlsMaxLabelWidth)
+
+        // Calculate value widths separately for each section
+        val scoreMaxValueWidth = scoreAndTimePairs.maxOf { scoreFontMetrics.stringWidth(it.value) }
+        val controlsMaxValueWidth = controlPairs.maxOf { controlsFontMetrics.stringWidth(it.value) }
+
+        // Use the largest value width to determine the left border
+        val maxValueWidth = maxOf(scoreMaxValueWidth, controlsMaxValueWidth)
+        val scoreSpaceWidth = scoreFontMetrics.stringWidth(" ")
+        val controlsSpaceWidth = scoreSpaceWidth
+
+        val leftBorder = ggState.maxX - 20 - maxLabelWidth - scoreSpaceWidth - maxValueWidth
+
+        // Create separate column positions for each section - values aligned separately
+        val scoreColumns = ColumnPositions(leftBorder, leftBorder + maxLabelWidth + scoreSpaceWidth)
+        val controlsColumns = ColumnPositions(leftBorder, leftBorder + maxLabelWidth + controlsSpaceWidth)
+
+        val yAfterScore = drawTimeAndScore(g, scoreAndTimePairs, scoreColumns)
+        drawControls(g, controlPairs, controlsColumns, yAfterScore)
     }
 
     private fun drawInventory(g: Graphics2D) {
