@@ -10,12 +10,12 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import java.awt.BorderLayout
-import java.awt.Dimension
 import javax.swing.JPanel
 
 class MainMenuScreen(
     private val project: Project,
     private val toolWindow: ToolWindow,
+    private val toolWindowComponent: ToolWindowBaseComponent,
     private val saveState: GameSaveState,
 ): JPanel() {
 
@@ -63,7 +63,7 @@ class MainMenuScreen(
                 startGame(
                     project,
                     toolWindow,
-                    parent as ToolWindowBaseComponent,
+                    toolWindowComponent,
                     GameStartupSettings.createLevelOneSettings()
                 )
             }
@@ -72,7 +72,7 @@ class MainMenuScreen(
             startGame(
                 project,
                 toolWindow,
-                parent as ToolWindowBaseComponent,
+                toolWindowComponent,
                 GameStartupSettings.createLevelOneSettings()
             )
         }
@@ -83,7 +83,7 @@ class MainMenuScreen(
         startGame(
             project,
             toolWindow,
-            parent as ToolWindowBaseComponent,
+            toolWindowComponent,
             GameStartupSettings.createLevelTwoSettings()
         )
     }
@@ -93,7 +93,7 @@ class MainMenuScreen(
         startGame(
             project,
             toolWindow,
-            parent as ToolWindowBaseComponent,
+            toolWindowComponent,
             GameStartupSettings.createLevelThreeSettings()
         )
     }
