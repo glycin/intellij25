@@ -7,6 +7,7 @@ import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.CreditsDialog
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.GameButton
+import com.glycin.intelli25.ui.scaledToJbZoomLevel
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.PNG
 import com.intellij.openapi.components.service
@@ -61,7 +62,7 @@ class GameScreenContent(
         contentContainer.add(Box.createVerticalGlue())
 
         val titleLabel = JLabel("IDE SURVIVORS").apply {
-            font = Fonts.pixelFont.deriveFont(42.0f)
+            font = Fonts.pixelFont.scaledToJbZoomLevel(42.0f)
             foreground = GameColors.jbGreen
             alignmentX = CENTER_ALIGNMENT
             horizontalAlignment = SwingConstants.CENTER
@@ -104,7 +105,7 @@ class GameScreenContent(
         contentContainer.add(Box.createVerticalStrut(5))
 
         val levelLabel = JLabel("SELECT LEVEL").apply {
-            font = Fonts.jbMono.deriveFont(20.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(20.0f)
             foreground = GameColors.jbPurple
             alignmentX = CENTER_ALIGNMENT
             addDebugBorder(JBColor.MAGENTA)
@@ -174,7 +175,7 @@ class GameScreenContent(
             preferredWidth = 65,
             preferredHeight = 65,
         ).apply {
-            font = Fonts.jbMono.deriveFont(20.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(20.0f)
             addActionListener { action() }
             addDebugBorder(JBColor.PINK)
         }
@@ -188,7 +189,7 @@ class GameScreenContent(
             preferredWidth = 160,
             preferredHeight = FOOTER_BUTTON_PREFERRED_HEIGHT,
         ).apply {
-            font = Fonts.jbMono.deriveFont(18.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(18.0f)
             addActionListener { action() }
             addDebugBorder(JBColor.WHITE)
         }
