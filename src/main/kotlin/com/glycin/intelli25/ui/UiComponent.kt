@@ -57,6 +57,7 @@ class UiComponent(
             .setCancelOnWindowDeactivation(false)
             .setCancelKeyEnabled(false)
             .setTitle("LEVEL UP!")
+            .setMovable(true)
             .createPopup()
 
         panel.components.forEach { comp ->
