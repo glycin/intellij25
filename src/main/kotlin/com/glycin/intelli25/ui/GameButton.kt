@@ -20,7 +20,7 @@ class GameButton(
     private var hover = false
 
     init {
-        font = Fonts.jbMono.deriveFont(16.0f)
+        font = Fonts.jbMono.scaledToJbZoomLevel(16.0f)
         preferredSize = JBUI.size(preferredWidth, preferredHeight)
         minimumSize = preferredSize
         maximumSize = preferredSize

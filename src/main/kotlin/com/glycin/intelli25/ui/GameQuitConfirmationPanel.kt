@@ -8,9 +8,10 @@ import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 
-class EscMenuPanel(
+class GameQuitConfirmationPanel(
     private val onResume: () -> Unit,
-    private val onQuit: () -> Unit
+    private val onQuit: () -> Unit,
+    quitButtonLabel: String = "QUIT GAME"
 ) : JPanel() {
     private var popup: JBPopup? = null
 
@@ -24,7 +25,7 @@ class EscMenuPanel(
             onResume()
         }
 
-        val quitBtn = createMenuButton("QUIT GAME") {
+        val quitBtn = createMenuButton(quitButtonLabel) {
             popup?.cancel()
             onQuit()
         }
@@ -34,10 +35,6 @@ class EscMenuPanel(
         add(Box.createVerticalStrut(15))
         add(quitBtn)
         add(Box.createVerticalGlue())
-    }
-
-    fun setPopup(jbPopup: JBPopup) {
-        this.popup = jbPopup
     }
 
     private fun createMenuButton(text: String, action: () -> Unit): JButton {

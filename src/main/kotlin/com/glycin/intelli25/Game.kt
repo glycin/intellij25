@@ -1,33 +1,31 @@
 package com.glycin.intelli25
 
 import com.glycin.intelli25.input.GameKeyListener
+import com.glycin.intelli25.input.NoOpEditorActionHandler
 import com.glycin.intelli25.managers.AttackManager
 import com.glycin.intelli25.managers.CollisionsManager
 import com.glycin.intelli25.managers.EnemyManager
-import com.glycin.intelli25.model.EnemyType
-import com.glycin.intelli25.model.GameStartupSettings
-import com.glycin.intelli25.model.Player
-import com.glycin.intelli25.model.UpgradeBackpackItem
-import com.glycin.intelli25.model.UpgradeOption
-import com.glycin.intelli25.model.Vec2
+import com.glycin.intelli25.model.*
 import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.ToolWindowBaseComponent
 import com.glycin.intelli25.ui.UiComponent
-import com.glycin.intelli25.ui.screens.CutsceneTexts
-import com.glycin.intelli25.ui.screens.DialogueScreen
-import com.glycin.intelli25.ui.screens.DialogueScreenWrapper
-import com.glycin.intelli25.ui.screens.GameOverScreen
-import com.glycin.intelli25.ui.screens.GameOverScreenWrapper
+import com.glycin.intelli25.ui.screens.*
 import com.glycin.intelli25.upgrades.BasicAttack
 import com.glycin.intelli25.upgrades.UpgradeRepository
 import com.glycin.intelli25.util.GameGlobalState
 import com.glycin.intelli25.util.PNG
 import com.glycin.intelli25.util.getDeltaTime
+import com.intellij.openapi.actionSystem.IdeActions
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ScrollType
+import com.intellij.openapi.editor.actionSystem.EditorActionHandler
+import com.intellij.openapi.editor.actionSystem.EditorActionManager
+import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.wm.ToolWindow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +52,9 @@ class Game(
     private var dialogueScreenWrapper: DialogueScreenWrapper? = null
     private var mouseWheelBlocker: MouseWheelListener? = null //TODO: Workaround until I find a good way to pin the UI as the user scrolls around
 
+    // Store original action handlers to restore them later
+    private val originalActionHandlers = mutableMapOf<String, EditorActionHandler>()
+
     private lateinit var player: Player
     private lateinit var ggState: GameGlobalState
     private lateinit var upgradeRepository: UpgradeRepository
@@ -63,8 +64,13 @@ class Game(
 
     init {
         scope.launch(Dispatchers.EDT) {
+            disableDefaultEditorCaretActions()
+
+            val caretModel = editor.caretModel
+            caretModel.moveToOffset(0)
+            caretModel.removeSecondaryCarets()
+
             val scrollingModel = editor.scrollingModel
-            editor.caretModel.moveToOffset(0)
             scrollingModel.scrollToCaret(ScrollType.CENTER_UP)
 
             delay(250) // Give the editor time to scroll up
@@ -133,17 +139,16 @@ class Game(
                 gc.requestFocusInWindow()
             }
 
-            uiComponent = UiComponent(
+            val uiComponent = UiComponent(
+                project = project,
                 player = player,
                 ggState = ggState,
                 scope = scope,
-                onQuit = {
-                    stopGame()
-                },
             ).also { uic ->
                 uic.bounds = editor.contentComponent.bounds
                 uic.isOpaque = false
             }
+            this@Game.uiComponent = uiComponent
 
             editor.contentComponent.let { c ->
                 c.add(gameComponent)
@@ -157,10 +162,10 @@ class Game(
                     ggState.maxY = visibleRect.height
                     ggState.minX = visibleRect.x
                     ggState.minY = visibleRect.y
-                    uiComponent?.updateBounds(visibleRect)
+                    uiComponent.updateBounds(visibleRect)
                     gameComponent?.bounds = visibleRect
-                    uiComponent?.revalidate()
-                    uiComponent?.repaint()
+                    uiComponent.revalidate()
+                    uiComponent.repaint()
                     gameComponent?.revalidate()
                     gameComponent?.repaint()
                     collisionsManager.updateGridBounds()
@@ -169,20 +174,85 @@ class Game(
                 c.revalidate()
             }
 
-            keyListener = GameKeyListener(player, uiComponent).also {
+            keyListener = GameKeyListener(player, uiComponent, this@Game).also {
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(it)
             }
 
-            uiComponent?.showGameUi()
+            initGameConfirmationDialogListener(uiComponent)
+
+            uiComponent.showGameUi()
 
             postInit()
         }
     }
 
+    /**
+     * In [GameKeyListener] we intercept the arrow key events (UP, DOWN, LEFT, RIGHT).
+     * However, just that is not enough.
+     * We also need to disable the default editor caret actions to prevent caret movement
+     * while the game is running. This is because the arrow keys are also used for
+     * navigating the editor, and we want to prevent that while the game is running.
+     *
+     * Just returning `true` from the `dispatchKeyEvent` method seems to not work as IntelliJ has a special handling for arrow keys
+     */
+    private fun disableDefaultEditorCaretActions() {
+        // Override arrow key action handlers to prevent caret movement
+        val editorActionManager = EditorActionManager.getInstance()
+
+        // List of editor actions to mute while the game is running
+        val editorCaretActionsToDisable: List<String> = listOf(
+            // Arrow key movements
+            IdeActions.ACTION_EDITOR_MOVE_CARET_UP,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_DOWN,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_LEFT,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_RIGHT,
+
+            IdeActions.ACTION_EDITOR_MOVE_CARET_UP_WITH_SELECTION,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_DOWN_WITH_SELECTION,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_LEFT_WITH_SELECTION,
+            IdeActions.ACTION_EDITOR_MOVE_CARET_RIGHT_WITH_SELECTION,
+        )
+
+        editorCaretActionsToDisable.forEach { actionId ->
+            val originalAction: EditorActionHandler = editorActionManager.getActionHandler(actionId)
+            originalActionHandlers[actionId] = originalAction
+
+            val noOpHandler = NoOpEditorActionHandler(editor, originalAction)
+            editorActionManager.setActionHandler(actionId, noOpHandler)
+        }
+    }
+
+    private fun restoreOriginalEditorCaretActions() {
+        val actionManager = EditorActionManager.getInstance()
+        originalActionHandlers.forEach { (actionId, handler) ->
+            actionManager.setActionHandler(actionId, handler)
+        }
+        originalActionHandlers.clear()
+    }
+
+    private fun initGameConfirmationDialogListener(uiComponent: UiComponent) {
+        val listener = ShowStopGameConfirmationDialogOnEditorCloseListener(
+            project,
+            this,
+            ggState,
+            editor,
+            uiComponent
+        )
+
+        // Register editor close listener to show a confirmation dialog
+        val projectMessageBus = project.messageBus.connect()
+        projectMessageBus.subscribe(FileEditorManagerListener.Before.FILE_EDITOR_MANAGER, listener)
+
+        // Register a project closing listener to track when a project is being closed.
+        // If an IDE is closed, it will also auto-close all projects
+        val appMessageBus = ApplicationManager.getApplication().messageBus.connect()
+        appMessageBus.subscribe(ProjectManager.TOPIC, listener)
+    }
+
     private fun postInit() {
         // Rendering loop
-        scope.launch (Dispatchers.Default) {
-            while(ggState.gameActive) {
+        scope.launch(Dispatchers.Default) {
+            while (ggState.gameActive) {
                 editor.contentComponent.repaint()
                 delay(ggState.deltaTime)
             }
@@ -210,20 +280,36 @@ class Game(
         return upgradeRepository.getRandomUpgrades(attackManager)
     }
 
-    private fun stopGame() {
+    fun stopGameWithoutEditorCleanups() {
         uiComponent?.dispose()
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
+
+        dialogueScreenWrapper = null
+        ggState.gameActive = false
+
+        project.getService(GameService::class.java).resetGame()
+    }
+
+
+    fun stopGame() {
+        stopGameWithoutEditorCleanups()
+
+        cleanUpEditor()
+    }
+
+    private fun cleanUpEditor() {
+        restoreOriginalEditorCaretActions()
+
         editor.contentComponent.remove(uiComponent)
         editor.contentComponent.remove(gameComponent)
         editor.contentComponent.revalidate()
         editor.contentComponent.repaint()
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyListener)
+
         mouseWheelBlocker?.let { mwb ->
             editor.contentComponent.removeMouseWheelListener(mwb)
         }
         mouseWheelBlocker = null
-        dialogueScreenWrapper = null
-        ggState.gameActive = false
-        project.getService(GameService::class.java).resetGame()
     }
 
     private fun levelOneBeaten() {

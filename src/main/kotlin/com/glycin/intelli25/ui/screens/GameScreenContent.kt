@@ -7,6 +7,7 @@ import com.glycin.intelli25.persistence.GameSaveState
 import com.glycin.intelli25.ui.CreditsDialog
 import com.glycin.intelli25.ui.Fonts
 import com.glycin.intelli25.ui.GameButton
+import com.glycin.intelli25.ui.scaledToJbZoomLevel
 import com.glycin.intelli25.util.GameColors
 import com.glycin.intelli25.util.PNG
 import com.intellij.openapi.components.service
@@ -15,11 +16,14 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTabbedPane
+import com.intellij.ui.JBColor
+import java.awt.Color
 import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.GridBagLayout
+import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -44,20 +48,23 @@ class GameScreenContent(
     init {
         isOpaque = false
         layout = GridBagLayout()
+        addDebugBorder(JBColor.RED)
 
         val contentContainer = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
             alignmentX = CENTER_ALIGNMENT
+            addDebugBorder(JBColor.GREEN)
         }
 
         contentContainer.add(Box.createVerticalGlue())
 
         val titleLabel = JLabel("IDE SURVIVORS").apply {
-            font = Fonts.pixelFont.deriveFont(42.0f)
+            font = Fonts.pixelFont.scaledToJbZoomLevel(42.0f)
             foreground = GameColors.jbGreen
             alignmentX = CENTER_ALIGNMENT
             horizontalAlignment = SwingConstants.CENTER
+            addDebugBorder(JBColor.BLUE)
         }
         contentContainer.add(titleLabel)
         contentContainer.add(Box.createVerticalStrut(5))
@@ -74,6 +81,7 @@ class GameScreenContent(
                 maximumSize = Dimension(targetW, targetH)
                 minimumSize = Dimension(targetW, targetH)
                 alignmentX = CENTER_ALIGNMENT
+                addDebugBorder(JBColor.CYAN)
             }
 
             override fun paintComponent(g: Graphics) {
@@ -95,9 +103,10 @@ class GameScreenContent(
         contentContainer.add(Box.createVerticalStrut(5))
 
         val levelLabel = JLabel("SELECT LEVEL").apply {
-            font = Fonts.jbMono.deriveFont(20.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(20.0f)
             foreground = GameColors.jbPurple
             alignmentX = CENTER_ALIGNMENT
+            addDebugBorder(JBColor.MAGENTA)
         }
         contentContainer.add(levelLabel)
 
@@ -110,6 +119,7 @@ class GameScreenContent(
         val levelRow = JPanel().apply {
             isOpaque = false
             layout = BoxLayout(this, BoxLayout.X_AXIS)
+            addDebugBorder(JBColor.YELLOW)
             add(level1Btn)
             add(Box.createHorizontalStrut(15))
             add(level2Btn)
@@ -125,8 +135,8 @@ class GameScreenContent(
             isOpaque = false
             layout = FlowLayout(FlowLayout.CENTER, 15, 0)
             alignmentX = CENTER_ALIGNMENT
-            maximumSize = Dimension(600, 50)
-            minimumSize = Dimension(600, 50)
+
+            addDebugBorder(JBColor.ORANGE)
             add(createFooterButton("How to play") { showHowToPlayDialog() })
             add(createFooterButton("Diary") {
                 toolWindow.hide()
@@ -158,8 +168,9 @@ class GameScreenContent(
             preferredWidth = 65,
             preferredHeight = 65,
         ).apply {
-            font = Fonts.jbMono.deriveFont(20.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(20.0f)
             addActionListener { action() }
+            addDebugBorder(JBColor.PINK)
         }
     }
 
@@ -171,8 +182,17 @@ class GameScreenContent(
             preferredWidth = 160,
             preferredHeight = 60,
         ).apply {
-            font = Fonts.jbMono.deriveFont(18.0f)
+            font = Fonts.jbMono.scaledToJbZoomLevel(18.0f)
             addActionListener { action() }
+            addDebugBorder(JBColor.WHITE)
+        }
+    }
+
+    private fun JComponent.addDebugBorder(color: Color) {
+        val debugBorderWidth = 0
+        @Suppress("KotlinConstantConditions")
+        if (debugBorderWidth > 0) {
+            border = BorderFactory.createLineBorder(color, debugBorderWidth)
         }
     }
 
